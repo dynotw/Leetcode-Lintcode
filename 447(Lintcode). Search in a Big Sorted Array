@@ -1,0 +1,89 @@
+447. Search in a Big Sorted Array
+
+Given a big sorted array with non-negative integers sorted by non-decreasing order. The array is so big so that you can not get the length of the whole array directly, and you can only access the kth number by ArrayReader.get(k) (or ArrayReader->get(k) for C++).
+
+Find the first index of a target number. Your algorithm should be in O(log k), where k is the first index of the target number.
+
+Return -1, if the number doesn't exist in the array.
+
+Example
+Example 1:
+
+Input: [1, 3, 6, 9, 21, ...], target = 3
+Output: 1
+Example 2:
+
+Input: [1, 3, 6, 9, 21, ...], target = 4
+Output: -1
+Challenge
+O(logn) time, n is the first index of the given target number.
+
+Notice
+If you accessed an inaccessible index (outside of the array), ArrayReader.get will return 2,147,483,647.
+
+
+
+
+// kinds of search the first position of Target, but we don't know the size of reader, so we need to set the end of reader by ourselves
+public class Solution {
+    /**
+     * @param reader: An instance of ArrayReader.
+     * @param target: An integer
+     * @return: An integer which is the first index of target.
+     */
+    public int searchBigSortedArray(ArrayReader reader, int target) {
+        // write your code here
+        
+        // Search + Sorted, come up wth Binary Search.
+        // this problem has the requirement on time complexity
+        // the difficulty is that we can't get the length(size) of reader
+        // therefore we can't get the mid pointer
+        
+        /*
+        we need to set the right boundary by ourselves
+        the right boundary maybe not the end of the reader, as long as it's bigger than target
+        */
+        
+        int end = 1;
+        // end -1, because the index starts from 0 rather than 1 
+        while(reader.get(end-1) < target){
+            end = end * 2;
+        }
+        
+        // after the end is set, we can solve the problem in binary Search
+        // wo don't need to set left as 0, because we've known that the target is between end/2 -1 and end - 1
+        
+        int left = end/2 -1;
+        int right = end -1;
+        
+        while(left + 1 < right){
+            
+            int mid = left +(right - left)/2;
+            
+            if (reader.get(mid) == target){
+                // search the first position
+                right = mid;
+            }
+            
+            else if (reader.get(mid) < target){
+                left = mid; 
+            }
+            
+            else if (reader.get(mid) > target){
+                right = mid;
+            }
+        }
+        
+        if (reader.get(left) == target){
+            return left;
+        }
+        
+        else if (reader.get(right) == target){
+            return right;
+        }
+        
+        else {
+            return -1;
+        }
+    }
+}
