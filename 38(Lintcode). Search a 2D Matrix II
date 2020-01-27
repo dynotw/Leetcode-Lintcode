@@ -54,13 +54,13 @@ public class Solution {
         // from bottom left to top right(从左下角或右上角出发都行)
         // 本质就是一行一列的排除（从左下角出发，就是向上和向右，朝[0][m-1]靠拢）
         int n = matrix.length;
-        int m = matrix[0].length;
+        int m = matrix[0].length - 1;
         // [x][y] 表示了起点（左下角）
         int x = n - 1;
         int y = 0;
         int count = 0;
         
-        while (x >= 0 && y < m) {
+        while (x >= 0 && y <= m) {
             
             //y column 都 < target, so eliminate y column
             if (matrix[x][y] < target) {
