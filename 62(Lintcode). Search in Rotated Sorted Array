@@ -1,0 +1,100 @@
+62. Search in Rotated Sorted Array
+
+Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+
+(i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+
+You are given a target value to search. If found in the array return its index, otherwise return -1.
+
+You may assume no duplicate exists in the array.
+
+Example
+Example 1:
+
+Input: [4, 5, 1, 2, 3] and target=1, 
+Output: 2.
+Example 2:
+
+Input: [4, 5, 1, 2, 3] and target=0, 
+Output: -1.
+Challenge
+O(logN) time
+
+
+
+
+
+
+public class Solution {
+    /**
+     * @param A: an integer rotated sorted array
+     * @param target: an integer to be searched
+     * @return: an integer
+     */
+    
+    // chanllenge use Binary Search once 
+    public int search(int[] A, int target) {
+        // write your code here
+        
+        // eliminate special conditions
+        if (A == null ||A.length == 0){
+            return -1;
+        }
+        
+        // set two pointers
+        // the array consists of two increasing sorted arrays
+        // right array is smaller than left array
+        // left is the first element of left array, right is the last element of right array
+        // left is the smallest element in left array, right is the biggest element in right array
+        // left > right
+        
+        int left = 0;
+        int right = A.length -1;
+        
+        while (left + 1 <right){
+            
+            int mid = left + (right - left)/2;
+            
+            if (A[mid] == target){
+                return mid;
+            }
+            
+            // mid is at left array
+            if (A[mid] > A[left]){
+                
+                //target is at left array, and between left and mid
+                if (A[left] <= target && target <= A[mid]){
+                    right = mid;
+                }
+                
+                else {
+                    left = mid;
+                }
+            }
+            
+            // mid is at right array
+            else{
+            
+            // target is at right array, and it is between mid and right
+                if (A[mid] <= target && target <= A[right]){
+                    left =mid;
+                }
+                else{
+                    right = mid;
+                }
+            }
+        }
+        
+        if (A[left] == target){
+            return left;
+        }
+        
+        else if (A[right] == target){
+            return right;
+        }
+        
+        else{
+            return -1;
+        }
+    }
+}
