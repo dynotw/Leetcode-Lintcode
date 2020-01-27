@@ -39,7 +39,6 @@ public class Solution {
         // use Binary Search
         
         // eliminate the special condition
-        
         if (nums == null ||nums.length == 0){
             return -1;
         }
@@ -49,7 +48,8 @@ public class Solution {
         int right = nums.length - 1;
         
         // there is no target in this problem
-        // we only need to compare mid and right
+        // we only need to compare mid and right, always remember the two indiviual array also are sorted, and the mid is nearly center
+        // the number before or after mid, is quite similar (how many numbers will be ascended)
         while (left+1 < right){
             int mid = left +(right - left)/2;
             
