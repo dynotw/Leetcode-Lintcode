@@ -1,0 +1,112 @@
+75. Find Peak Element
+
+There is an integer array which has the following features:
+
+The numbers in adjacent positions are different.
+A[0] < A[1] && A[A.length - 2] > A[A.length - 1].
+We define a position P is a peak if:
+
+A[P] > A[P-1] && A[P] > A[P+1]
+Find a peak element in this array. Return the index of the peak.
+
+Example
+Example 1:
+	Input:  [1, 2, 1, 3, 4, 5, 7, 6]
+	Output:  1 or 6
+	
+	Explanation:
+	return the index of peek.
+
+
+Example 2:
+	Input: [1,2,3,4,1]
+	Output:  3
+
+Challenge
+Time complexity O(logN)
+
+Notice
+It's guaranteed the array has at least one peak.
+The array may contain multiple peeks, find any of them.
+The array has at least 3 numbers in it.
+
+
+
+
+
+
+// 比较585(Lintcode). Maximum Number in Mountain Sequence
+// 585-only peak， this problem may have many peaks
+public class Solution {
+    /**
+     * @param A: An integers array.
+     * @return: return any of peek positions.
+     */
+     
+    // return any peak is okay, not return the set of all peaks  
+    public int findPeak(int[] A) {
+        // write your code here
+        
+        // eliminate special conditions
+        
+        // 因为一定要有一个peak，所以至少有3个元素
+        if (A == null || A.length < 3){
+            return -1;
+        } 
+        
+        // set two pointers
+        int left = 0;
+        int right = A.length -1;
+        
+        while (left+1 < right){
+            int mid = left + (right - left)/2;
+            
+            
+            // divide into two cnditions
+            if (A[mid-1] < A[mid]){
+                left = mid;
+            }
+            
+            else if (A[mid-1] > A[mid]){
+                right = mid;
+            }
+            
+        
+            
+            /*
+            // divide into 4 conditions, but ti shows time out when submit the code
+            // mid is one peak 
+            if (A[mid-1]< A[mid] && A[mid]> A[mid+1]){
+                return mid;
+            }
+            
+            // mid is at increasing, there must be a peak at right of mid
+            else if (A[mid-1] < A[mid] && A[mid] < A[mid+1]){
+                // 去除mid左边的部分
+                left = mid;
+            }
+            
+            // mid is at decreasing, there must be a peak at left of mid
+            else if (A[mid -1] > A[mid] && A[mid] > A[mid+1]){
+                right = mid;
+            }
+            
+            // mid is at the bottom, whatever is left or right, there must be one peak
+            else if (A[mid -1] > A[mid] && A[mid] > A[mid+1]){
+                left = mid;
+            }
+            */
+            
+        }
+        
+        // return the peak (the index of bigger one )
+        // there's no condition which A[left] == A[right], according to the description of problem
+        if (A[left] < A[right]){
+            return right;
+        }
+        
+        else{
+            return left;}
+        
+    }
+}
