@@ -1,0 +1,165 @@
+464. Sort Integers II
+
+Given an integer array, sort it in ascending order in place. Use quick sort, merge sort, heap sort or any O(nlogn) algorithm.
+
+Example
+Example1:
+
+Input: [3, 2, 1, 4, 5], 
+Output: [1, 2, 3, 4, 5].
+Example2:
+
+Input: [2, 3, 1], 
+Output: [1, 2, 3].
+
+
+
+
+// the following is quick sort
+// 联系partition array那道题
+// this problem includes two sort methods: merge sort & quick sort
+
+public class Solution {
+    /**
+     * @param A: an integer array
+     * @return: nothing
+     */
+    public void sortIntegers2(int[] A) {
+        // write your code here
+        
+        quickSort(A, 0, A.length-1);
+    }    
+        
+    public void quickSort(int[] A, int start, int end){
+        
+        // 注意，递归的终止条件一定放在最前面
+        if (start >= end){
+            return;
+        }
+        
+        int pointer1 = start;
+        int pointer2 = end;
+        int pivot = A[start];
+        
+        
+        while (pointer1 <= pointer2){
+            
+            while (pointer1 <= pointer2 && A[pointer1] < pivot){
+                pointer1++;
+            }
+            
+            while (pointer1 <= pointer2 && A[pointer2] > pivot){
+                pointer2--;
+            } 
+            
+            if (pointer1 <= pointer2){
+                int temp = A[pointer1];
+                A[pointer1] = A[pointer2];
+                A[pointer2] = temp;
+                
+                pointer1++;
+                pointer2--;
+            }
+        }
+        
+        quickSort(A, start, pointer2);
+        quickSort(A, pointer1, end);
+    } 
+        
+}
+
+
+
+
+/*
+the following sort is merge sort
+
+public class Solution {
+     * @param A: an integer array
+     * @return: nothing
+    public void sortIntegers2(int[] A) {
+        // write your code here
+        // two steps split(sort) and merge
+        // compared with '6. Merge two sorted array' 
+        //6 is merging two given sorted arrays, but this problem is 将一个unsorted array 拆分成连两个unsorted 的array，将其各自排序后，再merge
+        //这是一个recursion的过程，1个 -》2个 -》 4个，一直到unsorted //array中只有一个元素，再一步步merge 
+        
+        int[] temp = new int[A.length];
+        mergeSort(A, 0, A.length-1, temp);
+    }
+        
+    // define mergeSort function:
+    public void mergeSort(int[] A, int start, int end, int[] temp){
+            // start is the first of A, end is the last one of A; 
+            // temp 是个缓冲array用来存放中间的非完全结果,在sortInteger里面new出来
+            
+            // 递归终止条件（start=end，array中只有一个元素）
+            if(start >= end){
+                return;
+            }
+            
+            // find the mid, then split the array into two array. based on mid
+            // one array is A[start, mid] and another array is A[mid +1, end]
+            
+            int mid = (start +end) / 2; 
+            //我们不能直接将A[start,mid] and A[mid+1, end]两个array合并，因为此时它们是unsorted
+            //所以我们继续调用mergeSort函数，递归直到start=end（array中只有一个元素），那么这个array就一定是sorted（毕竟只有一个元素了） 
+            
+            
+            // 其实mergeSort没有任何实际操作，只是相当于不断地移动start和end这两个pointer，使得后续merge函数的作用区域不同
+            // 真正实现功能的，其实是merge函数
+            mergeSort(A, start, mid, temp);
+            mergeSort(A, mid+1, end, temp);
+            
+            merge(A, start, mid, end, temp);
+        }
+        
+        
+        
+    // define the merge function, just same as No.6
+    // A = A[start, mid];
+    // B= A[mid+1,end];
+    // C = A[start, end];
+        
+    public void merge(int[] A, int start, int mid, int end, int[] temp){
+            
+            int pointer1 = start; // for A
+            int pointer2 = mid +1; // for B
+            int index = start;  // for C
+            
+            while(pointer1 <= mid && pointer2 <= end){
+                
+                if(A[pointer1] <= A[pointer2]){
+                    temp[index] = A[pointer1];
+                    pointer1++;
+                }
+                
+                else{
+                    temp[index] = A[pointer2];
+                    pointer2++;
+                }
+                
+                index++;
+                
+            }
+            
+            while(pointer1 <= mid ){
+                temp[index] = A[pointer1];
+                pointer1++;
+                index++;
+            }
+            
+            while(pointer2 <= end){
+                temp[index] = A[pointer2];
+                pointer2++;
+                index++;
+            }
+            
+            // need to renew the array A, because the array 不是值传递，所以在内部修改后，外部的A也一同改变了
+            for (int i=start; i <= end; i++){
+                A[i] = temp[i];
+            }
+    }
+         
+}
+*/
