@@ -53,6 +53,11 @@ public class Solution {
     public void reverse(List<Integer> nums, int start, int end) {
         for (int i = start, j = end; i < j; i++, j--) {
             int temp = nums.get(i);
+            
+            // public E set(int index, E element); 
+            // index- index of the element to replace
+            //element- element to be stored at the specified position
+            
             nums.set(i, nums.get(j));
             nums.set(j, temp);
         }
