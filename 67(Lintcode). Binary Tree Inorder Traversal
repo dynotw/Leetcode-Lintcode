@@ -43,10 +43,12 @@ Can you do it without recursion?
  
  
  
- // Binary Tree, Recursion, Divide Conquer
+ // Remember Three Methods: Binary Tree, Recursion, Divide Conquer, Stack(Stack方法仅用于Binary Tree的遍历)
  // recursion method
  // inorder, preorder, postorder都可以用recursion
  /*
+ 
+ // 1st method: Recursion
  public class Solution {
 
     public List<Integer> inorderTraversal(TreeNode root) {
@@ -83,6 +85,8 @@ Can you do it without recursion?
 }
 */
 
+
+// 2nd method: Stack
 public class Solution {
     /**
      * @param root: A Tree
@@ -104,6 +108,7 @@ public class Solution {
         stack.push(root);
         
         while(!stack.isEmpty()){
+            //. peek()是输出最后一个node
             TreeNode top = stack.peek();
             
             if(top.left!=null){
@@ -116,6 +121,7 @@ public class Solution {
             
             else{
                 result.add(top.val);
+                // pop() 是删除最后一个node，并返回该node
                 stack.pop();
                 if(top.right!=null){
                     stack.push(top.right);
@@ -128,8 +134,7 @@ public class Solution {
     }
     */
     
-    
-    //iterative method
+// 4th method iterative method
     public List<Integer> inorderTraversal(TreeNode root) {
         
     ArrayList<Integer> result = new ArrayList<>();    
