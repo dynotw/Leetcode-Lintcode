@@ -27,6 +27,10 @@ public class Solution {
     public void sortIntegers2(int[] A) {
         // write your code here
         
+        if (A == null || A.length == 0){
+            return;
+         }
+     
         quickSort(A, 0, A.length-1);
     }    
         
@@ -39,19 +43,26 @@ public class Solution {
         
         int pointer1 = start;
         int pointer2 = end;
-        int pivot = A[start];
         
+        // 1. pivot, A[start], A[end]
+        // get the value, not the index
+        //虽然任一点都可以作为pivot，但一般还是选择中点
+        int pivot = A[(start +end)/2];
         
+        // remeber it's requirement is pointer1<=pointer2 not pointer1 < pointer2
         while (pointer1 <= pointer2){
             
+            // 一直遍历到A[pointer1] >= pivot
             while (pointer1 <= pointer2 && A[pointer1] < pivot){
                 pointer1++;
             }
             
+            // 一直遍历到A[pointer2] <= pivot
             while (pointer1 <= pointer2 && A[pointer2] > pivot){
                 pointer2--;
             } 
             
+            // 通过上面的两个while循环， pointer1 和 pointer2 都需要换位置了
             if (pointer1 <= pointer2){
                 int temp = A[pointer1];
                 A[pointer1] = A[pointer2];
@@ -62,6 +73,8 @@ public class Solution {
             }
         }
         
+        
+        // 当上面最初while 循环结束后，pointer1 > pointer2
         quickSort(A, start, pointer2);
         quickSort(A, pointer1, end);
     } 
