@@ -1,0 +1,157 @@
+67. Binary Tree Inorder Traversal
+
+Given a binary tree, return the inorder traversal of its nodes' values.
+
+Example
+Example 1:
+
+Input：{1,2,3}
+Output：[2,1,3]
+Explanation:
+   1
+  / \
+ 2   3
+it will be serialized {1,2,3}
+Inorder Traversal
+Example 2:
+
+Input：{1,#,2,3}
+Output：[1,3,2]
+Explanation:
+1
+ \
+  2
+ /
+3
+it will be serialized {1,#,2,3}
+Inorder Traversal
+Challenge
+Can you do it without recursion?
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+ 
+ 
+ 
+ // Binary Tree, Recursion, Divide Conquer
+ // recursion method
+ // inorder, preorder, postorder都可以用recursion
+ /*
+ public class Solution {
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+    Linkedlist<Integer> result = new Linkedlist<Integer>();
+        if(root ==null){
+            return result;
+        }
+        
+        helper(root, result);
+ 
+        return result;
+    }
+    
+    // inorder is left-root-right
+    // 先对left child 调用 helper（求left.child的inorder），再写入root，再对 right.child 调用helper（求right.child的inorder）
+ 
+    public void helper(TreeNode p, Linkedlist<Integer> result){
+    
+    //recursion的终止条件
+        if (p == null){
+            return;
+        }
+    
+        if(p.left!=null){
+            helper(p.left,result);
+        }
+    
+        res.add(p.val);
+ 
+        if(p.right!=null){
+            helper(p.right,result);
+        }
+    }
+}
+*/
+
+public class Solution {
+    /**
+     * @param root: A Tree
+     * @return: Inorder in ArrayList which contains node values.
+     */
+    /*
+    public List<Integer> inorderTraversal(TreeNode root) {
+        // write your code here
+        List<Integer> result = new ArrayList<Integer>();
+        
+        if(root==null){
+            return result;
+            
+        }
+        
+        // 利用stack的先进后出的特性
+        // 
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        stack.push(root);
+        
+        while(!stack.isEmpty()){
+            TreeNode top = stack.peek();
+            
+            if(top.left!=null){
+                stack.push(top.left);
+                // 当将top.left保留在stack后，需要将其null
+                // 因为从root到左子树走到头后，会反过来。若不将top.left = null, 则if（top.left ！= null）又是成立，进入不了else语句
+                top.left=null;
+                
+            }
+            
+            else{
+                result.add(top.val);
+                stack.pop();
+                if(top.right!=null){
+                    stack.push(top.right);
+                }
+            }
+            
+        }
+        
+        return result;
+    }
+    */
+    
+    
+    //iterative method
+    public List<Integer> inorderTraversal(TreeNode root) {
+        
+    ArrayList<Integer> result = new ArrayList<>();    
+    Stack<TreeNode> stack = new Stack<>();
+ 
+    TreeNode p = root;
+    while(p!=null){
+        stack.push(p);
+        p=p.left;
+    }
+ 
+    while(!stack.isEmpty()){            
+        TreeNode t = stack.pop();
+        result.add(t.val);
+ 
+        t = t.right;
+        while(t!=null){
+            stack.push(t);
+            t = t.left;
+        }
+    }
+ 
+    return result;
+}
+}
