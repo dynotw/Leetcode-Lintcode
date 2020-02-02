@@ -1,0 +1,122 @@
+93. Balanced Binary Tree
+
+Given a binary tree, determine if it is height-balanced.
+
+For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
+
+Example
+Example  1:
+	Input: tree = {1,2,3}
+	Output: true
+	
+	Explanation:
+	This is a balanced binary tree.
+		  1  
+		 / \                
+		2  3
+
+	
+Example  2:
+	Input: tree = {3,9,20,#,#,15,7}
+	Output: true
+	
+	Explanation:
+	This is a balanced binary tree.
+		  3  
+		 / \                
+		9  20                
+		  /  \                
+		 15   7 
+
+	
+Example  3:
+	Input: tree = {1,#,2,3,4}
+	Output: false
+	
+	Explanation:
+	This is not a balanced tree. 
+	The height of node 1's right sub-tree is 2 but left sub-tree is 0.
+		  1  
+		   \                
+		   2                
+		  /  \                
+		 3   4
+	
+
+
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+
+// This problem is Binary Tree and Divide
+// Use Divide, and construct own struct(class)
+
+// define a struct to return the depth of tree and whether it's balanced.
+class ResultType{
+    public int depth;
+    public boolean isBalanced;
+    // 构造函数
+    public ResultType(int depth, boolean isBalanced){
+        this.isBalanced = isBalanced;
+        this.depth = depth;
+    }
+}
+
+public class Solution {
+    /**
+     * @param root: The root of binary tree.
+     * @return: True if this Binary tree is Balanced, or false.
+     */
+    public boolean isBalanced(TreeNode root) {
+        // write your code here
+        
+        // eliminate special case
+        if (root == null){
+            return true;
+        }
+        
+        return helper(root).isBalanced;
+    }
+    
+    public ResultType helper(TreeNode root){
+        
+        if (root == null){
+            
+            return new ResultType(0, true);
+        }
+        
+        // Divide
+        ResultType left = helper(root.left);
+        ResultType right = helper(root.right);
+        
+        // 
+        if (!left.isBalanced || !right.isBalanced){
+            
+            // must return ResultType (because we define hepler in this way)
+            // this condition, we can return any depth. 
+            // isBalanced is false, so whatever depth is, always return fasle 
+            // we only care the isBalanced of ResultType
+            
+            return new ResultType(-1, false);
+        }
+        
+        if (Math.abs(left.depth - right.depth) > 1){
+            // 与上一个condition一样
+            return new ResultType(-1, false);
+        }
+        
+        // this case, we must return the maxDepth
+        return new ResultType(Math.max(left.depth, right.depth)+1, true);
+    }
+}
