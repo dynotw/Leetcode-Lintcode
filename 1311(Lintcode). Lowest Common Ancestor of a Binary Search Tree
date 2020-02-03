@@ -8,10 +8,10 @@ Given binary search tree: root = {6,2,8,0,4,7,9,#,#,3,5}
 
 Example
 Explanation:
-	1
+    6	1
    / \ 
-  2	  8
- /\	  /\
+  2    8
+ /\    /\
 0  4  7 9
    /\
   3  5
