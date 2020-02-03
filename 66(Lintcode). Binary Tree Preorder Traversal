@@ -1,0 +1,152 @@
+66. Binary Tree Preorder Traversal
+
+Given a binary tree, return the preorder traversal of its nodes' values.
+
+Example
+Example 1:
+
+Input：{1,2,3}
+Output：[1,2,3]
+Explanation:
+   1
+  / \
+ 2   3
+it will be serialized {1,2,3}
+Preorder traversal
+Example 2:
+
+Input：{1,#,2,3}
+Output：[1,2,3]
+Explanation:
+1
+ \
+  2
+ /
+3
+it will be serialized {1,#,2,3}
+Preorder traversal
+Challenge
+Can you do it without recursion?
+
+Notice
+The first data is the root node, followed by the value of the left and right son nodes, and "#" indicates that there is no child node.
+The number of nodes does not exceed 20.
+
+
+
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+// Binary Tree, Recursion, Divide
+// also can use recursion, compared with inorder
+
+// 1st Method: Traverse(Recursion)
+/*
+public class Solution{
+    
+    public List<Integer> preorderTraversal(TreeNode root){
+        // write your code
+        
+        List<Integer> result = new ArrayList<Integer>();
+        // eliminate special case
+        if (root == null){
+            return null;
+        }
+        
+        helper(root,result);
+        
+        return result;
+    }
+    
+    public void helper(TreeNode root, List<Integer> result){
+        
+        if(root == null){
+            return;
+        }
+        
+        result.add(root.val);
+        helper(root.left, result);
+        helper(root.right, result);
+    }
+    
+}
+*/
+
+// 2nd Method: Divide
+
+public class Solution{
+    
+    public List<Integer> preorderTraversal(TreeNode root){
+        
+        List<Integer> result = new ArrayList<>();
+        if (root == null){
+            return result;
+        }
+        
+        // Divide
+        List<Integer> left = preorderTraversal(root.left);
+        List<Integer> right = preorderTraversal(root.right);
+        
+        
+        // Conquer, use addAll rather than add
+        result.add(root.val);
+        result.addAll(left);
+        result.addAll(right);
+        
+        return result;
+    }
+}
+
+/*
+// 3rd Method: Stack
+public class Solution {
+
+    public List<Integer> preorderTraversal(TreeNode root) {
+        // write your code here
+        
+        ArrayList<Integer> returnList = new ArrayList<Integer>();
+ 
+        if(root == null)
+            return returnList;
+            
+ 
+ 
+        // 利用了stack先进后出的规则，因为preorder是root-left-right
+        // 所以先right再left
+        Stack<TreeNode> stack1 = new Stack<TreeNode>();
+        
+        // 在队尾加入一个元素
+        stack1.push(root);
+ 
+        while(!stack1.empty()){
+            
+            // pop 是删除最后一位，并返回该值
+            TreeNode n = stack1.pop();
+            
+            // 在队尾加入一个元素
+            returnList.add(n.val);
+ 
+            if(n.right != null){
+                stack1.push(n.right);
+            }
+            if(n.left != null){
+                stack1.push(n.left);
+            }
+ 
+        }
+        return returnList;
+        
+    }
+}
+*/
