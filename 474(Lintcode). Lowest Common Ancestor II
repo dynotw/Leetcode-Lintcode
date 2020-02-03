@@ -54,7 +54,7 @@ public class Solution {
     
 // Binary Tree, Divide
 // Understand the Lowest Common Ancestor(LCA)
-// This problem is quite similar to 1311(BST), But 1311 is easier, because it's Binary Search Tree(BST). 
+// This problem is quite similar to 88, I just use the same code. 
 
     public ParentTreeNode lowestCommonAncestorII(ParentTreeNode root, ParentTreeNode A, ParentTreeNode B) {
         // write your code here
