@@ -1,0 +1,118 @@
+480. Binary Tree Paths
+
+Given a binary tree, return all root-to-leaf paths.
+
+Example
+Example 1:
+
+Input：{1,2,3,#,5}
+Output：["1->2->5","1->3"]
+Explanation：
+   1
+ /   \
+2     3
+ \
+  5
+Example 2:
+
+Input：{1,2}
+Output：["1->2"]
+Explanation：
+   1
+ /   
+2  
+
+
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+
+// Binary Tree, Recursion, Divide
+
+// 1st method: Recursion
+/*
+public class Solution {
+
+    public List<String> binaryTreePaths(TreeNode root) {
+        
+        String sb = "";
+        ArrayList<String> result = new ArrayList<String>();
+        
+        findPath(root, result, sb);
+        return result;
+        
+    }
+    
+    public void findPath(TreeNode root, ArrayList<String> result, String s){
+        
+        if(root==null){
+            return;
+        }
+        
+        s = s+"->"+root.val;
+        
+        if(root.left==null &&root.right==null){
+            
+            // string.substring(start,end): start和end是string的index，在string中从start取到end
+            // 从index=2，开始取，相当于把最早写入的‘->’不读取
+            
+            result.add(s.substring(2));
+            return;
+            
+        }
+        if(root.left!=null){
+            findPath(root.left, result, s);
+            
+        }
+        if(root.right!=null){
+            findPath(root.right, result, s);
+            
+        }
+        
+    }
+}
+*/
+
+
+// 2nd method: Divide
+public class Solution{
+    
+    public List<String> binaryTreePaths(TreeNode root){
+        
+        List<String> results = new ArrayList<>();
+        if (root == null){
+            return results;
+        }
+        
+        List<String> left = binaryTreePaths(root.left);
+        List<String> right = binaryTreePaths(root.right);
+        
+        // 遍历left中的每个string，加上 root.val -> 
+        for (String result : left){
+            results.add(root.val + "->" + result);
+        }
+        
+        for (String result: right){
+            results.add(root.val + "->" + result);
+        }
+        
+
+        if (results.size() == 0){
+            results.add("" + root.val);
+        }
+
+        
+        return results;
+    }
+}
