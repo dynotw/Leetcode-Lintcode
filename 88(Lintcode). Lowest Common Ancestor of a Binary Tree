@@ -1,0 +1,101 @@
+88. Lowest Common Ancestor of a Binary Tree
+
+Given the root and two nodes in a Binary Tree. Find the lowest common ancestor(LCA) of the two nodes.
+
+The lowest common ancestor is the node with largest depth which is the ancestor of both nodes.
+
+Example
+Example 1:
+
+Input：{1},1,1
+Output：1
+Explanation：
+ For the following binary tree（only one node）:
+         1
+ LCA(1,1) = 1
+Example 2:
+
+Input：{4,3,7,#,#,5,6},3,5
+Output：4
+Explanation：
+ For the following binary tree:
+
+      4
+     / \
+    3   7
+       / \
+      5   6
+			
+ LCA(3, 5) = 4
+Notice
+Assume two nodes are exist in tree.
+
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+// Binary Tree, Divide
+// Understand the Lowest Common Ancestor(LCA)
+// This problem is quite similar to 1311(BST), But 1311 is easier, because it's Binary Search Tree(BST). 
+
+public class Solution {
+    /*
+     * @param root: The root of the binary search tree.
+     * @param A: A TreeNode in a Binary.
+     * @param B: A TreeNode in a Binary.
+     * @return: Return the least common ancestor(LCA) of the two nodes.
+     */
+     
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // write your code here
+        
+        
+        // 递归结束条件和排除特殊情况
+        if (root == null){
+            return null;
+        }
+        
+        if (p == root || q == root){
+            return root;
+        }
+        
+        
+        // Divide
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p,q);
+        
+        /* three case, 1.LCA在left(p,q都在left);
+                       2.LCA在right(p,q都在right);
+                       3.LCA在root(p,q不在同一边)
+            分别对应: 1.left return LCA, right return null; 
+                      2.left return null, right return LCA; 
+                      3.left and right 最深层分别return p或q,然后逐层return各自的root 
+        */
+        
+        
+        // Conquer
+        if (left != null && right != null){
+            return root;
+        }
+        
+        else if (left != null){
+            return left;
+        } 
+        
+        else if (right != null){
+            return right;
+        }
+        
+        return null;
+    }
+}
