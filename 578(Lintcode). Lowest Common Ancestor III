@@ -1,0 +1,114 @@
+578. Lowest Common Ancestor III
+
+Given the root and two nodes in a Binary Tree. Find the lowest common ancestor(LCA) of the two nodes.
+The lowest common ancestor is the node with largest depth which is the ancestor of both nodes.
+Return null if LCA does not exist.
+
+Example
+Example1
+
+Input: 
+{4, 3, 7, #, #, 5, 6}
+3 5
+5 6
+6 7 
+5 8
+Output: 
+4
+7
+7
+null
+Explanation:
+  4
+ / \
+3   7
+   / \
+  5   6
+
+LCA(3, 5) = 4
+LCA(5, 6) = 7
+LCA(6, 7) = 7
+LCA(5, 8) = null
+
+Example2
+
+Input:
+{1}
+1 1
+Output: 
+1
+Explanation:
+The tree is just a node, whose value is 1.
+Notice
+node A or node B may not exist in tree.
+Each node has a different value
+
+
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+ 
+// Binary Tree, Divide, Construct a Struct
+// 因为我们要同时知道3个返回值：1.a是否存在；2.b是否存在；3.a和b的LCA，所以对于需要或者多个返回值的，我们construct a struct（class）
+// 在88的基础上，多加判断a和b是否存在
+class ResultType {
+    public boolean a_exist;
+    public boolean b_exist;
+    public TreeNode node;
+    ResultType(boolean a, boolean b, TreeNode n) {
+        a_exist = a;
+        b_exist = b;
+        node = n;
+    }
+}
+
+public class Solution {
+    /**
+     * @param root The root of the binary tree.
+     * @param A and B two nodes
+     * @return: Return the LCA of the two nodes.
+     */
+    public TreeNode lowestCommonAncestor3(TreeNode root, TreeNode A, TreeNode B) {
+        // write your code here
+        ResultType result = helper(root, A, B);
+        // 先判断a和b是否存在
+        if (!result.a_exist || !result.b_exist)
+            return null;
+        else
+            return result.node;
+    }
+
+    public ResultType helper(TreeNode root, TreeNode A, TreeNode B) {
+        if (root == null)
+            return new ResultType(false, false, null);
+            
+        ResultType left_rt = helper(root.left, A, B);
+        ResultType right_rt = helper(root.right, A, B);
+        
+        boolean a_exist = left_rt.a_exist || right_rt.a_exist || root == A;
+        boolean b_exist = left_rt.b_exist || right_rt.b_exist || root == B;
+        
+        if (root == A || root == B)
+            return new ResultType(a_exist, b_exist, root);
+
+        // This part is same as 88
+        if (left_rt.node != null && right_rt.node != null)
+            return new ResultType(a_exist, b_exist, root);
+        if (left_rt.node != null)
+            return new ResultType(a_exist, b_exist, left_rt.node);
+        if (right_rt.node != null)
+            return new ResultType(a_exist, b_exist, right_rt.node);
+
+        return new ResultType(a_exist, b_exist, null);
+    }
+}
