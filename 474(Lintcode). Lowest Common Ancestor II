@@ -1,0 +1,101 @@
+474. Lowest Common Ancestor II
+
+Given the root and two nodes in a Binary Tree. Find the lowest common ancestor(LCA) of the two nodes.
+
+The lowest common ancestor is the node with largest depth which is the ancestor of both nodes.
+
+The node has an extra attribute parent which point to the father of itself. The root's parent is null.
+
+Example
+Example 1:
+
+Input：{4,3,7,#,#,5,6},3,5
+Output：4
+Explanation：
+     4
+     / \
+    3   7
+       / \
+      5   6
+LCA(3, 5) = 4
+Example 2:
+
+Input：{4,3,7,#,#,5,6},5,6
+Output：7
+Explanation：
+      4
+     / \
+    3   7
+       / \
+      5   6
+LCA(5, 6) = 7
+
+
+
+
+
+/**
+ * Definition of ParentTreeNode:
+ * 
+ * class ParentTreeNode {
+ *     public ParentTreeNode parent, left, right;
+ * }
+ */
+
+
+public class Solution {
+    /*
+     * @param root: The root of the tree
+     * @param A: node in the tree
+     * @param B: node in the tree
+     * @return: The lowest common ancestor of A and B
+     */
+
+    
+// Binary Tree, Divide
+// Understand the Lowest Common Ancestor(LCA)
+// This problem is quite similar to 1311(BST), But 1311 is easier, because it's Binary Search Tree(BST). 
+
+    public ParentTreeNode lowestCommonAncestorII(ParentTreeNode root, ParentTreeNode A, ParentTreeNode B) {
+        // write your code here
+        
+        
+        // 递归结束条件和排除特殊情况
+        if (root == null){
+            return null;
+        }
+        
+        if (A == root || B == root){
+            return root;
+        }
+        
+        
+        // Divide
+        ParentTreeNode left = lowestCommonAncestorII(root.left, A, B);
+        ParentTreeNode right = lowestCommonAncestorII(root.right, A, B);
+        
+        /* three case, 1.LCA在left(p,q都在left);
+                       2.LCA在right(p,q都在right);
+                       3.LCA在root(p,q不在同一边)
+            分别对应: 1.left return LCA, right return null; 
+                      2.left return null, right return LCA; 
+                      3.left and right 最深层分别return p或q,然后逐层return各自的root 
+        */
+        
+        
+        // Conquer
+        if (left != null && right != null){
+            return root;
+        }
+        
+        else if (left != null){
+            return left;
+        } 
+        
+        else if (right != null){
+            return right;
+        }
+        
+        return null;
+    }
+}
