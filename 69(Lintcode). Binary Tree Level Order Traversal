@@ -1,0 +1,100 @@
+69. Binary Tree Level Order Traversal
+
+Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
+
+Example
+Example 1:
+
+Input：{1,2,3}
+Output：[[1],[2,3]]
+Explanation：
+  1
+ / \
+2   3
+it will be serialized {1,2,3}
+level order traversal
+Example 2:
+
+Input：{1,#,2,3}
+Output：[[1],[2],[3]]
+Explanation：
+1
+ \
+  2
+ /
+3
+it will be serialized {1,#,2,3}
+level order traversal
+Challenge
+Challenge 1: Using only 1 queue to implement it.
+
+Challenge 2: Use BFS algorithm to do it.
+
+Notice
+The first data is the root node, followed by the value of the left and right son nodes, and "#" indicates that there is no child node.
+The number of nodes does not exceed 20.
+
+
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+// BST, Queue
+public class Solution {
+    /**
+     * @param root: A Tree
+     * @return: Level order a list of lists of integer
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        // write your code here
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        if (root == null){
+            return result;
+        }
+        
+        // Queue is an Interface, 不能直接new（右边），我们需要用其他数据结构去new
+        // 这里我们就用linkedlist去new了queue
+        // 利用queue先进先出的特性
+        // 将node输入queue，再输出到currentlevel的ArrayList，最后再加到result（并且逐层）
+        Queue<TreeNode> queue = new LinkedList<>();
+        // offer添加一个元素并返回true
+        queue.offer(root);
+        
+        while (!queue.isEmpty()){
+            int size = queue.size();
+            ArrayList<Integer> currentLevel = new ArrayList<>();
+            
+            // 注意在for判断中不能写 i < queue.size(), 因为size在for循环中一直在变
+            // 为什么不把node一次性放入，再一次性放出？
+            // 因为this peoblem，我们需要逐层输出
+            for (int i=0; i < size; i++){
+                // poll移除并返回队列头部的元素
+                TreeNode head =  queue.poll();
+                currentLevel.add(head.val);
+                
+                // 当把一个node从queue剔除的同时，加入它的子节点
+                if (head.left != null){
+                    queue.offer(head.left);
+                }
+                
+                if (head.right != null){
+                    queue.offer(head.right);
+                }
+            }
+            result.add(currentLevel);
+            
+        }
+        
+        return result; 
+    }
+}
