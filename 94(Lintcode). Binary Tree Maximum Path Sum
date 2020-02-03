@@ -1,0 +1,145 @@
+94. Binary Tree Maximum Path Sum
+
+Given a binary tree, find the maximum path sum.
+
+The path may start and end at any node in the tree.
+
+Example
+Example 1:
+	Input:  For the following binary tree（only one node）:
+	2
+	Output：2
+	
+Example 2:
+	Input:  For the following binary tree:
+
+      1
+     / \
+    2   3
+		
+	Output: 6
+
+
+
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+// Binary Tree, Divide, Recursion, Struct
+/*
+public class Solution {
+    /*
+     * @param root: The root of binary tree.
+     * @return: An integer
+     */
+    /*
+    public int maxPathSum(TreeNode root) {
+        // write your code here
+        
+        if (root == null){
+            return Integer.MIN_VALUE;
+        }
+        
+        int left = maxPathSum(root.left);
+        int right = maxPathSum(root.right);
+        
+        int leftMax = Math.max(0,left);
+        int rightMax = Math.max(0,right);
+        int bothMax = Math.max(leftMax,rightMax);
+        
+        // This part is wrong
+        // 因为从right tree返回的不再是6 -> -5, 而是5-> -5 -> 6
+        int midMax = Math.max(leftMax + rightMax, bothMax) + root.val;
+        return midMax;
+    }
+}
+
+*/
+
+public class Solution {
+    private class ResultType {
+        // singlePath: 从root往下走到任意点的最大路径，这条路径可以不包含任何点
+        // maxPath: 从树中任意到任意点的最大路径，这条路径至少包含一个点
+        int singlePath, maxPath; 
+        ResultType(int singlePath, int maxPath) {
+            this.singlePath = singlePath;
+            this.maxPath = maxPath;
+        }
+    }
+
+    private ResultType helper(TreeNode root) {
+        if (root == null) {
+            return new ResultType(0, Integer.MIN_VALUE);
+        }
+        // Divide
+        ResultType left = helper(root.left);
+        ResultType right = helper(root.right);
+
+        // Conquer
+        int singlePath = Math.max(left.singlePath, right.singlePath) + root.val;
+        singlePath = Math.max(singlePath, 0);
+
+        int maxPath = Math.max(left.maxPath, right.maxPath);
+        maxPath = Math.max(maxPath, left.singlePath + right.singlePath + root.val);
+
+        return new ResultType(singlePath, maxPath);
+    }
+
+    public int maxPathSum(TreeNode root) {
+        ResultType result = helper(root);
+        return result.maxPath;
+    }
+}
+
+
+// Version 2:
+// SinglePath也定义为，至少包含一个点。
+public class Solution {
+    /**
+     * @param root: The root of binary tree.
+     * @return: An integer.
+     */
+    private class ResultType {
+        int singlePath, maxPath;
+        ResultType(int singlePath, int maxPath) {
+            this.singlePath = singlePath;
+            this.maxPath = maxPath;
+        }
+    }
+
+    private ResultType helper(TreeNode root) {
+        if (root == null) {
+            return new ResultType(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        }
+        // Divide
+        ResultType left = helper(root.left);
+        ResultType right = helper(root.right);
+
+        // Conquer
+        int singlePath =
+            Math.max(0, Math.max(left.singlePath, right.singlePath)) + root.val;
+
+        int maxPath = Math.max(left.maxPath, right.maxPath);
+        maxPath = Math.max(maxPath,
+                           Math.max(left.singlePath, 0) + 
+                           Math.max(right.singlePath, 0) + root.val);
+
+        return new ResultType(singlePath, maxPath);
+    }
+
+    public int maxPathSum(TreeNode root) {
+        ResultType result = helper(root);
+        return result.maxPath;
+    }
+
+}
