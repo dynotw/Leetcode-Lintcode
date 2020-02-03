@@ -76,7 +76,7 @@ Can you do it without recursion?
             helper(p.left,result);
         }
     
-        res.add(p.val);
+        result.add(p.val);
  
         if(p.right!=null){
             helper(p.right,result);
