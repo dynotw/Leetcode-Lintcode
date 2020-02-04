@@ -85,6 +85,7 @@ public class Solution {
         ResultType left = helper(root.left);
         ResultType right = helper(root.right);
         
+// Conquer,这里较为特殊，因为需要new一个result（一般自己构造了struct后，Divide的递归的Conquer都会有这一步）        
         // 先假设maxSumSubtree就是root引导的Subtree
         ResultType result = new ResultType(
             left.sum + right.sum + root.val,
