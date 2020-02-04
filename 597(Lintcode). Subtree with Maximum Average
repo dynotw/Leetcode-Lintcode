@@ -1,0 +1,119 @@
+597. Subtree with Maximum Average
+
+Given a binary tree, find the subtree with maximum average. Return the root of the subtree.
+
+Example
+Example 1
+
+Input：
+{1,-5,11,1,2,4,-2}
+Output：11
+Explanation:
+The tree is look like this:
+     1
+   /   \
+ -5     11
+ / \   /  \
+1   2 4    -2 
+The average of subtree of 11 is 4.3333, is the maximun.
+Example 2
+
+Input：
+{1,-5,11}
+Output：11
+Explanation:
+     1
+   /   \
+ -5     11
+The average of subtree of 1,-5,11 is 2.333,-5,11. So the subtree of 11 is the maximun.
+Notice
+LintCode will print the subtree which root is your return node.
+It's guaranteed that there is only one subtree with maximum average.
+
+
+
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+// Binary Tree, Divide, Construct a Struct
+// Compared with 628 Maximum Subtree 
+// 自己单独写完的第一个Divide，好开心
+
+class ResultType{
+    int number;
+    int sum;
+    double maxAverage;
+    TreeNode maxAverageSubtree;
+
+    // Construct Function
+    ResultType(int number, int sum, double maxAverage, TreeNode maxAverageSubtree){
+        this.number = number;
+        this.sum = sum;
+        this.maxAverage = maxAverage;
+        this.maxAverageSubtree = maxAverageSubtree;
+    }
+}
+
+//
+public class Solution {
+    /**
+     * @param root: the root of binary tree
+     * @return: the root of the maximum average of subtree
+     */
+    public TreeNode findSubtree2(TreeNode root) {
+        // write your code here
+        if (root == null){
+            return null;
+        }
+
+        ResultType result = helper(root);
+
+        return result.maxAverageSubtree;
+    }
+
+
+    public ResultType helper(TreeNode root){
+        // 注意此处maxAverage必须设定成double类型的最小值(这里设为-Double.MAX_VALUE，是因为Double.MIN_VALUE的值这是针对绝对值而言的)
+        // 如果我们随便取0，但是这Binary Tree全部是负数（maxAverage其实是negative），那么就会将这个0当做maxAverage一直返回
+        if (root == null){
+            return new ResultType(0, 0, -Double.MAX_VALUE, null);
+        }
+
+        ResultType left = helper(root.left);
+        ResultType right = helper(root.right);
+
+        // 先假设maxAverageSubtree就是root引导的Subtree
+        ResultType result = new ResultType(
+            left.number + right.number + 1,
+            left.sum + right.sum + root.val,
+            // 因为java除法默认向下取整，但我们的average不一定是int，所以我们需要保留小数点，即加了（double）
+            (double)(left.sum + right.sum + root.val)/(left.number + right.number + 1),
+            root
+        );
+
+
+        // In this part, '>' and '>=' are both okay 
+        if (left.maxAverage >= result.maxAverage){
+            result.maxAverage = left.maxAverage;
+            result.maxAverageSubtree = left.maxAverageSubtree;
+        }
+
+        if (right.maxAverage >= result.maxAverage){
+            result.maxAverage = right.maxAverage;
+            result.maxAverageSubtree = right.maxAverageSubtree;
+        }
+
+        return result;
+    }
+}
