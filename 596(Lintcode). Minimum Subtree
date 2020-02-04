@@ -93,7 +93,7 @@ public class Solution {
         ResultType leftResult = helper(root.left);
         ResultType rightResult = helper(root.right);
         
-        // 先不管min是什么，暂定min就是root引导的SubTree的sum
+        // 先不管min是什么，暂定min就是root引导的SubTree的sum, 即root is the minSubtree
         // 后续再将sum和左右子树的minSum进行对比
         ResultType result = new ResultType(
             root,
