@@ -93,6 +93,9 @@ public class Solution {
         ResultType left = helper(root.left);
         ResultType right = helper(root.right);
 
+// Conquer,这里较为特殊，因为需要new一个result（相当于root）
+//一般需要比较root，root.left 和 root.right的时候，就会new一个root出来，毕竟自己在得到left和right后，我们没有得到root。
+//因此我们需要自己new 一个初始化root出来进行比较 
         // 先假设maxAverageSubtree就是root引导的Subtree
         ResultType result = new ResultType(
             left.number + right.number + 1,
