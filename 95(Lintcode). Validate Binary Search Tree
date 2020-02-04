@@ -1,0 +1,114 @@
+95. Validate Binary Search Tree
+
+Given a binary tree, determine if it is a valid binary search tree (BST).
+
+Assume a BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and right subtrees must also be binary search trees.
+A single node tree is a BST
+Example
+Example 1:
+
+Input:  {-1}
+Output：true
+Explanation：
+For the following binary tree（only one node）:
+	      -1
+This is a binary search tree.
+Example 2:
+
+Input:  {2,1,4,#,#,3,5}
+Output: true
+For the following binary tree:
+	  2
+	 / \
+	1   4
+	   / \
+	  3   5
+This is a binary search tree.
+
+
+
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+// BST, Divide, Construct a Struct
+class ResultType {
+    public boolean isBST;
+    // 这里设置成int就会报错，搞不懂，难度node.value有这么大/小？
+    public long minValue, maxValue;
+    
+    //构造函数
+    public ResultType(long minValue, long maxValue, boolean isBST) {
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+        this.isBST = isBST;
+        
+    }
+}
+
+public class Solution {
+    /**
+     * @param root: The root of binary tree.
+     * @return: True if the binary tree is BST, or false
+     */
+    public boolean isValidBST(TreeNode root) {
+        // write your code here
+        
+        if (root == null){
+            return true;
+        }
+        
+        ResultType result = validHelper(root);
+        return result.isBST; 
+        
+        
+    }
+    
+    // 因为 isValidBST 只有一个返回值，但ResulType在递归时，要返回三个值，所以我们自己再重新定义一个函数
+    // 上述理解有误，ResultType其实没有递归，是validHelper函数在递归
+    // 一旦我们自己定义了一个Struct，那么我们也要定义一个function
+    public ResultType validHelper(TreeNode node){
+        
+        //判断node是否为空，如果是空(null算bst)，那么将left.maxValue 变成最小值， right.minValue变成最小值
+        // 在62行判断时，BST就一定是true了
+        if (node == null){
+            // 对应max就初始化MAX_VALUE；对应min就初始化MIN_VALUE
+            return new ResultType(Long.MAX_VALUE, Long.MIN_VALUE, true);
+        }
+        
+        // Divide 
+        ResultType left = validHelper(node.left); //调用左子树 
+        ResultType right = validHelper(node.right);
+        
+        
+        
+        // Conquer
+        //若有node的左右某一子树不是bst，那么整个tree绝对就不是bst(minValue & maxValue的值就无所谓)
+        if (!left.isBST || !right.isBST ){
+            return new ResultType(-1,-1,false);
+        }
+        
+        // 判断以node为root的树，是不是bst
+        boolean isBST = left.maxValue < node.val && node.val < right.minValue;
+        return new ResultType(
+            Math.min(node.val,left.minValue), 
+            Math.max(node.val, right.maxValue), 
+            isBST); 
+        //左右可能有空节点，所以需要和node.val自身取最大最小值
+        
+    }
+}
