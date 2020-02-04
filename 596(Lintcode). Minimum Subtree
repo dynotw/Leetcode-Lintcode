@@ -62,8 +62,12 @@ public class Solution {
 
 // version 2: Pure divide conquer
 class ResultType {
+// minSubtree 就是minSum对应的subtree 
+// sum 是所有node.val的sum，不管是不是min
+// minSum 是min的Sum
     public TreeNode minSubtree;
-    public int sum, minSum;
+    public int sum; 
+    public int minSum;
     public ResultType(TreeNode minSubtree, int minSum, int sum) {
         this.minSubtree = minSubtree;
         this.minSum = minSum;
@@ -81,18 +85,20 @@ public class Solution {
         return result.minSubtree;
     }
     
-    public ResultType helper(TreeNode node) {
+    public ResultType helper(TreeNode root) {
         if (node == null) {
             return new ResultType(null, Integer.MAX_VALUE, 0);
         }
         
-        ResultType leftResult = helper(node.left);
-        ResultType rightResult = helper(node.right);
+        ResultType leftResult = helper(root.left);
+        ResultType rightResult = helper(root.right);
         
+        // 先不管min是什么，暂定min就是root引导的SubTree的sum
+        // 后续再将sum和左右子树的minSum进行对比
         ResultType result = new ResultType(
-            node,
-            leftResult.sum + rightResult.sum + node.val,
-            leftResult.sum + rightResult.sum + node.val
+            root,
+            leftResult.sum + rightResult.sum + root.val,
+            leftResult.sum + rightResult.sum + root.val
         );
         
         if (leftResult.minSum <= result.minSum) {
