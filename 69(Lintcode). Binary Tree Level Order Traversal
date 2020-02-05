@@ -49,7 +49,7 @@ The number of nodes does not exceed 20.
  * }
  */
 
-// BST, Queue
+// BST, Queue, BSF
 public class Solution {
     /**
      * @param root: A Tree
