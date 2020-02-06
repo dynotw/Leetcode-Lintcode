@@ -1,0 +1,131 @@
+137. Clone Graph
+
+Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors. Nodes are labeled uniquely.
+
+You need to return a deep copied graph, which has the same structure as the original graph, and any changes to the new graph will not have any effect on the original graph.
+
+Example
+Example1
+
+Input:
+{1,2,4#2,1,4#4,1,2}
+Output: 
+{1,2,4#2,1,4#4,1,2}
+Explanation:
+1------2  
+ \     |  
+  \    |  
+   \   |  
+    \  |  
+      4   
+Clarification
+How we serialize an undirected graph: http://www.lintcode.com/help/graph/
+
+Notice
+You need return the node with the same label as the input node.
+
+
+
+
+
+
+
+
+/**
+ * Definition for Undirected graph.
+ * class UndirectedGraphNode {
+ *     int label;
+ *     List<UndirectedGraphNode> neighbors;
+ *     UndirectedGraphNode(int x) {
+ *  // label 表示这个node it self
+ *  // neighbors represents all neighbor nodes around the node
+ *         label = x;
+ *         neighbors = new ArrayList<UndirectedGraphNode>();
+ *     }
+ * }
+ */
+ 
+ // BFS, Graph
+ // This problem is clone(is deep copy rather than soft copy)
+ /*
+ deep copy 是指copy的内容不只只是reference
+ 例：
+    list<Integer> list1 = new List<>();
+    
+    List<Integer> list2 = list1;
+    这个是soft copy，reference 复制了。修改list1或list2的任意一个的内容，剩下一个的内容也会改变
+    List<Integer> list3 = new List<>(list1);
+    这个是deep copy，利用了复制构造函数。修改list1(list3)的内容，不会改变list3(list1)的内容
+*/
+public class Solution {
+    /**
+     * @param node: A undirected graph node
+     * @return: A undirected graph node
+     */
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        // write your code here
+        /*
+        This problem needs three steps:
+        1. from node(input) get all nodes (因为cloneGraph的输入只有一个node，我们需要得到所有nodes)
+        2. clone all nodes
+        3. copy the edges between all nodes
+        */
+        
+        if (node == null) {
+            return node;
+        }
+
+        // use bfs algorithm to traverse the graph and get all nodes.
+        // getNodes function is defined by ourselves, to get all nodes
+        ArrayList<UndirectedGraphNode> nodes = getNodes(node);
+
+        // copy nodes, store the old->new mapping information in a hash map
+        // This part just clones(deep copy) all nodes, so we have to new rather than just use '=' 进行赋值
+        // 这里相当于只new了所有的nodes并赋值label属性，但neighbors属性没被赋值
+        HashMap<UndirectedGraphNode, UndirectedGraphNode> mapping = new HashMap<>();
+        // 这个Hashmap中对应的key和value是一样的
+        for (UndirectedGraphNode n : nodes) {
+            mapping.put(n, new UndirectedGraphNode(n.label));
+        }
+
+        // copy neighbors(edges)
+        for (UndirectedGraphNode n : nodes) {
+            // get(),得到的是一个UnidirectedGraphNode。 因为mapping的key和value都是undirectedGraphNode
+            // n 相当于是 mapping中的key里面的UndirectedGraphNode
+            UndirectedGraphNode newNode = mapping.get(n);
+            // 遍历一个List<UndirectedGraphNode>
+            for (UndirectedGraphNode neighbor : n.neighbors) {
+                UndirectedGraphNode newNeighbor = mapping.get(neighbor);
+                newNode.neighbors.add(newNeighbor);
+            }
+        }
+
+        return mapping.get(node);
+    }
+
+
+// 类比178的操作，set是为了保证不出现重复node
+// 答案使用了HashSet，但我用ArrayList照样okay，不懂啥区别。应该是contains()操作，HashSet更优。
+// 但是函数return的是ArrayList，return new ArrayList<UndirectedGraphNode>(set); 如果set是HashSet为什么能调用ArrayList的复制构造函数来new呢？
+// 如题：Exapmle 1，遍历1时，我们会得到2和4两个neighbors；然后遍历2，此时会得到1和4，但是之前我们已经遍历过1，所以相当于1已经存在与getNodes了
+// 所以我们不会把1再放入queue和set里面（if statement的判断）
+    private ArrayList<UndirectedGraphNode> getNodes(UndirectedGraphNode node) {
+        Queue<UndirectedGraphNode> queue = new LinkedList<UndirectedGraphNode>();
+        ArrayList<UndirectedGraphNode> set = new ArrayList<>();
+
+        queue.offer(node);
+        set.add(node);
+        while (!queue.isEmpty()) {
+            UndirectedGraphNode head = queue.poll();
+            for (UndirectedGraphNode neighbor : head.neighbors) {
+                if (!set.contains(neighbor)) {
+                    set.add(neighbor);
+                    queue.offer(neighbor);
+                }
+            }
+        }
+
+        return new ArrayList<UndirectedGraphNode>(set);        
+        
+    }
+}
