@@ -41,6 +41,7 @@ public class Solution {
             return false;
         }
         // initializeGraph function 是我们自己定义的
+        // Generate adjacent table decsribing graph
         Map<Integer, Set<Integer>> graph = initializeGraph(n, edges);
         
         // bfs
