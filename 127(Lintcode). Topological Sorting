@@ -79,6 +79,7 @@ public class Solution {
         }
         
         // This part is quite similar to regular BFS
+        // Topological Sorting
         while (!queue.isEmpty()) {
             DirectedGraphNode node = queue.poll();
             for (DirectedGraphNode neighbor : node.neighbors) {
