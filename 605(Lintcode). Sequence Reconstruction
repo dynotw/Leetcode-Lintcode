@@ -1,0 +1,116 @@
+605. Sequence Reconstruction
+
+Check whether the original sequence org can be uniquely reconstructed from the sequences in seqs. The org sequence is a permutation of the integers from 1 to n, with 1 ≤ n ≤ 10^4. Reconstruction means building a shortest common supersequence of the sequences in seqs (i.e., a shortest sequence so that all sequences in seqs are subsequences of it). Determine whether there is only one sequence that can be reconstructed from seqs and it is the org sequence.
+
+Example
+Example 1:
+
+Input:org = [1,2,3], seqs = [[1,2],[1,3]]
+Output: false
+Explanation:
+[1,2,3] is not the only one sequence that can be reconstructed, because [1,3,2] is also a valid sequence that can be reconstructed.
+Example 2:
+
+Input: org = [1,2,3], seqs = [[1,2]]
+Output: false
+Explanation:
+The reconstructed sequence can only be [1,2].
+Example 3:
+
+Input: org = [1,2,3], seqs = [[1,2],[1,3],[2,3]]
+Output: true
+Explanation:
+The sequences [1,2], [1,3], and [2,3] can uniquely reconstruct the original sequence [1,2,3].
+Example 4:
+
+Input:org = [4,1,5,2,6,3], seqs = [[5,2,6,3],[4,1,5,2]]
+Output:true
+
+
+
+
+
+// 不会做
+// BSF, Graph, Topological
+public class Solution {
+    /**
+     * @param org: a permutation of the integers from 1 to n
+     * @param seqs: a list of sequences
+     * @return: true if it can be reconstructed only one or false
+     */
+    public boolean sequenceReconstruction(int[] org, int[][] seqs) {
+        // write your code here
+       // build graph
+        Map<Integer, ArrayList<Integer>> graph = getGraph(seqs); 
+        /**
+         * we need to build graph from seqs!! cause we are using seqs to try to build org
+         * 
+         */
+        // build indegree
+        Map<Integer, Integer> indegree = getIndegree(graph);
+        // get zero indegree, offer in queue
+        Queue<Integer> queue = new LinkedList<>();
+        for (int node : graph.keySet()) {
+            if (indegree.get(node) == 0) {
+                queue.offer(node);
+            }
+        }
+        // we shoud have a container to compare it to org
+        List<Integer> sequence = new ArrayList<>();
+        // bfs
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            if (size > 1) {
+                return false;
+            }
+            int node = queue.poll();
+            sequence.add(node);
+            for (int neib : graph.get(node)) {
+                indegree.put(neib, indegree.get(neib) - 1);
+                if (indegree.get(neib) == 0) {
+                    queue.offer(neib);
+                }
+            }
+        }
+        
+        if (sequence.size() != org.length) { // first compare length, to prevent egde cases.
+            return false;
+        }
+        
+        for (int i = 0; i < org.length; i++) {
+            if (sequence.get(i) != org[i]) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private Map<Integer, ArrayList<Integer>> getGraph(int[][] seqs) {
+        Map<Integer, ArrayList<Integer>> graph = new HashMap<Integer, ArrayList<Integer>>();
+        for (int[] path : seqs) {
+            for (int node : path) {
+                graph.put(node, new ArrayList<Integer>());
+            }
+        }
+        for (int[] path : seqs) {
+            for (int i = 0; i < path.length - 1; i++) {
+                graph.get(path[i]).add(path[i+1]);
+            }
+        }
+        return graph;
+    }
+    
+    private Map<Integer, Integer> getIndegree(Map<Integer, ArrayList<Integer>> graph) {
+        Map<Integer, Integer> indegree = new HashMap<Integer, Integer>();
+        for (int node : graph.keySet()) {
+            indegree.put(node, 0);
+        }
+        for (int node : graph.keySet()) {
+            for (int neib : graph.get(node)) {
+                indegree.put(neib, indegree.get(neib) + 1);
+            }
+        }
+        return indegree;
+    }
+}
