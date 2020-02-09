@@ -1,0 +1,132 @@
+127. Topological Sorting
+
+Given an directed graph, a topological order of the graph nodes is defined as follow:
+
+For each directed edge A -> B in graph, A must before B in the order list.
+The first node in the order can be any node in the graph with no nodes direct to it.
+Find any topological order for the given graph.
+
+Example
+For graph as follow:
+
+
+The topological order can be:
+
+[0, 1, 2, 3, 4, 5]
+[0, 2, 3, 1, 5, 4]
+...
+Challenge
+Can you do it in both BFS and DFS?
+
+Clarification
+Learn more about representation of graphs
+
+Notice
+You can assume that there is at least one topological order in the graph.
+
+
+
+
+
+
+/**
+ * Definition for Directed graph.
+ * class DirectedGraphNode {
+ *     int label;
+ *     ArrayList<DirectedGraphNode> neighbors;
+ *     DirectedGraphNode(int x) { label = x; neighbors = new ArrayList<DirectedGraphNode>(); }
+ * };
+ */
+
+// BSF, Graph, topological
+// topological is a new kind of BFS probelm, so the code will be different
+// This problem is DirectedGraphNode rather than NoDirectedNode
+public class Solution {
+    /*
+     * @param graph: A list of Directed graph node
+     * @return: Any topological order for the given graph.
+     */
+    public ArrayList<DirectedGraphNode> topSort(ArrayList<DirectedGraphNode> graph) {
+        // write your code here
+        
+        if (graph == null){
+            return null;
+        }
+        
+        ArrayList<DirectedGraphNode> result = new ArrayList<DirectedGraphNode>();
+        HashMap<DirectedGraphNode, Integer> map = new HashMap();
+        
+        // count indgree(入度)，这里是DirectedGraphNode，所以neighbors只包括此该Node所指向的Nodes
+        // 经过这个循环，我们知道了每个Node分别被多少个Nodes所指
+        // 只有源头的Nodes(indgree = 0)没有被放入map
+        for (DirectedGraphNode node : graph) {
+            for (DirectedGraphNode neighbor : node.neighbors) {
+                if (map.containsKey(neighbor)) {
+                    map.put(neighbor, map.get(neighbor) + 1);
+                } else {
+                    map.put(neighbor, 1); 
+                }
+            }
+        }
+        
+        // Search for Nodes whose indgree is 0, and put them into queue and result
+        Queue<DirectedGraphNode> queue = new LinkedList<DirectedGraphNode>();
+        for (DirectedGraphNode node : graph) {
+            if (!map.containsKey(node)) {
+                queue.offer(node);
+                result.add(node);
+            }
+        }
+        
+        // This part is quite similar to regular BFS
+        while (!queue.isEmpty()) {
+            DirectedGraphNode node = queue.poll();
+            for (DirectedGraphNode neighbor : node.neighbors) {
+                // 访问各个Nodes，因为上方code已经将indgree=0的Nodes放入result，所以将它的neighbor的Nodes的indgree-1； 当indgree=0，便可以输出
+                map.put(neighbor, map.get(neighbor) - 1);
+                if (map.get(neighbor) == 0) {
+                    result.add(neighbor);
+                    queue.offer(neighbor);
+                }
+            }
+        }
+        return result;
+    }
+}
+
+
+
+
+
+入度与出度
+在介绍算法之前，我们先介绍图论中的一个基本概念，入度和出度，英文为 in-degree & out-degree。
+在有向图中，如果存在一条有向边 A-->B，那么我们认为这条边为 A 增加了一个出度，为 B 增加了一个入度。
+
+算法流程
+拓扑排序的算法是典型的宽度优先搜索算法，其大致流程如下：
+
+统计所有点的入度，并初始化拓扑序列为空。
+将所有入度为 0 的点，也就是那些没有任何依赖的点，放到宽度优先搜索的队列中.
+将队列中的点一个一个的释放出来，放到拓扑序列中，每次释放出某个点 A 的时候，就访问 A 的相邻点（所有A指向的点），并把这些点的入度减去 1。
+如果发现某个点的入度被减去 1 之后变成了 0，则放入队列中。
+直到队列为空时，算法结束.
+深度优先搜索的拓扑排序
+深度优先搜索也可以做拓扑排序，不过因为不容易理解，也并不推荐作为拓扑排序的主流算法。
+
+笔记：拓扑排序的大体思想为：
+首先将入度为0的结点放入queue中，在一个一个向外pop的过程中，
+每pop一个则将此节点放入访问顺序中，同时对于每个pop出的结点，
+将他们指向的结点的入度全都减1，若此时又存在新的入度为0的结
+点，则将此结点放入queue中
+
+while queue不空：
+pop结点
+加入order
+for 此结点所有出度结点：
+每个结点入度减一
+判断此结点是否入度为0，若为零加入queue
+
+注意，这里为图的bfs，故没有层级遍历，故只有一个大循环while
+
+对于如何寻找入度，方法为设置一个字典，key为结点，value为入度，
+循环所有结点，每次将他们出度的结点的value加一即可
