@@ -1,0 +1,126 @@
+433. Number of Islands
+
+Given a boolean 2D matrix, 0 is represented as the sea, 1 is represented as the island. If two 1 is adjacent, 
+we consider them in the same island. We only consider up/down/left/right adjacent.
+
+Find the number of islands.
+
+Example
+Example 1:
+
+Input:
+[
+  [1,1,0,0,0],
+  [0,1,0,0,1],
+  [0,0,0,1,1],
+  [0,0,0,0,0],
+  [0,0,0,0,1]
+]
+Output:
+3
+Example 2:
+
+Input:
+[
+  [1,1]
+]
+Output:
+1
+
+
+
+
+// BFS in matrix
+
+class Coordinate {
+    int x, y;
+    public Coordinate(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class Solution {
+    /**
+     * @param grid a boolean 2D matrix
+     * @return an integer
+     */
+     
+    // eliminate special cases 
+    public int numIslands(boolean[][] grid) {
+        // eliminate special cases 
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
+        
+        int n = grid.length;
+        int m = grid[0].length;
+        int islands = 0;
+        
+        
+        // our main task is to find how many groups of true point(1)
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == true) {
+                    BFS(grid, i, j);
+                    islands++;
+                }
+            }
+        }
+        
+        return islands;
+    }
+    
+    
+    // similar to BFS
+    // 输入point，然后遍历这个point的上下左右周围四个方向，直到碰到边界或false point
+    // 相当于把连在一起的true point都遍历一遍，并将其改为false（因为连在一起的true point，只算一个island）
+    // 1. whether the point is  out of the matrix
+    // 2. whether the point is 1(true)
+    // if the point meets both requirements, add into the queue 
+    
+    private void BFS(boolean[][] grid, int x, int y) {
+        // magic numbers!
+        // 这个direction是对应好的，确保只有上下左右4个方向
+        int[] directionX = {0, 1, -1, 0};
+        int[] directionY = {1, 0, 0, -1};
+        
+        Queue<Coordinate> queue = new LinkedList<>();
+        
+        queue.offer(new Coordinate(x, y));
+        // 遍历过的point，要标记成0（false），确保不会被第二次遍历
+        grid[x][y] = false;
+        
+        while (!queue.isEmpty()) {
+            Coordinate coor = queue.poll();
+            for (int i = 0; i < 4; i++) {
+                Coordinate adj = new Coordinate(
+                    coor.x + directionX[i],
+                    coor.y + directionY[i]
+                );
+                
+                // if the Coordinate is out the bound of matrix, we give up it
+                if (!inBound(adj, grid)) {
+                    continue;
+                }
+                if (grid[adj.x][adj.y]) {
+                    grid[adj.x][adj.y] = false;
+                    queue.offer(adj);
+                }
+            }
+        }
+    }
+    
+    private boolean inBound(Coordinate coor, boolean[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        
+        // 判断[x][y]这个点是不是matrix的边界
+        if (coor.x >= 0 && coor.x < n && coor.y >= 0 && coor.y < m){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+}
