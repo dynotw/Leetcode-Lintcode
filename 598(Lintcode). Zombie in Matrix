@@ -1,0 +1,130 @@
+598. Zombie in Matrix
+
+Given a 2D grid, each cell is either a wall 2, a zombie 1 or people 0 (the number zero, one, two).Zombies can turn the nearest people(up/down/left/right) into zombies every day, but can not through wall. How long will it take to turn all people into zombies? Return -1 if can not turn all people into zombies.
+
+Example
+Example 1:
+
+Input:
+[[0,1,2,0,0],
+ [1,0,0,2,1],
+ [0,1,0,0,0]]
+Output:
+2
+Example 2:
+
+Input:
+[[0,0,0],
+ [0,0,0],
+ [0,0,1]]
+Output:
+4
+
+
+
+// BFS in matrix, 多点同时BFS
+// 因为是多个起点的bfs，所以我们需要先用for loop确定所有符合要求的起点
+// (因为得把所有的zombie都先存入queue)
+class Coordinate{
+    int x;
+    int y;
+    public Coordinate(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class Solution {
+    /**
+     * @param grid: a 2D integer grid
+     * @return: an integer
+     */
+
+    public int WALL = 2;
+    public int ZOMBIE = 1;
+    public int PEOPLE = 0;
+    
+    public int zombie(int[][] grid) {
+        // write your code here
+        
+        int n = grid.length;
+        int m = grid[0].length;
+        
+        if (grid == null || grid.length == 0 || grid[0].length == 0){
+            return 0;
+        }
+        
+        int numPeople = 0;
+        Queue<Coordinate> queueZombie = new LinkedList<>();
+        
+        // get the number of people and all original zombie
+        for (int i=0; i<n; i++){
+            for (int j=0; j<m; j++){
+                if (grid[i][j] == PEOPLE){
+                    numPeople++;
+                }
+                
+                else if (grid[i][j] == ZOMBIE){
+                    queueZombie.offer(new Coordinate(i,j));
+                }
+            }
+        }
+        
+        
+        // BFS
+        int days=0;
+        while(!queueZombie.isEmpty()){
+            int [] directionX = {-1,1,0,0};
+            int [] directionY = {0,0,-1,1};
+            
+            int queueLenghth = queueZombie.size();
+            
+            days++;
+            
+            for (int i=0; i< queueLenghth; i++){
+                Coordinate currentPoint = queueZombie.poll();
+                for (int j=0; j<4; j++){
+                    Coordinate attack = new Coordinate(
+                        currentPoint.x + directionX[j],
+                        currentPoint.y + directionY[j]);
+                    
+                    // 判断是否出界（这个必须先判断，因为要确保attack是有效点）
+                    if (!isBound(grid, attack)){
+                        continue;
+                    } 
+                    
+                    // 判断是否是墙
+                    else if (grid[attack.x][attack.y] == WALL){
+                        continue;
+                    }
+                    
+                    // If it's people，then bfs
+                    else if (grid[attack.x][attack.y] == PEOPLE){
+                        grid[attack.x][attack.y] = ZOMBIE;
+                        numPeople --;
+                        if (numPeople == 0){
+                            return days;
+                        }
+                        queueZombie.offer(attack);
+                    }
+                }
+            }
+           
+        }
+        
+        return -1;
+        
+    }
+    
+    
+    private boolean isBound(int[][] grid, Coordinate currentPoint){
+        int n = grid.length;
+        int m = grid[0].length;
+        if (currentPoint.x >= 0 && currentPoint.x < n && currentPoint.y >=0 && currentPoint.y <m){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+}
