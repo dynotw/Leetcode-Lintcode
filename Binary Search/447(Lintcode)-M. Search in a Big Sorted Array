@@ -43,7 +43,7 @@ public class Solution {
         we need to set the right boundary by ourselves
         the right boundary maybe not the end of the reader, as long as it's bigger than target
         */
-        
+        // This [art is to determine the boundary
         int end = 1;
         // end -1, because the index starts from 0 rather than 1 
         while(reader.get(end-1) < target){
