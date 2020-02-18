@@ -20,7 +20,7 @@ Output: [-1,-1]
 
 
 
-
+// Binary Search
 public class Solution {
     /**
      * @param nums: the array of integers
@@ -32,7 +32,7 @@ public class Solution {
         
         // this problem isn't an array, it's ArrayList(because we only need to search element, so use ArrayList rather than LinkedList)
         // for 14，458， they're Array
-        // This problem, we use .get(),  .size()
+        // This problem, the input is List, so we have to use .get(),  .size()
         
         List<Integer> result = new ArrayList<>();
 
@@ -101,6 +101,7 @@ public class Solution {
 
         }
 
+// this 判断的先后顺序也要改，先判断end
         if (nums.get(lastRight) == target) {
             result.add(lastRight);
         }
