@@ -31,7 +31,7 @@ If the count of numbers is bigger than 2^32, can your code work properly?
 
 
 
-
+// Binary Search
 public class Solution {
     /**
      * @param nums: The integer array.
@@ -41,7 +41,7 @@ public class Solution {
     public int binarySearch(int[] nums, int target) {
         // write your code here
 
-        // Firstly, consider special condition 
+        // Firstly, elimate special condition 
         if (nums == null || nums.length == 0){
             return -1;
         }
@@ -53,6 +53,7 @@ public class Solution {
         
         
         // use while loop to shorten the gap
+	// 标准模板
         while (start + 1 < end){
             int mid = start + (end - start)/2;
             
