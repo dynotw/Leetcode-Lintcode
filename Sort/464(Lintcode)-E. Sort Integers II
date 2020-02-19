@@ -36,7 +36,7 @@ public class Solution {
         
     public void quickSort(int[] A, int start, int end){
         
-        // 注意，递归的终止条件一定放在最前面
+        // 注意，递归的终止条件一定放在最前面（return只会跳出本身的函数，即本级的函数）
         if (start >= end){
             return;
         }
@@ -135,12 +135,15 @@ public class Solution {
     // B= A[mid+1,end];
     // C = A[start, end];
         
+        // 传递给merge函数的，不是两个int[]，而是在int[]A中对应的3个index从而形成2个int[]
     public void merge(int[] A, int start, int mid, int end, int[] temp){
             
             int pointer1 = start; // for A
             int pointer2 = mid +1; // for B
             int index = start;  // for C
             
+            // 这里得是<=，不能是 < ；如果是 < ， 因为我们最后是分成单位int[],这样pointer1 = start; pointer2 = end;
+            // 那么while循环全部不执行，temp就没有写入
             while(pointer1 <= mid && pointer2 <= end){
                 
                 if(A[pointer1] <= A[pointer2]){
