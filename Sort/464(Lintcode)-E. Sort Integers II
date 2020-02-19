@@ -62,7 +62,7 @@ public class Solution {
                 pointer2--;
             } 
             
-            // 通过上面的两个while循环， pointer1 和 pointer2 所对应的value 都需要换位置了
+            // 通过上面的两个while循环和最大的while循环， pointer1 和 pointer2 所对应的value 都需要换位置了
             if (pointer1 <= pointer2){
                 int temp = A[pointer1];
                 A[pointer1] = A[pointer2];
@@ -104,7 +104,7 @@ public class Solution {
     // define mergeSort function:
     public void mergeSort(int[] A, int start, int end, int[] temp){
             // start is the first of A, end is the last one of A; 
-            // temp 是个缓冲array用来存放中间的非完全结果,在sortInteger里面new出来. 
+            // temp 是个缓冲array用来存放中间的非完全结果,在sortInteger里面new出来. 这个是给merge函数用的
             // this temp is for merge function, because we call merge in mergeSort, we need set temp as mergeSort's arguement 
             
             // 递归终止条件（start=end，array中只有一个元素）
