@@ -1,0 +1,130 @@
+80. Median
+
+Given a unsorted array with integers, find the median of it.
+
+A median is the middle number of the array after it is sorted.
+
+If there are even numbers in the array, return the N/2-th number after sorted.
+
+Example
+Example 1:
+
+Input：[4, 5, 1, 2, 3]
+Output：3
+Explanation:
+After sorting，[1,2,3,4,5]，the middle number is 3
+Example 2:
+
+Input：[7, 9, 4, 5]
+Output：5
+Explanation:
+After sorting，[4,5,7,9]，the second(4/2) number is 5
+Challenge
+O(n) time.
+
+Notice
+The size of array is not exceed 10000
+
+
+
+
+// Quick Sort
+public class Solution {
+    /**
+     * @param nums: A list of integers
+     * @return: An integer denotes the middle number of the array
+     */
+    public int median(int[] nums) {
+        // write your code here
+        
+        int start = 0;
+        int end = nums.length -1;
+        
+        quickSort(nums, start, end);
+        
+        return nums[(start+end)/2];
+    }
+    
+   public void quickSort(int[] A, int start, int end){
+        
+        // 注意，递归的终止条件一定放在最前面（return只会跳出本身的函数，即本级的函数）
+        if (start >= end){
+            return;
+        }
+        
+        int pointer1 = start;
+        int pointer2 = end;
+        
+        // 1. pivot, A[start], A[end]
+        // get the value, not the index
+        //虽然任一点都可以作为pivot，但一般还是选择中点
+        int pivot = A[(start +end)/2];
+        
+        // remeber it's requirement is pointer1<=pointer2 not pointer1 < pointer2
+        while (pointer1 <= pointer2){
+            
+            // 一直遍历到A[pointer1] >= pivot
+            while (pointer1 <= pointer2 && A[pointer1] < pivot){
+                pointer1++;
+            }
+            
+            // 一直遍历到A[pointer2] <= pivot
+            while (pointer1 <= pointer2 && A[pointer2] > pivot){
+                pointer2--;
+            } 
+            
+            // 通过上面的两个while循环和最大的while循环， pointer1 和 pointer2 所对应的value 都需要换位置了
+            if (pointer1 <= pointer2){
+                int temp = A[pointer1];
+                A[pointer1] = A[pointer2];
+                A[pointer2] = temp;
+                
+                pointer1++;
+                pointer2--;
+            }
+        }
+        
+        quickSort(A, start, pointer2);
+        quickSort(A, pointer1, end);
+    }    
+        
+/*   
+    public void quickSort (int[] nums, int start, int end){
+        
+        //set two pointers
+        int pointer1 = start;
+        int pointer2 = end;
+        
+        //错误在于 if statement和pivot的设置应该在while loop之前
+        
+        while(pointer1 <= pointer2){
+            if (pointer1 >= pointer2){
+                return;
+            }
+            
+            int pivot = start + (start-end)/2;
+            
+            // nums[pointer1] < nums[pivot],是为了确保pointer1不会超过pivot，最多到达pivot
+            // 因为此时nums[pointer1] == nums[pivot],while loop is over
+            while(pointer1 <= pointer2 && nums[pointer1] < nums[pivot]){
+                pointer1++;
+            }
+            
+            while(pointer1 <= pointer2 && nums[pointer2] > nums[pivot]){
+                pointer2--;
+            }
+            
+            if (pointer1 <= pointer2){
+                int temp = nums[pointer1];
+                nums[pointer1] = nums[pointer2];
+                nums[pointer2] = temp;
+                pointer1++;
+                pointer2--;
+            }
+        }
+        
+        quickSort(nums, start, pointer2);
+        quickSort(nums, pointer1, end);
+    }
+*/
+}
