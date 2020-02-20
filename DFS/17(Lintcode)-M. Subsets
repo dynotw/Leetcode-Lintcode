@@ -1,0 +1,88 @@
+17. Subsets
+
+Given a set of distinct integers, return all possible subsets.
+
+Example
+Example 1:
+
+Input: [0]
+Output:
+[
+  [],
+  [0]
+]
+Example 2:
+
+Input: [1,2,3]
+Output:
+[
+  [3],
+  [1],
+  [2],
+  [1,2,3],
+  [1,3],
+  [2,3],
+  [1,2],
+  []
+]
+Challenge
+Can you do it in both recursively and iteratively?
+
+Notice
+Elements in a subset must be in non-descending order.
+The solution set must not contain duplicate subsets.
+
+
+
+
+// DFS classical probelm
+class Solution {
+    /**
+     * @param S: A set of numbers.
+     * @return: A list of lists. All valid subsets.
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        
+        //因为return的是List<List<Integer>>,所以我们要new一个出来 
+        List<List<Integer>> results = new ArrayList<>();
+        
+        if (nums == null) {
+            return results;
+        }
+        else if (nums.length == 0) {
+            results.add(new ArrayList<Integer>());
+            return results;
+        }
+        
+        Arrays.sort(nums);
+        
+        helper(new ArrayList<Integer>(), nums, 0, results);
+        return results;
+    }
+    
+    
+    // 递归三要素
+    // 1. 递归的定义：在 Nums 中找到所有以 subset 开头的的集合，并放到 results
+    private void helper(ArrayList<Integer> subset,
+                        int[] nums,
+                        int startIndex,
+                        List<List<Integer>> results) {
+        // 2. 递归的拆解
+        // deep copy
+        // results.add(subset);
+        // 第一个存入的绝对是[]的空List
+        results.add(new ArrayList<Integer>(subset));
+        
+        for (int i = startIndex; i < nums.length; i++) {
+            // [] -> [1]; [1] -> [1,2]
+            subset.add(nums[i]);
+            // 寻找所有以 [1]; [1,2] 开头的集合，并扔到 results
+            helper(subset, nums, i + 1, results);
+            // [1] -> [0]; [1,2] -> [1]  回溯
+            subset.remove(subset.size() - 1);
+        }
+        
+        // 3. 递归的出口
+        return;
+    }
+}
