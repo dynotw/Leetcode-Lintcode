@@ -27,6 +27,7 @@ You can swap elements in the array
 
 
 // Quick Sort
+// 就是在Quick Sort的基础上，进行个输出就行
 public class Solution {
     /**
      * @param n: An integer
