@@ -47,6 +47,13 @@ public class Solution {
         // 1. pivot, A[start], A[end]
         // get the value, not the index
         //虽然任一点都可以作为pivot，但一般还是选择中点
+        /*
+        this place, we can't assign pivot as an index like: 
+        int pivot = start + (end - start)/2
+        Because during the resursion, the element on the index of pivot will change(相当于A[pivot]的值是会变化的)
+        Therefore, we have to assign the value to the pivot, so that the value of pivot won't change, during the recursion.
+        */
+        
         int pivot = A[(start +end)/2];
         
         // remeber it's requirement is pointer1<=pointer2 not pointer1 < pointer2
