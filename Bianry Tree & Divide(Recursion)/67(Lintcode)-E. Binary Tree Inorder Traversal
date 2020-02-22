@@ -95,6 +95,7 @@ public class Solution{
         
         List<Integer> result = new ArrayList<>();
         
+        // 这个不是eliminate special case，更像是recursion的结束条件
         if (root == null){
             return result;
         }
@@ -104,6 +105,7 @@ public class Solution{
         List<Integer> right = inorderTraversal(root.right);
         
         // Conquer
+        // use .addAll() instead of .add()
         result.addAll(left);
         result.add(root.val);
         result.addAll(right);
