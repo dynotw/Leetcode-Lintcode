@@ -36,6 +36,7 @@ Example 2:
  */
 
 // Binary Tree, Divide, Recursion, Struct
+// 1st method is wrong answer, 2nd and 3rd are quite similar, but 3rd is easier to understand
 /*
 public class Solution {
     /*
@@ -102,13 +103,10 @@ public class Solution {
 }
 
 
-// Version 2:
-// SinglePath也定义为，至少包含一个点。
+// Version 2（更理解）:
+// singlePath: 从root往下走到任意点的最大路径，这条路径至少包含root
+// maxPath: 从树中任意到任意点的最大路径，这条路径至少包含一个点
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: An integer.
-     */
     private class ResultType {
         int singlePath, maxPath;
         ResultType(int singlePath, int maxPath) {
@@ -119,6 +117,8 @@ public class Solution {
 
     private ResultType helper(TreeNode root) {
         if (root == null) {
+            // why return Integer.MIN_VALUE, it's hard to explain
+            // only need to run the code, to check (if root.val < 0)
             return new ResultType(Integer.MIN_VALUE, Integer.MIN_VALUE);
         }
         // Divide
@@ -126,9 +126,10 @@ public class Solution {
         ResultType right = helper(root.right);
 
         // Conquer
-        int singlePath =
-            Math.max(0, Math.max(left.singlePath, right.singlePath)) + root.val;
-
+        // because we can start and end at anynode, we can just give up the sum. if it's less than 0
+        int singlePath = Math.max(0, Math.max(left.singlePath, right.singlePath)) + root.val;
+        
+        // because Math.max() can only use for two numbers comparation, we have to use Math.max() twice
         int maxPath = Math.max(left.maxPath, right.maxPath);
         maxPath = Math.max(maxPath,
                            Math.max(left.singlePath, 0) + 
@@ -141,5 +142,4 @@ public class Solution {
         ResultType result = helper(root);
         return result.maxPath;
     }
-
 }
