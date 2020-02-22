@@ -82,6 +82,7 @@ public class Solution {
         // write your code here
         
         // eliminate special case
+	// this (root == null)，不是recursion中的over条件（不是divide的部分），只是单纯的排除特殊情况
         if (root == null){
             return true;
         }
@@ -89,10 +90,10 @@ public class Solution {
         return helper(root).isBalanced;
     }
     
+    // 如果自己定义了一个construct，通常也会对应地定义一个函数
     public ResultType helper(TreeNode root){
         
         if (root == null){
-            
             return new ResultType(0, true);
         }
         
@@ -100,9 +101,8 @@ public class Solution {
         ResultType left = helper(root.left);
         ResultType right = helper(root.right);
         
-        // 
-        if (!left.isBalanced || !right.isBalanced){
-            
+        // Conquer
+        if (!left.isBalanced || !right.isBalanced){            
             // must return ResultType (because we define hepler in this way)
             // this condition, we can return any depth. 
             // isBalanced is false, so whatever depth is, always return fasle 
