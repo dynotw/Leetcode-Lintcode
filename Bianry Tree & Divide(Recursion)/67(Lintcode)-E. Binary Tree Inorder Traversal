@@ -126,6 +126,8 @@ public class Solution {
         Stack<TreeNode> stack = new Stack<>();
         ArrayList<Integer> result = new ArrayList<>();
         
+        // 这里容易错误理解：root=root.left执行后，stack内部的root也会变化，其实不会。因为root只是一个引用不是对象，
+        // root=root.left只是将root这个引用指向的root.left指向的对象，此时原先root引用所指向的对象就失去了引用，只能通过pop或peek来获取了
         while (root != null) {
             stack.push(root);
             root = root.left;
