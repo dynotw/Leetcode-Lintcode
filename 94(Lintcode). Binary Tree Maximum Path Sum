@@ -21,8 +21,6 @@ Example 2:
 
 
 
-
-
 /**
  * Definition of TreeNode:
  * public class TreeNode {
@@ -37,7 +35,7 @@ Example 2:
 
 // Binary Tree, Divide, Recursion, Struct
 // 1st method is wrong answer, 2nd and 3rd are quite similar, but 3rd is easier to understand
-/*
+
 public class Solution {
     /*
      * @param root: The root of binary tree.
@@ -64,8 +62,6 @@ public class Solution {
         return midMax;
     }
 }
-
-*/
 
 public class Solution {
     private class ResultType {
@@ -134,7 +130,6 @@ public class Solution {
         maxPath = Math.max(maxPath,
                            Math.max(left.singlePath, 0) + 
                            Math.max(right.singlePath, 0) + root.val);
-
         return new ResultType(singlePath, maxPath);
     }
 
