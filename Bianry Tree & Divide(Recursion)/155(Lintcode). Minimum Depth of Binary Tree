@@ -73,7 +73,8 @@ public class Solution {
         
         // this part is different from 97(Lintcode). Maximum Depth of Binary Tree
         // because {1,#,2,3} should return 3 rather than 1
-        if (leftDepth == 0){
+        // 遇到0就相当于碰到了一个leaf node（没有根节点）,那么length就要从这个leaf node重新计算了
+	if (leftDepth == 0){
             return rightDepth + 1;
         }
         
