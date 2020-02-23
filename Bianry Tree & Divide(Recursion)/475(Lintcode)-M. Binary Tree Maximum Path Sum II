@@ -43,6 +43,7 @@ Explanation:
 // Binary Tree, Divide
 // Maxinmum Path Sum 系列有三种问题：1. root到leaf；2.root到anynode；3.anynode到anynode
 // This problem is root 到 anyone
+// 94 是anynode to anynode
 public class Solution {
     /**
      * @param root: the root of binary tree.
