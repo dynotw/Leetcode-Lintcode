@@ -46,53 +46,55 @@ Assume two nodes are exist in tree.
 
 // Binary Tree, Divide
 // Understand the Lowest Common Ancestor(LCA)
-// This problem is quite similar to 1311(BST), But 1311 is easier, because it's Binary Search Tree(BST). 
+// compared to 88, which is in Binary Tree. For this problem, we can write easier code, if we use the property of BST
 
 public class Solution {
-    /*
-     * @param root: The root of the binary search tree.
-     * @param A: A TreeNode in a Binary.
-     * @param B: A TreeNode in a Binary.
-     * @return: Return the least common ancestor(LCA) of the two nodes.
-     */
-     
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         // write your code here
         
         
-        // 递归结束条件和排除特殊情况
+        // 递归结束条件
         if (root == null){
             return null;
         }
         
+        // 特殊部分：因为自己归纳的over部分，只需要判断root == null
         if (p == root || q == root){
             return root;
         }
-        
-        
+         
         // Divide
+        // 此处left和right变量返回的其实不是p和q的commonAncestor，而是返回是否存在p或q
+        // 如果返回null，表示不存在p或q；如果返回非null，说明存在p或q，或p和q
         TreeNode left = lowestCommonAncestor(root.left, p, q);
-        TreeNode right = lowestCommonAncestor(root.right, p,q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
         
-        /* three case, 1.LCA在left(p,q都在left);
+        // Conquer
+        /*
+            three case, 1.LCA在left(p,q都在left);
                        2.LCA在right(p,q都在right);
                        3.LCA在root(p,q不在同一边)
             分别对应: 1.left return LCA, right return null; 
                       2.left return null, right return LCA; 
                       3.left and right 最深层分别return p或q,然后逐层return各自的root 
         */
-        
-        
-        // Conquer
+        /*
+        将这个特殊部分当作Conquer的其中一个情况放在这里也没问题，只是自己归纳的Conquer只根据判断 Divide的两个新变量（left和right）进行分情况讨论
+        只是把这部分当作over条件，放在Divide & Conquer的第一部分，代码更快
+        if (p == root || q == root){
+            return root;
+        }
+        */
+                
         if (left != null && right != null){
             return root;
         }
         
-        else if (left != null){
+        else if (left != null && right == null){
             return left;
         } 
         
-        else if (right != null){
+        else if (right != null && left == null){
             return right;
         }
         
