@@ -75,13 +75,13 @@ public class Solution {
         return result;
     }
     
-    private void dfs (List<List<Integer>> result, ArrayList<Integer> path, TreeNode root, int currSum, int sum) {
+    private void dfs (List<List<Integer>> result, ArrayList<Integer> path, TreeNode root, int currSum, int target) {
         
         path.add(root.val);
         
         // this condition is when recursion is over  
         if (root.left == null && root.right == null) {
-            if (currSum + root.val == sum) {
+            if (currSum + root.val == target) {
                 
                 // 因为在后面我们还对path进行了remove的操作，所以我们不能直接将path插入rst里面
                 // 这样会使得，当我们在进行remove操作时，rst里面的所插入path的对应值也发生改变（因为path不是值传递，引用传递），所以我们要new一个新的对象。
@@ -96,14 +96,14 @@ public class Solution {
         }
         
         if (root.left != null) {
-            dfs(result, path, root.left, currSum + root.val, sum);
+            dfs(result, path, root.left, currSum + root.val, target);
             
             // 当一条支路做完后，要把dfs所插入path的root.val全部删除，再重新开始计算另外一条支路
             path.remove(path.size() - 1);
         }
  
         if (root.right != null) {
-            dfs(result, path, root.right, currSum + root.val, sum);
+            dfs(result, path, root.right, currSum + root.val, target);
             path.remove(path.size() - 1);
         }
     }
