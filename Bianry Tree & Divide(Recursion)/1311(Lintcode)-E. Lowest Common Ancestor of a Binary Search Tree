@@ -2,13 +2,15 @@
 
 Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
 
-According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).”
+According to the definition of LCA on Wikipedia: 
+“The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants
+(where we allow a node to be a descendant of itself).”
 
 Given binary search tree: root = {6,2,8,0,4,7,9,#,#,3,5}
 
 Example
 Explanation:
-    6	1
+    6	
    / \ 
   2    8
  /\    /\
@@ -54,55 +56,91 @@ p and q are different and both values will exist in the BST.
  */
 
 
-// Binary Tree, Divide
-// Understand the Lowest Common Ancestor(LCA)
+// Binary Search Tree, Divide
+// compared to 88, which is in Binary Tree. For this problem, we can write easier code, if we use the property of BST
+
 public class Solution {
-    /**
-     * @param root: root of the tree
-     * @param p: the node p
-     * @param q: the node q
-     * @return: find the LCA of p and q
-     */
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         // write your code here
         
         
-        // 递归结束条件和排除特殊情况
+        // 递归结束条件
         if (root == null){
             return null;
         }
         
+        // 特殊部分：因为自己归纳的over部分，只需要判断root == null
         if (p == root || q == root){
             return root;
         }
-        
-        
+         
         // Divide
+        // 此处left和right变量返回的其实不是p和q的commonAncestor，而是返回是否存在p或q
+        // 如果返回null，表示不存在p或q；如果返回非null，说明存在p或q，或p和q
         TreeNode left = lowestCommonAncestor(root.left, p, q);
-        TreeNode right = lowestCommonAncestor(root.right, p,q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
         
-        /* three case, 1.LCA在left(p,q都在left);
+        // Conquer
+        /*
+            three case, 1.LCA在left(p,q都在left);
                        2.LCA在right(p,q都在right);
                        3.LCA在root(p,q不在同一边)
             分别对应: 1.left return LCA, right return null; 
                       2.left return null, right return LCA; 
                       3.left and right 最深层分别return p或q,然后逐层return各自的root 
         */
-        
-        
-        // Conquer
+        /*
+        将这个特殊部分当作Conquer的其中一个情况放在这里也没问题，只是自己归纳的Conquer只根据判断 Divide的两个新变量（left和right）进行分情况讨论
+        只是把这部分当作over条件，放在Divide & Conquer的第一部分，代码更快
+        if (p == root || q == root){
+            return root;
+        }
+        */
+                
         if (left != null && right != null){
             return root;
         }
         
-        else if (left != null){
+        else if (left != null && right == null){
             return left;
         } 
         
-        else if (right != null){
+        else if (right != null && left == null){
             return right;
         }
         
         return null;
     }
 }
+
+
+/*
+//由于BST的性质(inorder traversal can't be descenting)，如果一个大一个小的话LCA一定是root，不然在其一侧子树上，递归寻找即可
+public class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+        // Value of current node or parent node.
+        int parentVal = root.val;
+
+        // Value of p
+        int pVal = p.val;
+
+        // Value of q;
+        int qVal = q.val;
+
+        if (pVal > parentVal && qVal > parentVal) {
+            // If both p and q are greater than parent, both of them are at right tree
+            return lowestCommonAncestor(root.right, p, q);
+        } 
+        else if (pVal < parentVal && qVal < parentVal) {
+            // If both p and q are lesser than parent, both of them are at left tree
+            return lowestCommonAncestor(root.left, p, q);
+        } 
+        else {
+        // either of them is at each side tree
+            // We have found the split point, i.e. the LCA node.
+            return root;
+        }
+    }
+}
+*/
