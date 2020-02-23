@@ -61,21 +61,21 @@ public class Solution {
     public List<List<Integer>> binaryTreePathSum(TreeNode root, int target) {
         // write your code here
         
-        //rst stores the whole output
-        List<List<Integer>> rst = new ArrayList<>();
+        //result stores the whole output
+        List<List<Integer>> result = new ArrayList<>();
         
         // path 储存每个可能path，并且在将path写入rst后，会将这个path清理一下，储存新的path
         ArrayList<Integer> path = new ArrayList<>();
     
         if (root == null) {
-            return rst;
+            return result;
         }
         
-        dfs(rst, path, root, 0, target);
-        return rst;
+        dfs(result, path, root, 0, target);
+        return result;
     }
     
-    private void dfs (List<List<Integer>> rst, ArrayList<Integer> path, TreeNode root, int currSum, int sum) {
+    private void dfs (List<List<Integer>> result, ArrayList<Integer> path, TreeNode root, int currSum, int sum) {
         
         path.add(root.val);
         
@@ -88,7 +88,7 @@ public class Solution {
                 // 这里不是对path做个新的引用，而是根据path的内容new一个新的对象
                 
                 ArrayList path1 = new ArrayList<>(path);
-                rst.add(path1);
+                result.add(path1);
             }
             
             // 这个return 不是退出整个函数，而是退出其所在的那层函数(相当于最底层的dfs函数)
@@ -96,16 +96,15 @@ public class Solution {
         }
         
         if (root.left != null) {
-            dfs(rst, path, root.left, currSum + root.val, sum);
+            dfs(result, path, root.left, currSum + root.val, sum);
             
             // 当一条支路做完后，要把dfs所插入path的root.val全部删除，再重新开始计算另外一条支路
             path.remove(path.size() - 1);
         }
  
         if (root.right != null) {
-            dfs(rst, path, root.right, currSum + root.val, sum);
+            dfs(result, path, root.right, currSum + root.val, sum);
             path.remove(path.size() - 1);
         }
-        
     }
 }
