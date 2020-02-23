@@ -57,10 +57,96 @@ Each node has a different value
  *     }
  * }
  */
- 
+
+
+// Divide & Conquer in Binary Tree， Construct
+// 因为我们要同时知道3个返回值：1.a是否存在；2.b是否存在；3.a和b的LCA，所以对于需要或者多个返回值的，我们construct a struct（class）
+// 在88的基础上，多加判断A和B是否存在; 在88中，只要A，B有一个存在就不会return null
+// 1st menthod is written by myself, it seems more understandable 
+
+// 1st method,不需要构建construct，直接使用两个全局boolean全局变量来判断A和B是否存在即可
+public class Solution {
+    // we have to set A_exist and B_exist as gloabl variable
+    // 因为我们不能将其作为helper参数传入（这样就变成值传递了），但同时helper又能访问A_exsit and B_exist
+    public boolean A_exist = false;
+    public boolean B_exist = false;
+    
+    public TreeNode lowestCommonAncestor3(TreeNode root, TreeNode A, TreeNode B) {
+        
+        TreeNode result = helper(root, A, B);
+        
+        if (!A_exist || !B_exist){
+            return null;
+        }
+        return result;
+    }
+    
+    private TreeNode helper (TreeNode root, TreeNode A, TreeNode B){
+        
+        // over 
+        if (root == null){
+            return null;
+        }
+        /* 
+        与88不同，此题特殊部分不能放在此处，只能放在3.Conquer中
+        if (A == root){
+            A_exist = true;
+            return root;
+        }
+        if (B == root){
+            B_exist = true;
+            return root;
+        }
+        */
+        
+        // Divide
+        TreeNode left = helper(root.left, A, B);
+        TreeNode right = helper(root.right, A, B);
+        
+        // Conquer
+/*
+    此时在88中的特殊部分，不能放在1.Over中了。因为88中是默认A和B一定存在的；但是在578中，A和B不一定存在。
+    放在1.Over中：当A==root后，A的commonAncestor已经不可能低于此时的root了（不需要关注B了，因为B要么低于A，要么在另一侧的子树上），所以返回root即可。
+    放在3.Conquer中：因为当A==root后，我们还不确定B是否存在。对于A、B是否存在，我们必须先要遍历整个Binary Tree，只有A==root和B==root都出现了，
+    才能确定A和B都存在。conquer部分只有在root碰到leaf时才能执行，所以当执行了if (A==root)时，我们已经遍历完了A点以下的所有节点，可确定B是否低于A
+    
+    例子
+      2
+     / \
+    -1   
+    LCA(-1,2)=2
+    当特殊部分放在1.Over时，结果不是2而是null。因为if(A==root)成立，return root时，B_exsit还没进行过判断，仍然是false
+*/   
+
+        if (A == root){
+            A_exist = true;
+            return root;
+        }
+        if (B == root){
+            B_exist = true;
+            return root;
+        }
+        if (left != null && right != null){
+            return root;
+        }
+        else if (left != null && right == null){
+            return left;
+        }
+        else if (left == null && right != null){
+            return right;
+        }
+        else{
+            return null;
+        }
+    }
+}
+
+
+// 2nd method
+/*
 // Binary Tree, Divide, Construct a Struct
 // 因为我们要同时知道3个返回值：1.a是否存在；2.b是否存在；3.a和b的LCA，所以对于需要或者多个返回值的，我们construct a struct（class）
-// 在88的基础上，多加判断a和b是否存在
+// 在88的基础上，多加判断A和B是否存在; 在88中，只要A，B有一个存在就不会return null
 class ResultType {
     public boolean a_exist;
     public boolean b_exist;
@@ -73,14 +159,10 @@ class ResultType {
 }
 
 public class Solution {
-    /**
-     * @param root The root of the binary tree.
-     * @param A and B two nodes
-     * @return: Return the LCA of the two nodes.
-     */
     public TreeNode lowestCommonAncestor3(TreeNode root, TreeNode A, TreeNode B) {
         // write your code here
         ResultType result = helper(root, A, B);
+        
         // 先判断a和b是否存在
         if (!result.a_exist || !result.b_exist)
             return null;
@@ -88,10 +170,14 @@ public class Solution {
             return result.node;
     }
 
+// We usually define a function corresponding to construct, if we define a construct by ourselves
     public ResultType helper(TreeNode root, TreeNode A, TreeNode B) {
+        
+        // 1. Over
         if (root == null)
             return new ResultType(false, false, null);
-            
+        
+        // 2. Divide    
         ResultType left_rt = helper(root.left, A, B);
         ResultType right_rt = helper(root.right, A, B);
         
@@ -100,15 +186,17 @@ public class Solution {
         
         if (root == A || root == B)
             return new ResultType(a_exist, b_exist, root);
-
+            
+        // 3. Conquer
         // This part is same as 88
         if (left_rt.node != null && right_rt.node != null)
             return new ResultType(a_exist, b_exist, root);
-        if (left_rt.node != null)
+        else if (left_rt.node != null && right_rt.node == null)
             return new ResultType(a_exist, b_exist, left_rt.node);
-        if (right_rt.node != null)
+        else if (right_rt.node != null && right_rt.node == null)
             return new ResultType(a_exist, b_exist, right_rt.node);
 
         return new ResultType(a_exist, b_exist, null);
     }
 }
+*/
