@@ -45,37 +45,76 @@ This is a binary search tree.
  * }
  */
 
+// Divide & Conquer in BST, Construct
+// Inorder 里面加入判断，但这个方法表现很差
+// 1st method Inorder Traversal, Own method
+import java.util.LinkedList;
+public class Solution{
+    private boolean isBST = true;
+    public boolean isValidBST(TreeNode root){
+        
+        inorder(root);
+        return isBST;
+    }
+    
+    private List<Integer> inorder(TreeNode root){
+        
+        List<Integer> result = new LinkedList<>();
+        
+        // 1.Over
+        // Becuase when isBST == false, we don't care abour other nodes, the Binary Tree must not be BST.
+        // So we can put (isBST == false) in to Over Condition
+        if (root == null || isBST == false){
+            return result;
+        }
+        
+        // 2.Divide
+        List<Integer> left = inorder(root.left);
+        List<Integer> right = inorder(root.right);
+        
+        // 3.Conquer
+        result.addAll(left);
+        if (left.size() > 0){
+            if (root.val <= left.get(left.size() - 1)){
+                isBST = false;
+            }
+        }
+        result.add(root.val);
+        result.addAll(right);
+        if(right.size() > 0){
+            if (right.get(0) <= root.val){
+                isBST = false;
+            }
+        }
+        return result;
+    }
+}
+
+
+/*
 // BST, Divide, Construct a Struct
+// 2nd method, 
 class ResultType {
     public boolean isBST;
     // 这里设置成int就会报错，搞不懂，难度node.value有这么大/小？
     public long minValue, maxValue;
-    
     //构造函数
     public ResultType(long minValue, long maxValue, boolean isBST) {
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.isBST = isBST;
-        
     }
 }
 
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: True if the binary tree is BST, or false
-     */
     public boolean isValidBST(TreeNode root) {
-        // write your code here
-        
+        // eliminate special case
         if (root == null){
             return true;
         }
         
         ResultType result = validHelper(root);
         return result.isBST; 
-        
-        
     }
     
     // 因为 isValidBST 只有一个返回值，但ResulType在递归时，要返回三个值，所以我们自己再重新定义一个函数
@@ -94,10 +133,8 @@ public class Solution {
         ResultType left = validHelper(node.left); //调用左子树 
         ResultType right = validHelper(node.right);
         
-        
-        
         // Conquer
-        //若有node的左右某一子树不是bst，那么整个tree绝对就不是bst(minValue & maxValue的值就无所谓)
+        //若有node的左右某一子树不是bst，那么整个tree绝对就不是 bst(minValue & maxValue的值就无所谓)
         if (!left.isBST || !right.isBST ){
             return new ResultType(-1,-1,false);
         }
@@ -109,6 +146,6 @@ public class Solution {
             Math.max(node.val, right.maxValue), 
             isBST); 
         //左右可能有空节点，所以需要和node.val自身取最大最小值
-        
     }
 }
+*/
