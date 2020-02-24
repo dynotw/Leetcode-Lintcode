@@ -60,6 +60,67 @@ public class Solution {
     }
 }
 
+
+// Divide & Conquer in Binary Tree
+// Own method
+class ResultType{
+    TreeNode minNode;
+    int sum;
+    int minSum;
+    public ResultType(TreeNode minNode, int sum, int minSum){
+        this.minNode = minNode;
+        this.sum = sum;
+        this.minSum = minSum;
+    }
+}
+
+public class Solution {
+    /**
+     * @param root: the root of binary tree
+     * @return: the root of the minimum subtree
+     */
+    public TreeNode findSubtree(TreeNode root) {
+        // write your code here
+        if (root == null){
+            return null;
+        }
+        
+        ResultType result = helper(root);
+        
+        return result.minNode;
+    }
+    
+    private ResultType helper(TreeNode root){
+        // 1. over
+        if (root == null){
+            // 与628唯一的不同就在这里return MAX_VALUE和下面的Math.min
+            return new ResultType(null, 0, Integer.MAX_VALUE);
+        }
+        
+        // 2. Divide
+        ResultType left = helper(root.left);
+        ResultType right = helper(root.right);
+        
+        // 3. Conquer
+        int sum = left.sum + right.sum + root.val;
+        int sideMin = Math.min(left.minSum, right. minSum);
+        int finalMin = Math.min(sideMin, sum);
+        
+        if (finalMin == left.minSum){
+            return new ResultType(left.minNode, sum, left.minSum);
+        }
+        
+        else if (finalMin == right.minSum){
+            return new ResultType(right.minNode, sum, right.minSum);
+        }
+        
+        else{
+            return new ResultType(root, sum, sum);
+        }
+        
+    }
+}
+
 // version 2: Pure divide conquer
 class ResultType {
 // minSubtree 就是minSum对应的subtree 
