@@ -25,10 +25,6 @@ Explanation:
 it will be serialized {3,9,20,#,#,15,7}
 
 
-
-
-
-
 /**
  * Definition of TreeNode:
  * public class TreeNode {
@@ -41,6 +37,8 @@ it will be serialized {3,9,20,#,#,15,7}
  * }
  */
 
+// BFS in Binary Tree, 层级遍历(prefer 2nd method, because it also uses queue)
+// 1st method, use stack instead of queue
 public class Solution {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
@@ -62,7 +60,8 @@ public class Solution {
             
     /*
     Because Stack is FILO, we can't put the nextLevel's node into currLevel directly
-    If we do in this way, pop() operation will get the nextLevel's node rather than currLevel' node, so we new a nextLevel to put the nextLevel's node temporarily as buffer.
+    If we do in this way, pop() operation will get the nextLevel's node rather than currLevel' node, 
+    so we new a nextLevel to put the nextLevel's node temporarily as buffer.
     
     */
             Stack<TreeNode> nextLevel = new Stack<TreeNode>();
@@ -96,6 +95,10 @@ public class Solution {
         }
 
         return result;
-
     }
 }
+
+
+// 2nd method
+
+
