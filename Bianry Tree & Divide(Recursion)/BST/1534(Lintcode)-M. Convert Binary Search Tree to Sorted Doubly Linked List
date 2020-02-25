@@ -57,7 +57,10 @@ Output: "left:1->3->2  right:1->2->3"
 
 // Divide &Conquer in BST, use Inorder Traverse,
 // In Conquer, we connect each node
-// 1st method, Own method (效率也不错), 就记这个method，
+// 1st method, Own method (效率也不错), 就记这个method
+// Don't need to worry that certain subtree in Binary Tree will disappear when I change the root.left and root.right
+// Because all Subtree Nodes have been stored in left and right, two List<TreeNode>.
+// Even certain Nodes lose the pointer(root), we also can use List<TreeNode> to access them
 public class Solution{
     public TreeNode treeToDoublyList(TreeNode root){
         // eliminate special case
