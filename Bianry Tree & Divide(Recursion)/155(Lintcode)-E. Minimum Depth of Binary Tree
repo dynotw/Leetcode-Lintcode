@@ -15,10 +15,10 @@ Input:  {1,#,2,3}
 Output: 3	
 Explanation:
 	1
-	 \ 
-	  2
-	 /
-	3    
+       / \ 
+      #	  2
+	 / \
+	3   # 
 it will be serialized {1,#,2,3}
 Example 3:
 
@@ -73,13 +73,16 @@ public class Solution {
         
         // this part is different from 97(Lintcode). Maximum Depth of Binary Tree
         // because {1,#,2,3} should return 3 rather than 1
-        // 遇到0就相当于碰到了一个leaf node（没有根节点）,那么length就要从这个leaf node重新计算了
+	// Because depth is root to leaf, leaf is both leftDepth and rightDepth == 0. either of them isn't 0, then the node isn't leaf
+
 	// 这里+1，加的也是root
-	if (leftDepth == 0){
+	// if (leftDepth == 0 && rightDepth != 0) 就是针对Example 2 中的1
+	if (leftDepth == 0 && rightDepth != 0){
             return rightDepth + 1;
         }
         
-        else if (rightDepth == 0){
+	// if (rightDepth == 0 && leftDepth != 0) 就是针对Example 2 中的2
+        else if (rightDepth == 0 && leftDepth != 0){
             return leftDepth + 1;
         }
         
