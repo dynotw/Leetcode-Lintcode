@@ -76,7 +76,6 @@ public class Solution {
         TreeNode Left = helper(root.left);
         TreeNode Right = helper(root.right);
         
-
         if (Left != null){
             Left.right = Right;
             Left.left = null;
@@ -94,14 +93,60 @@ public class Solution {
 }
 */
 
+// Divide & Conquer in BST, Compared to 1534, 同时对Binary Tree Traversal的基础上进行改动
+// 2nd method, Own method based on Preorder in Binary Tree
+// Don't need to worry about when I change the root.left and root.right, certain subtrees in original tree will disapper(like in 1st method)
+// because all information about subtree is already stored in left and right two List<TreeNode>(through 2.Divide)
+public class Solution{
+    public void flatten(TreeNode root){
+        if (root == null){
+            return;
+        }
+        helper(root);
+    }
+    
+    private List<TreeNode> helper (TreeNode root){
+        List<TreeNode> result = new LinkedList<>();
+        
+        // 1. Over
+        if (root == null){
+            return result;
+        }
+        
+        // 2.Divide
+        List<TreeNode> left = helper(root.left);
+        List<TreeNode> right = helper(root.right);
+    
+        // 3. Conquer
+        int leftSize = left.size();
+        int rightSize = right.size();
+        result.add(root);
+        result.addAll(left);
+        result.addAll(right);
+        
+        root.left =null;
+        if (leftSize > 0){
+            root.right = left.get(0);
+            if (rightSize > 0){
+                TreeNode leftLast = left.get(leftSize - 1);
+                leftLast.right = right.get(0);
+            }
+        }
+        
+        else if (leftSize <= 0){
+            if (rightSize > 0){
+                root.right = right.get(0);
+            }
+        }
+        
+        return result;
+    }
+}
 
+/*
 // 画图才能理解
 // 答案有一点没理解，答案return的是新的Binary Tree的leaf而不是root
 public class Solution {
-    /**
-     * @param root: a TreeNode, the root of the binary tree
-     * @return: nothing
-     */
     public void flatten(TreeNode root) {
         helper(root);
     }
@@ -133,3 +178,4 @@ public class Solution {
         return root;
     }
 }
+*/
