@@ -38,14 +38,44 @@ it will be serialized {3,9,20,#,#,15,7}
  */
 
 // BFS in Binary Tree, 层级遍历(prefer 2nd method, because it also uses queue)
-// 1st method, use stack instead of queue
-public class Solution {
-    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
-
-        if (root == null) {
+// 1st method, still uses queue
+public class Solution{
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root){
+        List<List<Integer>> result = new LinkedList<List<Integer>>();
+        if (root == null){
             return result;
         }
+        boolean reverse = false;
+        Queue<TreeNode> queue = new LinkedList<>();
+        
+        queue.offer(root);
+        
+        while(!queue.isEmpty()){
+            List<Integer> currLevel = new LinkedList<>();
+            int size = queue.size();
+            
+            for (int i=0; i<size; i++){
+                TreeNode head = queue.poll();
+                if (reverse){
+                    currLevel.add(0,head.val);
+                }
+                else{
+                    currLevel.add(head.val);
+                }
+                
+                if (head.left != null){
+                    queue.offer(head.left);
+                }
+                if (head.right != null){
+                    queue.offer(head.right);
+                }
+            }
+            reverse = ! reverse;
+            result.add(currLevel);
+        }
+        return result;
+    }
+}
 
 // In this problem, we need to use Stack instead of Queue
 // because we need to use the property of Stack, FILO
