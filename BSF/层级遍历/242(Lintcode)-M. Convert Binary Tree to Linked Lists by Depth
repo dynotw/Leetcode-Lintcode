@@ -46,8 +46,9 @@ Explanation:
  * }
  */
  
- // Binary Tree, BSF, LinkedList,Queue
- // At the beginning, I don't know how to create the LinkedNode
+ // BFS in Binary Tree(Level Traversal) LinkedList,Queue
+ // At the beginning, I don't know how to create the LinkedNode, the trouble is how to create ListNode
+ // 这里ListNode的操作就相当于69中ArrayList cuurentLevel
 public class Solution {
     /**
      * @param root the root of binary tree
