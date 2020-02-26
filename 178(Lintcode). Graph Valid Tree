@@ -64,7 +64,7 @@ public class Solution {
         }
         
         // 判断各点之间是否互通。（只要有一个点满足，就全部满足）
-        // 判断size是否为n，因为我们从root出发，如果size=0，说明我们从root出发，找到了所有的n个点，即root可以通向任何一点
+        // 判断size是否为n，因为我们从root出发，如果size=n，说明我们从root出发，找到了所有的n个点，即root可以通向任何一点
         return (hash.size() == n);
     }
     
@@ -73,7 +73,7 @@ public class Solution {
     // key is one node; value is the neighbor node of the node
     // value is Set，就是保证每个node的neighbor node没有重复
     private Map<Integer, Set<Integer>> initializeGraph(int n, int[][] edges) {
-    // 1st is key, 2nd is value
+    // 1st is key, 2nd is value (Compared to dictionary in Python)
         Map<Integer, Set<Integer>> graph = new HashMap<>();
         // 有n个点就有n个键值对
         for (int i = 0; i < n; i++) {
