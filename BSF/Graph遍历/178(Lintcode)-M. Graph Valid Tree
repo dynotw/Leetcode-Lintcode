@@ -60,6 +60,9 @@ public class Solution {
                 }
                 hash.add(neighbor);
                 queue.offer(neighbor);
+                
+                // 不像层级遍历还要判断if(head.left != null) and if(head.right != null)
+                // Because there's now left and right SubNode in graph 
             }
         }
         
