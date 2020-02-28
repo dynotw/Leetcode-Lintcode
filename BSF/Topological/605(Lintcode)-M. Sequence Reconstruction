@@ -34,8 +34,7 @@ Output:true
 
 
 
-// 不会做
-// BSF, Graph, Topological
+// BSF in Topological
 public class Solution {
     /**
      * @param org: a permutation of the integers from 1 to n
@@ -43,44 +42,48 @@ public class Solution {
      * @return: true if it can be reconstructed only one or false
      */
     public boolean sequenceReconstruction(int[] org, int[][] seqs) {
-        // write your code here
+        // 1. 先构建有向图的container（Graph）
        // build graph
+       // getGraph is defined by ourselves
         Map<Integer, ArrayList<Integer>> graph = getGraph(seqs); 
-        /**
-         * we need to build graph from seqs!! cause we are using seqs to try to build org
-         * 
-         */
+
         // build indegree
+        // getIndegree is defined by ourselves
         Map<Integer, Integer> indegree = getIndegree(graph);
+        // 以上部分和615的思路一下，先构建有向图的container（graph） 和 indgree的container
+        
         // get zero indegree, offer in queue
         Queue<Integer> queue = new LinkedList<>();
+        List<Integer> sequence = new LinkedList<>();
         for (int node : graph.keySet()) {
             if (indegree.get(node) == 0) {
                 queue.offer(node);
+                sequence.add(node);
             }
         }
-        // we shoud have a container to compare it to org
-        List<Integer> sequence = new ArrayList<>();
-        // bfs
+
         while (!queue.isEmpty()) {
+            // 因为此题中sequence必须是唯一的，所以当同时有多个indgree=0进入queue就不符了
             int size = queue.size();
             if (size > 1) {
                 return false;
             }
+            //
             int node = queue.poll();
-            sequence.add(node);
-            for (int neib : graph.get(node)) {
-                indegree.put(neib, indegree.get(neib) - 1);
-                if (indegree.get(neib) == 0) {
-                    queue.offer(neib);
+            for (int neighbor : graph.get(node)) {
+                indegree.put(neighbor, indegree.get(neighbor) - 1);
+                if (indegree.get(neighbor) == 0) {
+                    queue.offer(neighbor);
+                    sequence.add(neighbor);
                 }
             }
         }
         
-        if (sequence.size() != org.length) { // first compare length, to prevent egde cases.
+        if (sequence.size() != org.length) {
             return false;
         }
         
+        // sequence中元素的顺序也要与org一致
         for (int i = 0; i < org.length; i++) {
             if (sequence.get(i) != org[i]) {
                 return false;
@@ -89,6 +92,7 @@ public class Solution {
         
         return true;
     }
+    
     
     private Map<Integer, ArrayList<Integer>> getGraph(int[][] seqs) {
         Map<Integer, ArrayList<Integer>> graph = new HashMap<Integer, ArrayList<Integer>>();
@@ -111,8 +115,8 @@ public class Solution {
             indegree.put(node, 0);
         }
         for (int node : graph.keySet()) {
-            for (int neib : graph.get(node)) {
-                indegree.put(neib, indegree.get(neib) + 1);
+            for (int neighbor : graph.get(node)) {
+                indegree.put(neighbor, indegree.get(neighbor) + 1);
             }
         }
         return indegree;
