@@ -60,26 +60,25 @@ public class Solution {
         // 经过这个循环，我们知道了每个Node分别被多少个Nodes所指
         // 只有源头的Nodes(indgree = 0)没有被放入map
         for (DirectedGraphNode node : graph) {
+            map.put(node, 0);
+        }
+        
+        for (DirectedGraphNode node : graph){
             for (DirectedGraphNode neighbor : node.neighbors) {
-                if (map.containsKey(neighbor)) {
-                    map.put(neighbor, map.get(neighbor) + 1);
-                } else {
-                    map.put(neighbor, 1); 
-                }
+                map.put(neighbor, map.get(neighbor) + 1);
             }
         }
         
         // Search for Nodes whose indgree is 0, and put them into queue and result
         Queue<DirectedGraphNode> queue = new LinkedList<DirectedGraphNode>();
         for (DirectedGraphNode node : graph) {
-            if (!map.containsKey(node)) {
+            if (map.get(node) == 0) {
                 queue.offer(node);
                 result.add(node);
             }
         }
         
         // This part is quite similar to regular BFS
-        // Topological Sorting
         while (!queue.isEmpty()) {
             DirectedGraphNode node = queue.poll();
             for (DirectedGraphNode neighbor : node.neighbors) {
@@ -94,10 +93,6 @@ public class Solution {
         return result;
     }
 }
-
-
-
-
 
 入度与出度
 在介绍算法之前，我们先介绍图论中的一个基本概念，入度和出度，英文为 in-degree & out-degree。
