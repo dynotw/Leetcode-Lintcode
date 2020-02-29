@@ -46,6 +46,7 @@ class Solution {
         //因为return的是List<List<Integer>>,所以我们要new一个出来 
         List<List<Integer>> results = new ArrayList<>();
         
+        // eliminate special case
         if (nums == null) {
             return results;
         }
