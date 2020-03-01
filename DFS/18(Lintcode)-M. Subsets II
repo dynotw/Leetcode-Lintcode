@@ -45,12 +45,15 @@ class Solution {
     public List<List<Integer>> subsetsWithDup(int[] nums) {
         // write your code here
         List<List<Integer>> results = new ArrayList<List<Integer>>();
-        if (nums == null) return results;
+        if (nums == null){
+            return result;
+        } 
         
         if (nums.length == 0) {
             results.add(new ArrayList<Integer>());
             return results;
         }
+        
         Arrays.sort(nums);
 
         List<Integer> subset = new ArrayList<Integer>();
@@ -65,8 +68,15 @@ class Solution {
         for(int i=startIndex; i<nums.length; i++){
             
             //前提是我们之前进行了排序，所以相同的数在nums里是从小到大排序的
-            // i ！= startIndex 是为了保证[1,2,2]不被删除
-            // nums[i] == nums[i-1] 是为了保证只有一个[1,2]
+            // for loop 是改变同一位上的数字，所以if statement 功能如下
+            // i ！= startIndex 是为了保证[1,2,2]不被删除, 
+            // nums[i] == nums[i-1] 是为了保证只有一个[1,2]，
+            // 综上，如果for loop时同一位上的元素可能出现相等，那么我们只取第一个
+            /*
+如果现在取了[1, 2(1), 2(2), 2(3)]。这时候2(1)是startPos - 1对应的。接下来递归是从startPos开始选下一个数。
+那么再选的时候只能选[1, 2(1), 2(2)]而不能选[1, 2(1), 2(3)]，不能跳着选。
+不能选的这个情况，如果num[i] == num[i - 1]并且i != startPos （必须先从 startPos开始选），那么说明跳着选了，我们不采用，continue掉。
+*/
             if (i != startIndex && nums[i]==nums[i-1]) {
                 continue;
             }
