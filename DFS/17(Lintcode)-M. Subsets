@@ -50,8 +50,7 @@ class Solution {
         if (nums == null) {
             return results;
         }
-        else if (nums.length == 0) {
-            results.add(new ArrayList<Integer>());
+        if (nums.length == 0) {
             return results;
         }
         
