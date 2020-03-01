@@ -35,7 +35,8 @@ The solution set must not contain duplicate subsets.
 
 
 
-
+// DFS in combination
+// compared with 17
 class Solution {
     /**
      * @param nums: A set of numbers.
