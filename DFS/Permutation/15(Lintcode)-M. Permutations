@@ -40,9 +40,9 @@ public class Solution {
         List<List<Integer>> results = new ArrayList<>();
         List<Integer> subset = new ArrayList<>();
         
-        // The function of the HashSet is different from Combination(it's easy to see from the data type of the Set)
-        // if we want to keep all elements in result is unique, we need to new another HashSet to eliminate same element
-        Set<Integer> visited = new HashSet<>();
+        // The function of the boolean[] is to restrict the for loop in DFS function
+        boolean[] visited = new boolean[nums.length];
+        
         if (nums == null) {
             return results;
         }
@@ -56,7 +56,7 @@ public class Solution {
     private void dfs(int[] nums,
                      List<Integer> subset,
                      List<List<Integer>> results,
-                     Set<Integer> visited) {
+                     boolean[] visited) {
         if (nums.length == subset.size()){
                 results.add(new ArrayList<Integer>(subset));
                 return;
@@ -66,14 +66,14 @@ public class Solution {
         // Use the HashSet means each number only use once
         // without HashSet, each number can be used twice
         for (int i = 0; i < nums.length; i++) {
-            if(visited.contains(nums[i])){
+            if(visited[i]){
                 continue;
             }
             subset.add(nums[i]);
-            visited.add(nums[i]);
+            visited[i] = true;
             dfs(nums, subset, results, visited);
             subset.remove(subset.size() - 1);
-            visited.remove(nums[i]);
+            visited[i] = false;
         }
     }
 }
