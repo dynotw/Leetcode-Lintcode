@@ -59,6 +59,9 @@ public class Solution {
         }
         
         for (int i = startIndex; i < candidates.length; i++) {
+        // 这个if statement非常重要，如果没有break，code就会Stack Overflow
+        // 因为在dfs调用时（相同元素可以repeat unlimited times）如果没有这个break，就真的无限的repeat的下去了，一直调用dfs下去了
+         （因为后续永远不满足return 的if statement）
             if (candidates[i] > remianTarget){
                 break;
             }
