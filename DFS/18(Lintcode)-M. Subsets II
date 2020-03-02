@@ -37,6 +37,7 @@ The solution set must not contain duplicate subsets.
 
 // DFS in combination
 // compared with 17
+// 1st method, jiuzhang
 class Solution {
     /**
      * @param nums: A set of numbers.
@@ -73,10 +74,12 @@ class Solution {
             // nums[i] == nums[i-1] 是为了保证只有一个[1,2]，
             // 综上，如果for loop时同一位上的元素可能出现相等，那么我们只取第一个
             /*
-如果现在取了[1, 2(1), 2(2), 2(3)]。这时候2(1)是startPos - 1对应的。接下来递归是从startPos开始选下一个数。
-那么再选的时候只能选[1, 2(1), 2(2)]而不能选[1, 2(1), 2(3)]，不能跳着选。
-不能选的这个情况，如果num[i] == num[i - 1]并且i != startPos （必须先从 startPos开始选），那么说明跳着选了，我们不采用，continue掉。
-*/
+            如果现在取了[1, 2(1), 2(2), 2(3)]。这时候2(1)是startPos - 1对应的。接下来递归是从startPos开始选下一个数。
+            那么再选的时候只能选[1, 2(1), 2(2)]而不能选[1, 2(1), 2(3)]，不能跳着选。
+            不能选的这个情况，如果num[i] == num[i - 1]并且i != startPos （必须先从 startPos开始选），那么说明跳着选了，我们不采用，continue掉。
+            */
+            // but this if statement, it's a liitle hard to understand. see 2nd method use HashSet来避免重复元素
+            
             if (i != startIndex && nums[i]==nums[i-1]) {
                 continue;
             }
@@ -84,5 +87,64 @@ class Solution {
             helper(nums, i+1, subset, results);
             subset.remove(subset.size()-1);
         }
+        
+        return;
     }
 }
+
+
+2nd method
+public class Solution {
+    /**
+     * @param nums: A set of numbers.
+     * @return: A list of lists. All valid subsets.
+     */
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        // write your code here
+        // new the return
+        Arrays.sort(nums);
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        List<Integer> subset = new ArrayList<Integer>();
+        
+        // eliminate special case 
+        if (nums == null){
+            return result;
+        }
+        
+        if (nums.length == 0){
+            result.add(subset);
+            return result;
+        }
+        
+        Set<ArrayList<Integer>> visited = new HashSet<ArrayList<Integer>>();
+        recursion(subset, nums, 0, result, visited);
+        return result;
+    }
+    
+    private void recursion(List<Integer> headNumber, int[] nums, int start, List<List<Integer>> result, Set<ArrayList<Integer>> visited){
+        
+        // Compared to 17, just add this if statement to eliminate same headNumber
+        // but I prefer to use HashSet to eliminate same headNumber
+        // because 如果想排除重复访问相同元素，在多数题中普遍都用HashSet， 所以用HashSet普适性更强
+        /*
+        if (!result.contains(headNumber)){
+            result.add(new ArrayList<Integer>(headNumber));
+        }
+        */
+        
+        if (!visited.contains(headNumber)){
+            result.add(new ArrayList<Integer>(headNumber));
+            visited.add(new ArrayList<Integer>(headNumber));
+        }
+        
+        for (int i = start; i < nums.length; i++){
+            headNumber.add(nums[i]);
+            recursion(headNumber, nums, i+1, result, visited);
+            headNumber.remove(headNumber.size()-1);
+        }
+        
+        return;
+    }
+}
+
+// 2nd method, use HashSet 来避免重复点
