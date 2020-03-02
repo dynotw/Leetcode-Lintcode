@@ -1,0 +1,73 @@
+135. Combination Sum
+
+Given a set of candidtate numbers candidates and a target number target. Find all unique combinations in candidates where the numbers sums to target.
+
+The same repeated number may be chosen from candidates unlimited number of times.
+
+Example
+Example 1:
+
+Input: candidates = [2, 3, 6, 7], target = 7
+Output: [[7], [2, 2, 3]]
+Example 2:
+
+Input: candidates = [1], target = 3
+Output: [[1, 1, 1]]
+Notice
+All numbers (including target) will be positive integers.
+Numbers in a combination a1, a2, … , ak must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak)
+Different combinations can be in any order.
+The solution set must not contain duplicate combinations.
+
+
+// DFS in combination
+public class Solution {
+    /**
+     * @param candidates: A list of integers
+     * @param target: An integer
+     * @return: A list of lists of integers
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        // write your code here
+        
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        List<Integer> subset = new ArrayList<>();
+        
+        if(candidates == null || candidates.length == 0){
+            return result;
+        }
+        
+        Arrays.sort(candidates);
+        
+        // 防止访问重复点
+        Set<ArrayList<Integer>> visited = new HashSet<>();
+        
+        dfs(candidates, target, 0, subset, result, visited);
+        return result;
+    }
+
+
+    private void dfs(int[] candidates, int remianTarget, int startIndex,
+                     List<Integer> subset, List<List<Integer>> result,
+                     Set<ArrayList<Integer>> visited) {
+        if (remianTarget == 0) {
+            if (!visited.contains(subset)){
+                result.add(new ArrayList<Integer>(subset));
+                visited.add(new ArrayList<Integer>(subset));
+                return;
+            }
+        }
+        
+        for (int i = startIndex; i < candidates.length; i++) {
+            if (candidates[i] > remianTarget){
+                break;
+            }
+            subset.add(candidates[i]);
+            // 注意此处的dfs调用，我的startIndex是从i不是从i+1了
+            // i表示candidates[i]可以repeat unlimited times
+            // i+1,每个元素只能用一次（是每个元素，不是相同元素） 
+            dfs(candidates, remianTarget - candidates[i], i, subset, result, visited);
+            subset.remove(subset.size() - 1);
+        }
+    }
+}
