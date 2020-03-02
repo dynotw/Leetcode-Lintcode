@@ -1,0 +1,84 @@
+136. Palindrome Partitioning
+中文English
+Given a string s. Partition s such that every substring in the partition is a palindrome.
+
+Return all possible palindrome partitioning of s.
+
+Example
+Example 1:
+
+Input: "a"
+Output: [["a"]]
+Explanation: Only 1 char in the string, only 1 way to split it (itself).
+Example 2:
+
+Input: "aab"
+Output: [["aa", "b"], ["a", "a", "b"]]
+Explanation: There are 2 ways to split "aab".
+    1. Split "aab" into "aa" and "b", both palindrome.
+    2. Split "aab" into "a", "a", and "b", all palindrome.
+Notice
+Different partitionings can be in any order.
+Each substring must be a continuous segment of s.
+
+
+// DFS in combination
+// This problem 是combination的变形，第一眼无法辨识是DFS in combination，但其本质就是DFS in combination
+// 其是切法的combination，在各个字母之间插入数字0~s.length() -1。切割的combination无非就是在哪几个数字的地方切割，即转化成各个数字的combination
+public class Solution {
+    /*
+     * @param s: A string
+     * @return: A list of lists of string
+     */
+    public List<List<String>> partition(String s) {
+        // write your code here
+        
+        List<List<String>> result = new ArrayList<List<String>>();
+        List<String> subset = new ArrayList<>();
+        if (s == null){
+            return result;
+        }
+        
+        dfs(s, 0, subset, result);
+        return result;
+    }
+    
+    private void dfs(String s, int startIndex, List<String> subset, List<List<String>> result){
+        if(startIndex == s.length()){
+            boolean isPla = true;
+            for (String partion: subset){
+                if (! isPalindrome(partion)){
+                    isPla = false;
+                    break;
+                }
+            }
+            if (isPla == true){
+                result.add(new ArrayList<String>(subset));
+            }
+            
+            return;
+        }
+        
+        
+        for (int i=startIndex; i<s.length(); i++){
+            String substring = s.substring(startIndex, i+1);
+            // 这个if statement 有点像 combination sum题中的for loop里面的if statement
+            // 都是为了简化for loop： 只不过这里是continue， combination sum里是break
+            if (!isPalindrome(substring)){
+                continue;
+            }
+            subset.add(substring);
+            dfs(s, i+1, subset, result);
+            subset.remove(subset.size()-1);
+        } 
+    }
+    
+    private boolean isPalindrome(String s){
+        for (int i = 0, j = s.length() - 1; i < j; i++, j--) {
+            if (s.charAt(i) != s.charAt(j)) {
+                return false;
+            }
+        }
+        return true;
+    } 
+}
