@@ -1,0 +1,59 @@
+152. Combinations
+
+Given two integers n and k. Return all possible combinations of k numbers out of 1, 2, ... , n.
+
+Example
+Example 1:
+
+Input: n = 4, k = 2
+Output: [[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]
+Example 2:
+
+Input: n = 4, k = 1
+Output: [[1],[2],[3],[4]]
+Notice
+You can return all combinations in any order, but numbers in a combination should be in ascending order.
+
+
+
+// DFS in combination
+public class Solution {
+    /**
+     * @param n: Given the range of numbers
+     * @param k: Given the numbers of combinations
+     * @return: All the combinations of k numbers out of 1..n
+     */
+    public List<List<Integer>> combine(int n, int k) {
+        // write your code here
+        
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        List<Integer> subset = new ArrayList<Integer>();
+        
+        // eliminate special case
+        
+        if (n == 0){
+            result.add(subset);
+            return result;
+        }
+        
+        dfs(n,k,1,result,subset);
+        return result;
+    }
+    
+    // DFS function
+    private void dfs(int n, int k, int start, List<List<Integer>> result, List<Integer> subset){
+        
+        // Recursion over 
+        if (subset.size() == k){
+        // new 一个subset
+            result.add(new ArrayList(subset));
+            return;
+        }
+        
+        for (int i=start; i<=n; i++){
+            subset.add(i);
+            dfs(n, k, i+1, result, subset);
+            subset.remove(subset.size()-1);
+        }
+    }
+}
