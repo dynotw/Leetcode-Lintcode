@@ -1,0 +1,78 @@
+15. Permutations
+Given a list of numbers, return all possible permutations.
+
+Example
+Example 1:
+
+Input: [1]
+Output:
+[
+  [1]
+]
+Example 2:
+
+Input: [1,2,3]
+Output:
+[
+  [1,2,3],
+  [1,3,2],
+  [2,1,3],
+  [2,3,1],
+  [3,1,2],
+  [3,2,1]
+]
+Challenge
+Do it without recursion.
+
+Notice
+You can assume that there is no duplicate numbers in the list.
+
+
+
+
+// DFS in permutation
+public class Solution {
+    /*
+     * @param nums: A list of integers.
+     * @return: A list of permutations.
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> results = new ArrayList<>();
+        List<Integer> subset = new ArrayList<>();
+        
+        // The function of the HashSet is different from Combination
+        Set<Integer> visited = new HashSet<>();
+        if (nums == null) {
+            return results;
+        }
+        
+        dfs(nums, subset, results, visited);
+        
+        return results;
+    }
+    
+    // There's not startIndex anymore
+    private void dfs(int[] nums,
+                     List<Integer> subset,
+                     List<List<Integer>> results,
+                     Set<Integer> visited) {
+        if (nums.length == subset.size()){
+                results.add(new ArrayList<Integer>(subset));
+                return;
+        }
+        
+        // There's no startIndex anymore, so whether each number can be repeat depends on the HashSet
+        // Use the HashSet means each number only use once
+        // without HashSet, each number can be used twice
+        for (int i = 0; i < nums.length; i++) {
+            if(visited.contains(nums[i])){
+                continue;
+            }
+            subset.add(nums[i]);
+            visited.add(nums[i]);
+            dfs(nums, subset, results, visited);
+            subset.remove(subset.size() - 1);
+            visited.remove(nums[i]);
+        }
+    }
+}
