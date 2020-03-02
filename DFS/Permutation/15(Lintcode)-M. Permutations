@@ -41,6 +41,7 @@ public class Solution {
         List<Integer> subset = new ArrayList<>();
         
         // The function of the HashSet is different from Combination
+        // if we want to keep all elements in result is unique, we need to new another HashSet to eliminate same element
         Set<Integer> visited = new HashSet<>();
         if (nums == null) {
             return results;
