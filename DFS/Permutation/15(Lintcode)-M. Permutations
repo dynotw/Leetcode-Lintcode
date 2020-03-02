@@ -40,7 +40,7 @@ public class Solution {
         List<List<Integer>> results = new ArrayList<>();
         List<Integer> subset = new ArrayList<>();
         
-        // The function of the HashSet is different from Combination
+        // The function of the HashSet is different from Combination(it's easy to see from the data type of the Set)
         // if we want to keep all elements in result is unique, we need to new another HashSet to eliminate same element
         Set<Integer> visited = new HashSet<>();
         if (nums == null) {
