@@ -1,6 +1,7 @@
 135. Combination Sum
 
-Given a set of candidtate numbers candidates and a target number target. Find all unique combinations in candidates where the numbers sums to target.
+Given a set of candidtate numbers candidates and a target number target. 
+Find all unique combinations in candidates where the numbers sums to target.
 
 The same repeated number may be chosen from candidates unlimited number of times.
 
