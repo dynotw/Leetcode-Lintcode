@@ -1,0 +1,113 @@
+33. N-Queens
+
+The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other(Any two queens can't be in the same row, column, diagonal line).
+
+Given an integer n, return all distinct solutions to the n-queens puzzle.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' each indicate a queen and an empty space respectively.
+
+Example
+Example 1:
+
+Input:1
+Output:
+   [["Q"]]
+
+
+Example 2:
+
+Input:4
+Output:
+[
+  // Solution 1
+  [".Q..",
+   "...Q",
+   "Q...",
+   "..Q."
+  ],
+  // Solution 2
+  ["..Q.",
+   "Q...",
+   "...Q",
+   ".Q.."
+  ]
+]
+
+Challenge
+Can you do it without recursion?
+
+
+// DFS in permutaion
+public class Solution {
+    /*
+     * @param n: The number of queens
+     * @return: All distinct solutions
+     */
+    public List<List<String>> solveNQueens(int n) {
+        // write your code here
+        
+        List<List<String>> result = new ArrayList<>();
+        List<Integer> subset = new ArrayList<>();
+        boolean[] visited = new boolean[n];
+        
+        dfs(n, subset, result, visited);
+        return result;
+    }
+    
+    private void dfs(int n, List<Integer> subset, List<List<String>> result, boolean[] visited){
+        
+        if (subset.size() == n){
+            List<String> row = drawChess(subset, n);
+            result.add(row);
+            return;                
+        }
+        
+        // 生成List<Integer> subset中的Integer对应的是每row的Q所在colunmIndex（because there's only one Q in one row, we don't need to think about rowIndex）
+        for (int i=0; i<n; i++){
+            if (!isValid(subset, i) || visited[i] == true){
+                continue;
+            }
+            
+            subset.add(i);
+            visited[i] = true;
+            dfs(n, subset, result, visited);
+            subset.remove(subset.size()-1);
+            visited[i] = false;
+        }
+    }
+    
+    // 因为for loop的i没变化一次，都会进行isValid的判断，所以我们只要针对新加入的i进行判断即可
+    private boolean isValid(List<Integer> subset, int columnIndex) {
+        // columnIndex 所在的rowIndex
+        int rowNumber = subset.size();
+        // i is equal to rowIndex
+        for (int i = 0; i < subset.size(); i++) {
+            // at same column
+            if (subset.get(i) == columnIndex) {
+                return false;
+            }
+            // 右斜线
+            if (i + subset.get(i) == rowNumber + columnIndex){
+                return false;
+            }
+            // 左斜线
+            if (i -  rowNumber == subset.get(i) - columnIndex){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private List<String> drawChess(List<Integer> subset, int n){
+        List<String> result = new ArrayList<>();
+        for (int i=0; i<n; i++){
+            StringBuilder row = new StringBuilder();
+            for (int j = 0; j < n; j++) {
+                row.append(j == subset.get(i) ? 'Q' : '.');
+            }
+            result.add(row.toString());
+        }
+        
+        return result;
+    }
+}
