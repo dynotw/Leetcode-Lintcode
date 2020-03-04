@@ -24,6 +24,7 @@ Can you solve it without using extra space?
 
 
 // LinkedList
+// compared with 102, in 103 we also need to return the List
 // Solve the problem isn't difficult, but the challenge is quite difficult
 /**
  * Definition for ListNode
