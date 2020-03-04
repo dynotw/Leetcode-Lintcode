@@ -1,0 +1,60 @@
+105. Copy List with Random Pointer
+
+A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
+
+Return a deep copy of the list.
+
+Challenge
+Could you solve it with O(1) space?
+
+
+/**
+ * Definition for singly-linked list with a random pointer.
+ * class RandomListNode {
+ *     int label;
+ *     RandomListNode next, random;
+ *     RandomListNode(int x) { this.label = x; }
+ * };
+ */
+ 
+// LinkedList
+// this code is really tricky in terms of challenge, just need to remeber its method.
+// the chanllenge of the problem is O(1) space complexity, 
+// this mean we can't use HashMap to deep copy LinkeNode as the same method in 137. Clone Graph Problem 
+
+// 1st method, regular method regardless of challenge
+public class Solution {
+    /**
+     * @param head: The head of linked list with a random pointer.
+     * @return: A new head of a deep copy of the list.
+     */
+    public RandomListNode copyRandomList(RandomListNode head) {
+        // write your code here
+ 
+         if (head == null) {
+            return null;
+        }
+        
+        // The function of HashMap, compared to 137. Clone Graph Problem
+        HashMap<RandomListNode,RandomListNode> map = new HashMap<>();
+        RandomListNode dummy = new RandomListNode(0);
+        dummy.next = head;
+        
+        // deep copy RandomListNode
+        while(head != null){
+            map.put(head, new RandomListNode(head.label));
+            head = head.next;
+        }
+        
+        // copy the random and next for each new RandomListNode
+        head = dummy.next;
+        while(head != null){
+            (map.get(head)).random = map.get(head.random);
+            (map.get(head)).next = map.get(head.next);
+            
+            head = head.next;
+        }
+        
+        return map.get(dummy.next);
+    }
+}
