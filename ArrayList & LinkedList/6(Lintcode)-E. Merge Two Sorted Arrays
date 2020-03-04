@@ -1,0 +1,78 @@
+6. Merge Two Sorted Arrays
+
+Merge two given sorted ascending integer array A and B into a new sorted integer array.
+
+Example
+Example 1:
+
+Input:  A=[1], B=[1]
+Output: [1,1]	
+Explanation:  return array merged.
+Example 2:
+
+Input:  A=[1,2,3,4], B=[2,4,5,6]
+Output: [1,2,2,3,4,4,5,6]	
+Explanation: return array merged.
+Challenge
+How can you optimize your algorithm if one array is very large and the other is very small?
+
+
+/**
+ * Definition for ListNode
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+
+
+// LinkedList
+/*
+双指针方法，用两个指针将两个部分分别串起来。最后在将两个部分拼接起来。
+left指针用来串起来所有小于x的结点，
+right指针用来串起来所有大于等于x的结点。
+得到两个链表，一个是小于x的，一个是大于等于x的，做一个拼接即可。
+*/
+public class Solution {
+    /**
+     * @param head: The first node of linked list
+     * @param x: An integer
+     * @return: A ListNode
+     */
+    public ListNode partition(ListNode head, int x) {
+        // write your code here
+       if (head == null) {
+            return null;
+        }
+        
+        // 1. intialize dummy 
+        ListNode leftDummy = new ListNode(0);
+        ListNode rightDummy = new ListNode(0);
+        ListNode left = leftDummy; 
+        ListNode right = rightDummy;
+        
+        // 2. while (head != null) loop
+        while (head != null) {
+            if (head.val < x) {
+                left.next = head;
+                left = head;
+            } 
+            
+            else {
+                right.next = head;
+                right = head;
+            }
+            
+            head = head.next;
+        }
+        
+        // 3.拼接
+        right.next = null;
+        left.next = rightDummy.next;
+        return leftDummy.next;
+    }
+}
