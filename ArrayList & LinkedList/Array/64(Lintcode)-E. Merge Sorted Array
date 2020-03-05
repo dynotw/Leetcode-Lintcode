@@ -1,0 +1,66 @@
+64. Merge Sorted Array
+
+Given two sorted integer arrays A and B, merge B into A as one sorted array.
+
+Example
+Example 1:
+
+Input：[1, 2, 3] 3  [4,5]  2
+Output：[1,2,3,4,5]
+Explanation:
+After merge, A will be filled as [1, 2, 3, 4, 5]
+Example 2:
+
+Input：[1,2,5] 3 [3,4] 2
+Output：[1,2,3,4,5]
+Explanation:
+After merge, A will be filled as [1, 2, 3, 4, 5]
+Notice
+You may assume that A has enough space (size that is greater or equal to m + n) to hold additional elements from B. 
+The number of elements initialized in A and B are m and n respectively.
+
+
+// Array
+// 注意是Array不是ArrayList，所以不存在什么add的插入方法。 因此我必须从尾部向头部遍历
+public class Solution {
+    /*
+     * @param A: sorted integer array A which has m elements, but size of A is m+n
+     * @param m: An integer
+     * @param B: sorted integer array B which has n elements
+     * @param n: An integer
+     * @return: nothing
+     */
+    public void mergeSortedArray(int[] A, int m, int[] B, int n) {
+        // write your code here
+        
+        int pointerA = m-1;
+        int pointerB = n-1;
+        int pointerMerge = m+n-1;
+        
+        while(pointerA >= 0 && pointerB >= 0){
+            if (A[pointerA] <= B[pointerB]){
+                A[pointerMerge] = B[pointerB];
+                pointerB--;
+                pointerMerge--;
+            }
+            
+            else if (A[pointerA] > B[pointerB]){
+                A[pointerMerge] = A[pointerA];
+                pointerA--;
+                pointerMerge--;
+            }
+        }
+        
+        while(pointerA >= 0){
+            A[pointerMerge] = A[pointerA];
+            pointerA--;
+            pointerMerge--; 
+        }
+        
+        while(pointerB >= 0){
+            A[pointerMerge] = B[pointerB];
+            pointerB--;
+            pointerMerge--; 
+        }
+    }
+}
