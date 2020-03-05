@@ -21,7 +21,8 @@ class Pair {
     int index;
     public Pair (int sum, int index) {
         this.sum = sum;
-        this.index = index;
+        this.index = index; // index直接对应nums的index（0 ~ nums.length-1）
+        // (1,0) 表示index=0 之前（包括自身）的sum
     }
 }
 
@@ -48,9 +49,9 @@ public class Solution {
         
         
         Pair[] prefixSum = new Pair[nums.length + 1];
-        prefixSum[0] = new Pair(0, 0);
-        for (int i = 1; i <= nums.length; i++) {
-            prefixSum[i] = new Pair(prefixSum[i - 1].sum + nums[i - 1], i);
+        prefixSum[0] = new Pair(0, -1);
+        for (int i = 1; i < nums.length + 1; i++) {
+            prefixSum[i] = new Pair(prefixSum[i - 1].sum + nums[i-1], i-1);
         }
         
         Pair[] sortedSum = prefixSum;
@@ -66,8 +67,8 @@ public class Solution {
         for (int i = 1; i < sortedSum.length; i++) {
             if (sortedSum[i].sum - sortedSum[i - 1].sum < closest) {
                 closest = sortedSum[i].sum - sortedSum[i - 1].sum;
-                result[0] = sortedSum[i].index - 1;
-                result[1] = sortedSum[i - 1].index - 1;
+                result[0] = sortedSum[i].index;
+                result[1] = sortedSum[i - 1].index;
             }
         }
         
