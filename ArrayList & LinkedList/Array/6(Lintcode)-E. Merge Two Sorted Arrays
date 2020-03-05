@@ -16,7 +16,7 @@ Challenge
 How can you optimize your algorithm if one array is very large and the other is very small?
 
 
-// ArrayList
+// Array
 // Compared with 64, which is to merge B into A rather than a new array
 // Here's nothing like Sort Algorithm
 public class Solution {
