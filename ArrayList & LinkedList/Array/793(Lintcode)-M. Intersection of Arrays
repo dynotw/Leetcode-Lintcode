@@ -1,0 +1,55 @@
+793. Intersection of Arrays
+
+Give a number of arrays, find their intersection, and output their intersection size.
+
+Example
+Example 1:
+
+	Input:  [[1,2,3],[3,4,5],[3,9,10]]
+	Output:  1
+	
+	Explanation:
+	Only '3' in all three array.
+Example 2:
+
+	Input: [[1,2,3,4],[1,2,5,6,7][9,10,1,5,2,3]]
+	Output:  2
+	
+	Explanation:
+	The set is [1,2].
+Notice
+The total number of all array elements is not more than 500000.
+There are no duplicated elements in each array.
+
+
+// Array
+public class Solution {
+    /**
+     * @param arrs: the arrays
+     * @return: the number of the intersection of the arrays
+     */
+    public int intersectionOfArrays(int[][] arrs) {
+        // write your code here
+        
+        List<Integer> oneDimension = new ArrayList<>();
+        Set<Integer> visited = new HashSet<>();
+        HashMap<Integer, Integer> map = new HashMap<>();
+        
+        int num = arrs.length;
+        for (int[] i : arrs){
+            for (int j: i){
+                if (! map.containsKey(j)){
+                    map.put(j, 1);
+                }
+                else{
+                    map.put(j, map.get(j) + 1);
+                    if (map.get(j) == num){
+                        visited.add(j);                        
+                    }
+                }
+            }
+        }
+        
+        return visited.size();
+    }
+}
