@@ -1,0 +1,62 @@
+547. Intersection of Two Arrays
+
+Given two arrays, write a function to compute their intersection.
+
+Example
+Example 1:
+
+Input: nums1 = [1, 2, 2, 1], nums2 = [2, 2], 
+Output: [2].
+Example 2:
+
+Input: nums1 = [1, 2], nums2 = [2], 
+Output: [2].
+Challenge
+Can you implement it in three different algorithms?
+
+Notice
+Each element in the result must be unique.
+The order of the results needs to be ascending
+
+
+// Array
+public class Solution {
+    /**
+     * @param nums1: an integer array
+     * @param nums2: an integer array
+     * @return: an integer array
+     */
+    public int[] intersection(int[] nums1, int[] nums2) {
+        // write your code here
+        
+        Set<Integer> num1 = new HashSet<>();
+        for (int i : nums1){
+            num1.add(i);
+        }
+        
+        Set<Integer> num2 = new HashSet<>();
+        for (int j : nums2){
+            if (num1.contains(j)){
+                num2.add(j);
+            }
+        }
+        
+        // Use two for loop rather than for embedded for 
+        /*
+        for (int i : nums1){
+            for (int j : nums2){
+            }
+        }
+        */
+        
+        int num = num2.size();
+        int[] result = new int[num];
+        int index = 0;
+        for (int i :num2){
+            result[index] = i;
+            index++;
+        }
+        
+        return result;
+    }
+}
