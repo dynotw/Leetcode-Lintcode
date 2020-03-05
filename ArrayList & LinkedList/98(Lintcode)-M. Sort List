@@ -1,0 +1,116 @@
+98. Sort List
+
+Sort a linked list in O(n log n) time using constant space complexity.
+
+Example
+Example 1:
+
+Input:  1->3->2->null
+Output:  1->2->3->null
+Example 2:
+
+Input: 1->7->2->6->null
+Output: 1->2->6->7->null	
+Challenge
+Solve it by merge sort & quick sort separately.
+
+
+
+/**
+ * Definition for ListNode
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+
+// LinkedList 
+// Because it's in LinkedList, the sort algorithm is a bit different from the origin. there's no right pointer which can move backward 
+// but the logical thinking is the same, put ListNode, which is less than pivot, in front of pivot; .....
+// so I have to split ListNode into three LinkedLsit(less than pivot, equal to pivot and more than pivot)
+// finally connect them
+
+// 1st method: Quick Sort
+public class Solution {
+    /**
+     * @param head: The head of linked list.
+     * @return: You should return the head of the sorted linked list, using constant space complexity.
+     */
+    public ListNode sortList(ListNode head) {
+        // write your code here
+        
+        // 1. Recursion over condition
+        if(head == null || head.next == null){  // if(head == null) is also okay
+            return head;
+        }
+        
+        ListNode lessDummy = new ListNode(0);
+        ListNode moreDummy = new ListNode(0);
+        ListNode equalDummy = new ListNode(0);
+        
+        ListNode less = lessDummy;
+        ListNode more = moreDummy;
+        ListNode equal = equalDummy;
+        ListNode pivot = head;
+        
+        while(head != null){
+            if (head.val < pivot.val){
+                less.next = head;
+                less = less.next;
+            }
+            else if (head.val == pivot.val){
+                equal.next = head;
+                equal = equal.next;
+            }
+            else if (head.val > pivot.val){
+                more.next = head;
+                more = more.next;
+            }
+            head = head.next; 
+        }
+        
+        // don't forget this part
+        less.next = null;
+        more.next = null;
+        equal.next = null;
+        
+        lessDummy.next = sortList(lessDummy.next);
+        moreDummy.next = sortList(moreDummy.next);
+        
+        ListNode dummy = lessDummy;
+        while(dummy.next != null){
+            dummy = dummy.next;
+        }
+        dummy.next = equalDummy.next;
+        
+        /*
+        At first, I write in the following way:
+
+        while(dummy != null){
+            dummy = dummy.next;
+        }
+        dummy = equalDummy.next;
+        
+        it's totally wrong, because 'dummy = equalDummy.next' won't change anything in the LinkedList, it just change the object which dummy refered.
+        */
+        
+        ListNode dummy1 = equalDummy;
+        while(dummy1.next != null){
+            dummy1 = dummy1.next;
+        }
+        dummy1.next = moreDummy.next;
+        
+        /* it's my first the logic: less is the last element in lessDummy
+        Actually it's worng. The element less refered is unchanged, but the recursion changes the order in less LinkedList,
+        so the element less refered isn't the last element anymore.
+        
+        less.next = equalDummy.next;
+        equal.next = moreDummy.next;
+       */
+        return lessDummy.next;
+    }
+}
