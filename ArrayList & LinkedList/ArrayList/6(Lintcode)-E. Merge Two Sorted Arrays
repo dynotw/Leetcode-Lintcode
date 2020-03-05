@@ -1,0 +1,76 @@
+6. Merge Two Sorted Arrays
+Merge two given sorted ascending integer array A and B into a new sorted integer array.
+
+Example
+Example 1:
+
+Input:  A=[1], B=[1]
+Output: [1,1]	
+Explanation:  return array merged.
+Example 2:
+
+Input:  A=[1,2,3,4], B=[2,4,5,6]
+Output: [1,2,2,3,4,4,5,6]	
+Explanation: return array merged.
+Challenge
+How can you optimize your algorithm if one array is very large and the other is very small?
+
+
+// ArrayList
+// Compared with 64, which is to merge B into A rather than a new array
+// Here's nothing like Sort Algorithm
+public class Solution {
+    /**
+     * @param A: sorted integer array A
+     * @param B: sorted integer array B
+     * @return: A new sorted integer array
+     */
+    public int[] mergeSortedArray(int[] A, int[] B) {
+        // write your code here
+        
+        // merge 
+        /* merge two sorted array, we have to use another array, whose length is (A.length + B.length)
+        make two pointer pointing to A and B respectively
+        */
+        
+        int[] C = new int[A.length + B.length];
+        int pointerA = 0;
+        int pointerB = 0;
+        int pointerC = 0;
+        
+        // pointer must be in the array
+        while (pointerA < A.length && pointerB < B.length){
+            /* because A and B is sorted array, 所以我们只需要比较当前指针所指向元素。
+            若A[pointerA] <= B[pointerB], 那么A[pointerA]就一定小于剩下的B中的元素
+            */
+            if (A[pointerA] <= B[pointerB]){
+                C[pointerC] = A[pointerA];
+                pointerA ++;
+                pointerC ++;
+            }
+            else{
+                C[pointerC] = B[pointerB];
+                pointerB ++;
+                pointerC ++;
+            }
+        }
+            
+            /* 经过上述的遍历比较后，A and B 一定有一个优先遍历完成，而另一个还没遍历完。
+            我们需要把剩下的那个array添加到C里面
+            */
+            
+        while(pointerA < A.length){
+                C[pointerC] = A[pointerA];
+                pointerA ++;
+                pointerC ++;
+        }
+            
+        while(pointerB < B.length){
+                C[pointerC] = B[pointerB];
+                pointerB ++;
+                pointerC ++;
+        }
+        
+        return C;
+    }
+}
