@@ -1,0 +1,94 @@
+587. Two Sum - Unique pairs
+
+Given an array of integers, find how many unique pairs in the array such that their sum is equal to a specific target number. 
+Please return the number of pairs.
+
+Example
+Example 1:
+
+Input: nums = [1,1,2,45,46,46], target = 47 
+Output: 2
+Explanation:
+
+1 + 46 = 47
+2 + 45 = 47
+
+Example 2:
+
+Input: nums = [1,1], target = 2 
+Output: 1
+Explanation:
+1 + 1 = 2
+
+
+// Two Sum
+// 1st method by own, using HashSetwithout two pointers
+// We don't need index, so HashSet is eough, we don't use HashMap
+/*
+public class Solution {
+
+    public int twoSum6(int[] nums, int target) {
+        // write your code here
+        if (nums == null || nums.length == 0 || nums.length == 1){
+            return 0;
+        }
+        Set<Integer> remainTarget = new HashSet<>();
+        Set<Integer> result = new HashSet<>();
+        for (int i=0; i < nums.length; i++){
+            if (remainTarget.contains(nums[i])){
+                result.add(nums[i]);
+                result.add(target-nums[i]);
+            }
+            
+            remainTarget.add(target - nums[i]);
+        }
+        
+        // this place '+1' is to pick upper int, responding to the special case:
+        // nums[i] = 1/2 target, nums[i] = target - nums[i] under this condition, so only one of them will be added into result
+        return (result.size()+1) / 2;
+    }
+}
+*/
+
+// 2nd method, using two pointers
+/*
+老样子，先排序(sort is fundamental for this logic)
+一个从左，一个从右，往当中走。
+如果加起来等于target，那么左边往右走到不是左边这个数的地方，右边往左走到不是右边这个数字的地方。
+*/
+public class Solution {
+    /**
+     * @param nums an array of integer
+     * @param target an integer
+     * @return an integer
+     */
+    public int twoSum6(int[] nums, int target) {
+        // Write your code here
+        if (nums == null || nums.length < 2)
+            return 0;
+
+// Sort needs O(nlogn)
+        Arrays.sort(nums);
+        int count = 0;
+        int left = 0;
+        int right = nums.length - 1;
+    // 'left < right' always is one of the requirement of while loop for two opposite pointers
+        while (left < right) {
+            if (nums[left] + nums[right] == target) {
+                count ++;
+                left ++;
+                right --;
+// this while loop can avoid all same nums[right], because we've sorted nums, so that all elements will stay together
+                while (left < right && nums[right] == nums[right + 1])
+                    right --;
+                while (left < right && nums[left] == nums[left - 1])
+                    left ++;
+            } else if (nums[left] + nums[right] > target) {
+                right --;
+            } else if (nums[left] + nums[right] <target){
+                left ++;
+            }
+        }
+        return count;
+    }
+}
