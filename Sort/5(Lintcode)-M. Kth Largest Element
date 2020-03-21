@@ -21,19 +21,11 @@ O(n) time, O(1) extra memory.
 Notice
 You can swap elements in the array
 
-
-
-
-
-
-// Quick Sort
-// 就是在Quick Sort的基础上，进行个输出就行
+// 2nd method is the point
+// 1st method, Quick Sort, don't meet the chanllenge
+// because the sort needs O(nlogn)
+/*
 public class Solution {
-    /**
-     * @param n: An integer
-     * @param nums: An array
-     * @return: the Kth largest element
-     */
     public int kthLargestElement(int n, int[] nums) {
         // write your code here
         
@@ -59,6 +51,7 @@ public class Solution {
         Because during the resursion, the element on the index of pivot will change(相当于A[pivot]的值是会变化的)
         Therefore, we have to assign the value to the pivot, so that the value of pivot won't change, during the recursion.
         */
+        /*
         int pivot = A[start + (end - start)/2];
         
         
@@ -89,4 +82,59 @@ public class Solution {
         quickSort(A, start, pointer2);
         quickSort(A, pointer1, end);
     }        
+}
+*/
+
+// 2nd Quick Select, meet the chanllenge
+public class Solution{
+    public int kthLargestElement(int n, int[] nums){
+        int start = 0;
+        int end = nums.length - 1;
+        return quickSelect(nums, n, start, end);
+    }
+    
+    private int quickSelect(int[] nums, int k, int start, int end){
+        
+        if (start >= end){
+            // return nums[start] and nums[end] is same, because start = end
+            return nums[start];
+        }
+        
+        int left = start;
+        int right = end;
+        // 当把pivot设置成start时，每次partition后，XXX right pivot left XXXX
+        // pivot都会出现在right 和 left 指针的中间
+        // 刚好适用此题
+        // 平时将中点设为pivot是为了在worst和best condition中make balance
+        int pivot = start;
+        
+        while (left <= right){
+            while (left <= right && nums[left] < nums[pivot]){
+                left++;
+            }
+            while (left <= right && nums[right] > nums[pivot]){
+                right--;
+            }
+            
+            if (left <= right){
+                int temp = nums[right];
+                nums[right] = nums[left];
+                nums[left] = temp;
+                left++;
+                right--;
+            }
+        }
+        
+        
+        if (nums.length - k == right + 1){
+            return nums[right + 1];
+        }
+        
+        else if (nums.length - k > right + 1){
+            return quickSelect(nums, k, left, end);
+        }
+        else {
+            return quickSelect(nums, k, start, right);
+        }
+    }
 }
