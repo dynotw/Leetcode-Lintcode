@@ -1,0 +1,140 @@
+5. Kth Largest Element
+
+Find K-th largest element in an array.
+
+Example
+Example 1:
+
+Input:
+n = 1, nums = [1,3,4,2]
+Output:
+4
+Example 2:
+
+Input:
+n = 3, nums = [9,3,2,4,8]
+Output:
+4
+Challenge
+O(n) time, O(1) extra memory.
+
+Notice
+You can swap elements in the array
+
+
+// 1st method, Quick Sort, don't meet the chanllenge
+// because the sort needs O(nlogn)
+/*
+public class Solution {
+    public int kthLargestElement(int n, int[] nums) {
+        // write your code here
+        
+        quickSort1(nums, 0, nums.length -1);
+        return nums[nums.length - n];
+    }
+   public void quickSort(int[] A, int start, int end){
+        
+        // 注意，递归的终止条件一定放在最前面（return只会跳出本身的函数，即本级的函数）
+        if (start >= end){
+            return;
+        }
+        
+        int pointer1 = start;
+        int pointer2 = end;
+        
+        // 1. pivot, A[start], A[end]
+        // get the value, not the index
+        //虽然任一点都可以作为pivot，但一般还是选择中点
+        /*
+        this place, we can't assign pivot as an index like: 
+        int pivot = start + (end - start)/2
+        Because during the resursion, the element on the index of pivot will change(相当于A[pivot]的值是会变化的)
+        Therefore, we have to assign the value to the pivot, so that the value of pivot won't change, during the recursion.
+        */
+        /*
+        int pivot = A[start + (end - start)/2];
+        
+        
+        // remeber it's requirement is pointer1<=pointer2 not pointer1 < pointer2
+        while (pointer1 <= pointer2){
+            
+            // 一直遍历到A[pointer1] >= pivot
+            while (pointer1 <= pointer2 && A[pointer1] < pivot){
+                pointer1++;
+            }
+            
+            // 一直遍历到A[pointer2] <= pivot
+            while (pointer1 <= pointer2 && A[pointer2] > pivot){
+                pointer2--;
+            } 
+            
+            // 通过上面的两个while循环和最大的while循环， pointer1 和 pointer2 所对应的value 都需要换位置了
+            if (pointer1 <= pointer2){
+                int temp = A[pointer1];
+                A[pointer1] = A[pointer2];
+                A[pointer2] = temp;
+                
+                pointer1++;
+                pointer2--;
+            }
+        }
+        
+        quickSort(A, start, pointer2);
+        quickSort(A, pointer1, end);
+    }        
+}
+*/
+
+// 2nd Quick Select, meet the chanllenge
+public class Solution{
+    public int kthLargestElement(int n, int[] nums){
+        int start = 0;
+        int end = nums.length - 1;
+        return quickSelect(nums, n, start, end);
+    }
+    
+    private int quickSelect(int[] nums, int k, int start, int end){
+        
+        if (start >= end){
+            // return nums[start] and nums[end] is same, because start = end
+            return nums[start];
+        }
+        
+        int left = start;
+        int right = end;
+        // 当把pivot设置成start时，每次partition后，XXX right pivot left XXXX
+        // pivot都会出现在right 和 left 指针的中间
+        // 刚好适用此题
+        // 平时将中点设为pivot是为了在worst和best condition中make balance
+        int pivot = start;
+        
+        while (left <= right){
+            while (left <= right && nums[left] < nums[pivot]){
+                left++;
+            }
+            while (left <= right && nums[right] > nums[pivot]){
+                right--;
+            }
+            
+            if (left <= right){
+                int temp = nums[right];
+                nums[right] = nums[left];
+                nums[left] = temp;
+                left++;
+                right--;
+            }
+        }
+        
+        
+        if (nums.length - k == right + 1){
+            return nums[right + 1];
+        }
+        
+        else if (nums.length - k > right + 1){
+            return quickSelect(nums, k, left, end);
+        }
+        else {
+            return quickSelect(nums, k, start, right);
+        }
+    }
+}
