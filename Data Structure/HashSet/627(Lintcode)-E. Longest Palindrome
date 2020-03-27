@@ -1,0 +1,58 @@
+627. Longest Palindrome
+
+Given a string which consists of lowercase or uppercase letters, find the length of the longest palindromes that can be built with those letters.
+
+This is case sensitive, for example "Aa" is not considered a palindrome here.
+
+Example
+Example 1:
+
+Input : s = "abccccdd"
+Output : 7
+Explanation :
+One longest palindrome that can be built is "dccaccd", whose length is `7`.
+Notice
+Assume the length of given string will not exceed 100000.
+
+/*
+这题其实就是找有多少个数出现过2次。我们维护一个count，并且开一个Set。
+遍历所有字符c，如果c没有出现过，那么我们加到Set里。
+如果c出现过，我们从Set里把它去掉，并且count += 2。
+最后判断是不是还有单个的数。如果没有，那么count就是结果。反之，count要+1
+*/
+public class Solution {
+    /**
+     * @param s: a string which consists of lowercase or uppercase letters
+     * @return: the length of the longest palindromes that can be built
+     */
+    public int longestPalindrome(String s) {
+        // write your code here
+        
+        // elimate special case
+        if (s == null || s.length() == 0){
+            return 0;
+        }
+        
+        Set<Character> visited = new HashSet<>();
+        int count = 0;
+        for(int i = 0; i < s.length(); i++){
+            char element = s.charAt(i);
+            if (visited.contains(element)){
+                visited.remove(element);
+                count += 2;
+            }
+            
+            else if (! visited.contains(element)){
+                visited.add(element);
+            }
+        }
+        
+        if (visited.isEmpty()){
+            return count;
+        }
+        
+        else{
+            return count + 1;
+        }
+    }
+}
