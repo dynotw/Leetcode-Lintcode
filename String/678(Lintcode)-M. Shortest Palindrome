@@ -15,7 +15,7 @@ Input: "abcd"
 Output: "dcbabcd"
 
 
-//String
+//String, actually using KMP is more efficent, but KMP is quite complicated, so I can't understand.
 // add characters in front of string, can't add characters at the end of string
 // different from jiuzhang's method
 public class Solution {
