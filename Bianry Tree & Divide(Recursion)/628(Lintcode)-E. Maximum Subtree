@@ -45,19 +45,6 @@ It's guaranteed that there is only one subtree with maximum sum and the given bi
  */
 
 
-// Binary Tree, Divide, Construct a Struct
-class ResultType{
-    int sum;
-    int maxSum;
-    TreeNode maxSumSubtree;
-    
-    // Construct Function
-    ResultType(int sum, int maxSum, TreeNode maxSumSubtree){
-        this.sum = sum;
-        this.maxSum = maxSum;
-        this.maxSumSubtree = maxSumSubtree;
-    }
-}
 
 // Divide & Conquer in Binary Tree, Construct a Struct
 class ResultType{
@@ -65,6 +52,7 @@ class ResultType{
     int maxSum;
     TreeNode maxSumSubtree;
     
+    // Construct Function
     ResultType(TreeNode maxSumSubtree, int sum, int maxSum){
         this.sum = sum;
         this.maxSum = maxSum;
@@ -86,7 +74,7 @@ public class Solution{
     
     private ResultType helper(TreeNode root){
 
-        // this time over codition, I think we should return this kind of ResultType. 
+        // this time over condition, I think we should return this kind of ResultType. 
         // 2nd method return (null, 0, 0) can't be right, if all node.val in the binary tree are negative
         // because we have to ensure leaf will return itself (root, root.val, root.val)
         if (root == null){
