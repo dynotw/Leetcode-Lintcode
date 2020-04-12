@@ -94,30 +94,40 @@ public class Solution {
     // 如果自己定义了一个construct，通常也会对应地定义一个函数
     public ResultType helper(TreeNode root){
         
+        ResultType result = new ResultType(0,true);
         if (root == null){
-            return new ResultType(0, true);
+            result.depth = 0;
+            result.isBalanced = true;
+            return result;
         }
         
         // Divide
         ResultType left = helper(root.left);
         ResultType right = helper(root.right);
         
-        // Conquer
-        if (!left.isBalanced || !right.isBalanced){            
+        // 
+        if (!left.isBalanced || !right.isBalanced){
             // must return ResultType (because we define hepler in this way)
             // this condition, we can return any depth. 
             // isBalanced is false, so whatever depth is, always return fasle 
             // we only care the isBalanced of ResultType
-            
-            return new ResultType(-1, false);
+            result.depth = 0;
+            result.isBalanced = false;
+            return result;
         }
         
-        if (Math.abs(left.depth - right.depth) > 1){
+        else if (Math.abs(left.depth - right.depth) > 1){
             // 与上一个condition一样
-            return new ResultType(-1, false);
+            result.depth = 0;
+            result.isBalanced = false;
+            return result;
         }
         
         // this case, we must return the maxDepth
-        return new ResultType(Math.max(left.depth, right.depth)+1, true);
+        else{
+            result.depth = Math.max(left.depth,right.depth) + 1;
+            result.isBalanced = true;
+            return result;
+        }
     }
 }
