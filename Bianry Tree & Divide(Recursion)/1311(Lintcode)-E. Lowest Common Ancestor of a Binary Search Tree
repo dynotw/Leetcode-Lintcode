@@ -81,7 +81,7 @@ public class Solution {
         TreeNode right = lowestCommonAncestor(root.right, p, q);
         
         // Conquer
-        /*
+        /*  对于root而言
             three case, 1.LCA在left(p,q都在left);
                        2.LCA在right(p,q都在right);
                        3.LCA在root(p,q不在同一边)
