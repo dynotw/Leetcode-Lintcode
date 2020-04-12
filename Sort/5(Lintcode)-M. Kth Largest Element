@@ -96,23 +96,23 @@ public class Solution{
     private int quickSelect(int[] nums, int k, int start, int end){
         
         if (start >= end){
-            // return nums[start] and nums[end] is same, because start = end
-            return nums[start];
+            // return nums[nums.length -k], because start >= end implies we've found the kth largest number
+            return nums[nums.length - k];
         }
         
         int left = start;
         int right = end;
         // 当把pivot设置成start时，每次partition后，XXX right pivot left XXXX
         // pivot都会出现在right 和 left 指针的中间
-        // 刚好适用此题
+        // 刚好适用此题 (其实好像这道题pivot选1st, mid, last也都可，思路一模一样)
         // 平时将中点设为pivot是为了在worst和best condition中make balance
-        int pivot = start;
+        int pivot = nums[start];
         
         while (left <= right){
-            while (left <= right && nums[left] < nums[pivot]){
+            while (left <= right && nums[left] < pivot){
                 left++;
             }
-            while (left <= right && nums[right] > nums[pivot]){
+            while (left <= right && nums[right] > pivot){
                 right--;
             }
             
@@ -125,7 +125,7 @@ public class Solution{
             }
         }
         
-        
+        // is equal to pivot， also can return pivot
         if (nums.length - k == right + 1){
             return nums[right + 1];
         }
