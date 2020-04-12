@@ -64,13 +64,13 @@ public class Solution {
         // write your code here
         
         
-        // 递归结束条件
+        // 递归结束条件(有两个)
         if (root == null){
             return null;
         }
         
         // 特殊部分：因为自己归纳的over部分，只需要判断root == null
-        if (p == root || q == root){
+        else if (root ==p || root == q){
             return root;
         }
          
