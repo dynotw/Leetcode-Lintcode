@@ -48,7 +48,8 @@ public class Solution {
         int right = nums.length - 1;
         
         // there is no target in this problem
-        // we only need to compare mid and right, always remember the two indiviual arrays also are sorted(right sorted array is smaller than the left one)
+        // we only need to compare mid and right, always remember the two indiviual arrays also are sorted
+        // right sorted array is smaller than the left one)
         // if mid > right, the mid must be at the left array, otherwise it's at the right array
         while (left+1 < right){
             int mid = left +(right - left)/2;
