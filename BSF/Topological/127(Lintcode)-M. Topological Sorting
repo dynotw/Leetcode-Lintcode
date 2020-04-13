@@ -77,18 +77,19 @@ public class Solution {
         for (DirectedGraphNode node : graph) {
             if (map.get(node) == 0) {
                 queue.offer(node);
-                result.add(node);
+                // result.add(node);
             }
         }
         
         // This part is quite similar to regular BFS
         while (!queue.isEmpty()) {
             DirectedGraphNode node = queue.poll();
+            result.add(node); // put Node in this place, making more similar to BFSin Binary Tree
             for (DirectedGraphNode neighbor : node.neighbors) {
                 // 访问各个Nodes，因为上方code已经将indgree=0的Nodes放入result，所以将它的neighbor的Nodes的indgree-1； 当indgree=0，便可以输出
                 map.put(neighbor, map.get(neighbor) - 1);
                 if (map.get(neighbor) == 0) {
-                    result.add(neighbor);
+                    // result.add(neighbor);
                     queue.offer(neighbor);
                 }
             }
