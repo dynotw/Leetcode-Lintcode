@@ -26,11 +26,6 @@ You need return the node with the same label as the input node.
 
 
 
-
-
-
-
-
 /**
  * Definition for Undirected graph.
  * class UndirectedGraphNode {
@@ -57,6 +52,7 @@ You need return the node with the same label as the input node.
     List<Integer> list3 = new List<>(list1);
     这个是deep copy，利用了复制构造函数。修改list1(list3)的内容，不会改变list3(list1)的内容
 */
+
 public class Solution {
     /**
      * @param node: A undirected graph node
@@ -65,10 +61,10 @@ public class Solution {
     public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
         // write your code here
         /*
-        This problem needs three steps:
-        1. from node(input) get all nodes (因为cloneGraph的输入只有一个node，我们需要得到所有nodes)
-        2. clone all nodes
-        3. copy the edges between all nodes
+           This problem needs three steps:
+           1. from node(input) get all nodes (因为cloneGraph的输入只有一个node，我们需要得到所有nodes)
+           2. clone all nodes
+           3. copy the edges between all nodes
         */
         
         if (node == null) {
@@ -95,6 +91,8 @@ public class Solution {
             UndirectedGraphNode newNode = mapping.get(n);
             // 遍历一个List<UndirectedGraphNode>
             for (UndirectedGraphNode neighbor : n.neighbors) {
+               // 必须建立新的newNeighbor, because it's deep copy. 
+               // if we code that newNode.neighbors.add(neighbor), it's soft copy
                 UndirectedGraphNode newNeighbor = mapping.get(neighbor);
                 newNode.neighbors.add(newNeighbor);
             }
@@ -105,10 +103,8 @@ public class Solution {
 
 
 // 类比178的操作，set是为了保证不出现重复node
-// 答案使用了HashSet，但我用ArrayList照样okay，不懂啥区别。应该是contains()操作，HashSet更优。
 // 但是函数return的是ArrayList，return new ArrayList<UndirectedGraphNode>(set); 如果set是HashSet为什么能调用ArrayList的复制构造函数来new呢？
 // 如题：Exapmle 1，遍历1时，我们会得到2和4两个neighbors；然后遍历2，此时会得到1和4，但是之前我们已经遍历过1，所以相当于1已经存在与getNodes了
-// 所以我们不会把1再放入queue和set里面（if statement的判断）
     private ArrayList<UndirectedGraphNode> getNodes(UndirectedGraphNode node) {
         Queue<UndirectedGraphNode> queue = new LinkedList<UndirectedGraphNode>();
         Set<UndirectedGraphNode> set = new HashSet<>();
