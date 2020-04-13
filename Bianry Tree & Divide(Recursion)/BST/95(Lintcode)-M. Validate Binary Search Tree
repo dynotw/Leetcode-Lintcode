@@ -145,7 +145,7 @@ public class Solution {
             Math.min(node.val,left.minValue), 
             Math.max(node.val, right.maxValue), 
             isBST); 
-        //左右可能有空节点，所以需要和node.val自身取最大最小值
+        //左右可能有空节点，所以需要和node.val自身取最大最小值，否则就是Integer.MAX_VALUE and Integer。MIN_VALUE
     }
 }
 */
