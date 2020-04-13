@@ -94,9 +94,9 @@ public class Solution{
     so we new a nextLevel to put the nextLevel's node temporarily as buffer.
     
     */
-            Stack<TreeNode> nextLevel = new Stack<TreeNode>();
-            
+            Stack<TreeNode> nextLevel = new Stack<TreeNode>();     
             int n = currLevel.size();
+            
             for (int i=0; i < n; i++){
                 TreeNode node = currLevel.pop();
                 currLevelResult.add(node.val);
@@ -111,7 +111,7 @@ public class Solution{
                 }
                 else {
                     if (node.right != null) {
-                            nextLevel.push(node.right);
+                        nextLevel.push(node.right);
                     }
                     if (node.left != null) {
                         nextLevel.push(node.left);
