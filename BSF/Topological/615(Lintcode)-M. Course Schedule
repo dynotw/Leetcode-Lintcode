@@ -26,7 +26,7 @@ public class Solution {
      * @return: true if can finish all courses or false
      */
      
-//1.根据先修课关系，建立有向图的hashmap(这步是127没有的，因为127中直接给了Node)
+//1.根据先修课关系，建立有向图的hashmap(这步是127没有的，因为127中直接给了Node, define DirectedNode)
 //2.根据先修课关系，建立indegree的hashmap
 //3.把所有入度为0 的课程加入到队列中
 //4.拓扑排序，处理节点，统计节点个数（经典Topo模板）
