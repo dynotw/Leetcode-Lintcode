@@ -111,7 +111,7 @@ public class Solution {
 // 所以我们不会把1再放入queue和set里面（if statement的判断）
     private ArrayList<UndirectedGraphNode> getNodes(UndirectedGraphNode node) {
         Queue<UndirectedGraphNode> queue = new LinkedList<UndirectedGraphNode>();
-        ArrayList<UndirectedGraphNode> set = new ArrayList<>();
+        Set<UndirectedGraphNode> set = new HashSet<>();
 
         queue.offer(node);
         set.add(node);
