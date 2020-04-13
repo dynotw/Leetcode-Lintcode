@@ -34,7 +34,10 @@ You can assume that there is at least one topological order in the graph.
  * class DirectedGraphNode {
  *     int label;
  *     ArrayList<DirectedGraphNode> neighbors;
- *     DirectedGraphNode(int x) { label = x; neighbors = new ArrayList<DirectedGraphNode>(); }
+ *     DirectedGraphNode(int x) { 
+            label = x; 
+            neighbors = new ArrayList<DirectedGraphNode>(); 
+       }
  * };
  */
 
