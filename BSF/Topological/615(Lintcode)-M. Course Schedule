@@ -40,6 +40,7 @@ public class Solution {
         // 用来存放上过的课
         List<Integer> courses = new LinkedList<>();
         
+        // Integer in map represents the prerequiste
         Map<Integer, ArrayList<Integer>> map = new HashMap<>();
         Map<Integer, Integer> indegree = new HashMap<>();
 
