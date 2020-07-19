@@ -9,14 +9,15 @@ You are given a target value to search. If found in the array return its index, 
 You may assume no duplicate exists in the array.
 
 Example
-Example 1:
 
+Example 1:
 Input: [4, 5, 1, 2, 3] and target=1, 
 Output: 2.
-Example 2:
 
+Example 2:
 Input: [4, 5, 1, 2, 3] and target=0, 
 Output: -1.
+
 Challenge
 O(logN) time
 
