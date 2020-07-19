@@ -22,6 +22,7 @@ Notice
 You can swap elements in the array
 
 // 2nd method is the point
+
 // 1st method, Quick Sort, don't meet the chanllenge
 // because the sort needs O(nlogn)
 /*
