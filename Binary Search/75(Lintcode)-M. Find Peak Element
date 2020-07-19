@@ -73,7 +73,7 @@ public class Solution {
             
         
             
-            /*
+            /* This method is more complicated than above one, because it needs 4 conditions, but above one only has 2 conditions
             // divide into 4 conditions, but ti shows time out when submit the code
             // mid is one peak 
             if (A[mid-1]< A[mid] && A[mid]> A[mid+1]){
