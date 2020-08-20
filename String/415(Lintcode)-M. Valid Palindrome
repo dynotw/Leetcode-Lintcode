@@ -71,3 +71,44 @@ public class Solution {
         return true;
     }
 }
+
+
+
+
+// Python 
+class Solution:
+    """
+    @param s: A string
+    @return: Whether the string is a valid palindrome
+    """
+    def isValid(self, element):
+        return element.isalpha() or element.isdigit()
+    
+    def isPalindrome(self, s):
+        # write your code here
+        # eliminate special condition
+        
+        if len(s) == 0:
+            return True
+        
+        left = 0
+        right = len(s) - 1
+        
+        change = s.lower()
+        
+        while (left < right):
+            while (not self.isValid(change[left]) and left < right):
+                left = left + 1
+            
+            while (not self.isValid(change[right]) and left < right):
+                right = right -1
+            
+            if (change[left] != change[right]):
+                return False
+            
+            else:
+                left = left + 1
+                right = right -1
+        
+        
+        return True
