@@ -15,7 +15,8 @@ Challenge
 O(n2) time is acceptable. Can you do it in O(n) time.
 
 
-// This method is bad, O(n^2)
+// This method is bad, O(n^3)
+// O(n^2) to give all substrings, then need O(n) to figure out whether each substring  is palindrome
 
 // pay attention to "ba", "b" theses edge condition
 public class Solution {
@@ -75,3 +76,101 @@ public class Solution {
         return true;
     } 
 }
+
+
+// This method is O(n^2), and there's O(n), using Manacher's Alg0rithm. However, it's kind of complicated, so I give up it.
+public class Solution {
+    /**
+     * @param s: input string
+     * @return: a string as the longest palindromic substring
+     */
+    public String longestPalindrome(String s) {
+        // write your code here
+        int max = 0;
+        int left = 0;
+        int right = 0;
+        for (int i =0; i < s.length(); i++){
+            int evenlen = longestBondary(s, i, i+1);
+            int oddlen = longestBondary(s, i, i);
+            
+            int maxlen = Math.max(evenlen, oddlen);
+            if (maxlen > max){
+                max = maxlen;
+                // it's even palindrome
+                if (max%2 == 0){
+                    left = i - (max/2 - 1);
+                    right = i + 1 + (max/2 - 1);
+                }
+                // it's odd palindrome
+                else{
+                    left = i - (max-1)/2;
+                    right = i + (max-1)/2;
+                }
+            }
+        }
+        
+        return s.substring(left, right + 1);
+    }
+    
+    
+    // Because palindrome could be even or odd, I don't use mid-index to expand substring
+    // check even substring, left = right - 1;
+    // check odd substring, left = right
+    private int longestBondary(String s, int left, int right){
+        if (s == null || s.length() == 0){
+            return 0;
+        }        
+        while(left >= 0 && right < s.length()){
+            if (s.charAt(left) != s.charAt(right)){
+                break;
+            }            
+            left --;
+            right ++;
+        }       
+        return right - left - 1;
+    }
+}
+
+
+
+// Python 
+class Solution:
+    """
+    @param s: input string
+    @return: a string as the longest palindromic substring
+    """
+    def longestPalindrome(self, s):
+        # write your code here
+        left = 0
+        right = 0
+        
+        // must use "//"
+        for i in range(len(s)):
+            even = self.longestBoundary(s,i,i+1)
+            odd = self.longestBoundary(s,i,i)
+            temMax = max(even, odd) 
+            if (temMax > (right - left)):
+                if (temMax%2 == 0):
+                    left = i - (temMax//2 - 1)
+                    right = i + 1 + (temMax//2 - 1)
+                else:
+                    left = i - (temMax - 1)//2
+                    right = i + (temMax-1)//2
+        
+        return s[left:right+1]
+    
+    
+    def longestBoundary(self, s, left ,right):
+        if (len(s) == 0 or s == None):
+            return 0;
+        
+        while(left >= 0 and right < len(s)):
+            if s[left] != s[right]:
+                break
+            
+            else:
+                left = left -1
+                right = right + 1
+            
+        return right - left -1 
+        
