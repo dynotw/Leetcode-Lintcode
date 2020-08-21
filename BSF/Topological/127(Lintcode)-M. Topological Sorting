@@ -98,6 +98,59 @@ public class Solution {
     }
 }
 
+
+// Python
+"""
+Definition for a Directed graph node
+class DirectedGraphNode:
+    def __init__(self, x):
+        self.label = x
+        self.neighbors = []
+"""
+
+
+class Solution:
+    """
+    @param: graph: A list of Directed graph node
+    @return: Any topological order for the given graph.
+    """
+    def topSort(self, graph):
+        # write your code here
+        result = list()
+        
+        if (graph == None):
+            return result
+            
+        # initialize indgree
+        indgree = dict()
+        for i in graph:
+            indgree[i] = 0
+        
+        # calculate indgree
+        for i in graph:
+            for j in i.neighbors:
+                indgree[j] = indgree[j] + 1
+        
+        # initialize queue
+        queue = list()
+        for i in graph:
+            if (indgree[i] == 0):
+                queue.append(i)
+                result.append(i)
+        
+        # bfs
+        
+        while(queue):
+            start = queue.pop(0)
+            for i in start.neighbors:
+                indgree[i] = indgree[i] - 1
+                
+                if (indgree[i] == 0):
+                    queue.append(i)
+                    result.append(i)
+                    
+        return result
+
 入度与出度
 在介绍算法之前，我们先介绍图论中的一个基本概念，入度和出度，英文为 in-degree & out-degree。
 在有向图中，如果存在一条有向边 A-->B，那么我们认为这条边为 A 增加了一个出度，为 B 增加了一个入度。
