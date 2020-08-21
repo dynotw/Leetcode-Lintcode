@@ -126,3 +126,66 @@ public class Solution {
         }
     }
 }
+
+
+
+
+// Python 
+class Coordinate:
+    x = 0
+    y = 0
+    
+    def __init__(self, x , y):
+        self.x = x
+        self.y = y
+
+class Solution:
+    """
+    @param grid: a boolean 2D matrix
+    @return: an integer
+    """
+    
+    def isValidPosition(self, grid, position):
+        height = len(grid)
+        width = len(grid[0])
+        
+        return (position.x >= 0 and position.x < height and position.y>= 0 and position.y < width)
+    
+    def bfs(self, grid, point):
+        directionX = [0,0,-1,1]
+        directionY = [-1,1,0,0]
+        
+        if (grid[point.x][point.y] == False):
+            return
+        
+        queue = list()
+        queue.append(point)
+        
+        while(queue):
+            start = queue.pop(0)
+            for i in range(4):
+                next = Coordinate(start.x + directionX[i], start.y + directionY[i])
+                if (self.isValidPosition(grid,next) and grid[next.x][next.y] == True):
+                    queue.append(next)
+                    grid[next.x][next.y] = False
+        
+        
+        return
+    
+    
+    def numIslands(self, grid):
+        # write your code here
+        
+        if (len(grid) == 0 or len(grid[0]) == 0):
+            return 0
+        
+        num = 0
+        
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if (grid[i][j]):
+                    point = Coordinate(i,j)
+                    self.bfs(grid,point)
+                    num = num + 1
+        
+        return num
