@@ -99,3 +99,124 @@ public class Solution {
         //return count == numCourses;
     }
 }
+
+
+
+// Java(more clear) 
+public class Solution {
+    /*
+     * @param numCourses: a total of n courses
+     * @param prerequisites: a list of prerequisite pairs
+     * @return: true if can finish all courses or false
+     */
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        // write your code here
+        List<Integer> result = new LinkedList<>();
+        
+        if (numCourses == 0){
+            return true;
+        }
+        
+        int n = numCourses;
+        
+        // initialize directed graph
+        HashMap<Integer, List<Integer>> directedGraph = new HashMap<>();
+        for (int i=0; i<n; i++){
+            List<Integer> neighbors = new ArrayList<>();
+            directedGraph.put(i, neighbors);
+        }
+        
+        for (int[] pair : prerequisites){
+            directedGraph.get(pair[1]).add(pair[0]);
+        }
+    
+        // initial indgree
+        HashMap<Integer, Integer> indgree = new HashMap<>();
+        for (int i=0; i<n; i++){
+            indgree.put(i,0);
+        }
+        
+        // calculate indgree
+        for (int i =0; i<n; i++){
+            for (int j : directedGraph.get(i)){
+                indgree.put(j, indgree.get(j)+1);
+            }
+        }
+        
+        // initialize queue
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i=0; i<n ; i++){
+            if (indgree.get(i) == 0){
+                queue.offer(i);
+                result.add(i);
+            }
+        }
+        
+        // bfs
+        while(! queue.isEmpty()){
+            int start = queue.poll();
+            for (int next : directedGraph.get(start)){
+                indgree.put(next, indgree.get(next) - 1);
+                if (indgree.get(next) == 0){
+                    queue.offer(next);
+                    result.add(next);
+                }
+            }
+        }
+        
+        return result.size() == n;
+    }
+}
+
+
+
+
+// Python
+class Solution:
+    """
+    @param: numCourses: a total of n courses
+    @param: prerequisites: a list of prerequisite pairs
+    @return: true if can finish all courses or false
+    """
+    def canFinish(self, numCourses, prerequisites):
+        # write your code here
+        
+        result = list()
+        if (numCourses == 0):
+            return True
+        
+        # initialize directed graph
+        directedGraph = dict()
+        for i in range(numCourses):
+            directedGraph[i] = list()
+        
+        for pair in prerequisites:
+            directedGraph[pair[1]].append(pair[0])
+        
+        # initialize indgree
+        indegree = dict()
+        for i in range(numCourses):
+            indegree[i] = 0
+        
+        for i in range(numCourses):
+            for j in directedGraph[i]:
+                indegree[j] = indegree[j] + 1
+        
+        # initialize queue
+        queue = list()
+        for i in range(numCourses):
+            if indegree[i] == 0:
+                queue.append(i)
+                result.append(i)
+        
+        # bfs
+        while (queue):
+            start = queue.pop(0)
+            for neig in directedGraph[start]:
+                indegree[neig] = indegree[neig] - 1
+                
+                if (indegree[neig] == 0):
+                    queue.append(neig)
+                    result.append(neig)
+        
+        return len(result) == numCourses
