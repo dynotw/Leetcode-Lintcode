@@ -22,10 +22,7 @@ Notice
 You can assume no duplicate exists in the array.
 
 
-
-
-
-
+// BFS
 public class Solution {
     /**
      * @param nums: a rotated sorted array
@@ -73,3 +70,31 @@ public class Solution {
         return Math.min(nums[left],nums[right]);
     }
 }
+
+// Python
+class Solution:
+    """
+    @param nums: a rotated sorted array
+    @return: the minimum number in the array
+    """
+    def findMin(self, nums):
+        # write your code here
+
+        # set two pointers
+        start = 0
+        end = len(nums) - 1
+        
+        while(start + 1 < end):
+            mid = start + (end-start)//2
+            
+            # only two valid conditions: mid<end<start; end<start<mid; start<mid<end(In this condition, we won't find minmum)
+            if(nums[mid] < nums[end]):
+                end = mid
+            
+            else:
+                start= mid
+        
+        if (nums[start] < nums[end]):
+            return nums[start]
+        else:
+            return nums[end]
