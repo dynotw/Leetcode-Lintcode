@@ -1,0 +1,38 @@
+140. Fast Power
+
+Calculate the a^n \% ba
+​n
+​​ %b where a, b and n are all 32bit non-negative integers.
+
+Example
+For 231 % 3 = 2
+
+For 1001000 % 1000 = 0
+
+Challenge
+O(logn)
+
+// 二分法
+class Solution:
+    """
+    @param a: A 32bit integer
+    @param b: A 32bit integer
+    @param n: A 32bit integer
+    @return: An integer
+    """
+    def fastPower(self, a, b, n):
+        if n == 0:
+            return 1 % b
+            
+        if n == 1:
+            return a % b
+            
+        # a^n = (a^n/2) ^ 2
+        power = self.fastPower(a, b, n // 2)
+        power = (power * power) % b
+        
+        # 如果 n 是奇数，还需要多乘以一个 a，因为 n // 2 是整除
+        if n % 2 == 1:
+            power = (power * a) % b
+            
+        return power
