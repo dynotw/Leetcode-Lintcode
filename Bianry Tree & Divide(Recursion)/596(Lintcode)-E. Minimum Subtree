@@ -121,6 +121,57 @@ public class Solution {
     }
 }
 
+// Python
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class ResultType:
+    def __init__(self,minSubTree,sum,minSum):
+        self.minSubTree = minSubTree
+        self.sum = sum
+        self.minSum = minSum
+        
+class Solution:
+    """
+    @param root: the root of binary tree
+    @return: the root of the minimum subtree
+    """
+    def findSubtree(self, root):
+        # write your code here
+        if(root == None):
+            return None
+        
+        result = self.helper(root)
+        
+        return result.minSubTree
+        
+    
+    def helper(self, root):
+        if(root==None):
+            return ResultType(root, 0, sys.maxsize)
+        
+        left = self.helper(root.left)
+        right = self.helper(root.right)
+        
+        sum = left.sum + right.sum + root.val
+        minSum = min(sum, min(left.minSum, right.minSum))
+        
+        if(minSum == left.minSum):
+            return ResultType(left.minSubTree, sum, left.minSum)
+        
+        elif(minSum == right.minSum):
+            return ResultType(right.minSubTree, sum, right.minSum)
+        
+        else:
+            return ResultType(root, sum, minSum)
+
+
+
 // version 2: Pure divide conquer
 class ResultType {
 // minSubtree 就是minSum对应的subtree 
