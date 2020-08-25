@@ -1,0 +1,180 @@
+901. Closest Binary Search Tree Value II
+Given a non-empty binary search tree and a target value, find k values in the BST that are closest to the target.
+
+Example
+Example 1:
+
+Input:
+{1}
+0.000000
+1
+Output:
+[1]
+Explanation：
+Binary tree {1},  denote the following structure:
+ 1
+Example 2:
+
+Input:
+{3,1,4,#,2}
+0.275000
+2
+Output:
+[1,2]
+Explanation：
+Binary tree {3,1,4,#,2},  denote the following structure:
+  3
+ /  \
+1    4
+ \
+  2
+Challenge
+Assume that the BST is balanced, could you solve it in less than O(n) runtime (where n = total nodes)?
+
+Notice
+Given target value is a floating point.
+You may assume k is always valid, that is: k ≤ total nodes.
+You are guaranteed to have only one unique set of k values in the BST that are closest to the target.
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+// method 1, method 2 is better, but it's much more complicated
+// time complexity is O(n), space complexity is O(n)
+public class Solution {
+    /**
+     * @param root: the given BST
+     * @param target: the given target
+     * @param k: the given k
+     * @return: k values in the BST that are closest to the target
+     */
+    public List<Integer> closestKValues(TreeNode root, double target, int k) {
+        // write your code here
+        List<Integer> result = new LinkedList<>();
+        
+        TreeMap<Double, Integer> inorder = inorder(root, target);
+        
+        for(int i = 0; i<k; i++){
+            double first = inorder.firstKey();
+            int element = inorder.get(first);
+            result.add(element);
+            inorder.remove(first);
+        }
+        
+        return result;
+    }
+    
+    // it's inorder traverse, just return TreeMap instead of List
+    private TreeMap<Double, Integer> inorder(TreeNode root, double target){
+        
+        TreeMap<Double, Integer> result = new TreeMap<>();
+        // exit of recursion
+        if(root == null){
+            return result;
+        }
+        
+        // Divide
+        TreeMap<Double, Integer> left = inorder(root.left, target);
+        TreeMap<Double, Integer> right = inorder(root.right, target);
+        
+        // Conquer
+        result.putAll(left);
+        result.put(Math.abs(root.val-target), root.val);
+        result.putAll(right);
+        
+        return result;
+    }
+}
+
+// method 2, time is O(log n + k), space is O(log n)
+class Solution {
+    public List<Integer> closestKValues(TreeNode root, double target, int k) {
+        List<Integer> values = new ArrayList<>();
+        
+        if (k == 0 || root == null) {
+            return values;
+        }
+        
+        Stack<TreeNode> lowerStack = getStack(root, target);
+        Stack<TreeNode> upperStack = new Stack<>();
+        upperStack.addAll(lowerStack);
+        if (target < lowerStack.peek().val) {
+            moveLower(lowerStack);
+        } else {
+            moveUpper(upperStack);
+        }
+        
+        for (int i = 0; i < k; i++) {
+            if (lowerStack.isEmpty() ||
+                   !upperStack.isEmpty() && target - lowerStack.peek().val > upperStack.peek().val - target) {
+                values.add(upperStack.peek().val);
+                moveUpper(upperStack);
+            } else {
+                values.add(lowerStack.peek().val);
+                moveLower(lowerStack);
+            }
+        }
+
+        return values;
+    }
+    
+    private Stack<TreeNode> getStack(TreeNode root, double target) {
+        Stack<TreeNode> stack = new Stack<>();
+        
+        while (root != null) {
+            stack.push(root);
+            
+            if (target < root.val) {
+                root = root.left;
+            } else {
+                root = root.right;
+            }
+        }
+        
+        return stack;
+    }
+    
+    public void moveUpper(Stack<TreeNode> stack) {
+        TreeNode node = stack.peek();
+        if (node.right == null) {
+            node = stack.pop();
+            while (!stack.isEmpty() && stack.peek().right == node) {
+                node = stack.pop();
+            }
+            return;
+        }
+        
+        node = node.right;
+        while (node != null) {
+            stack.push(node);
+            node = node.left;
+        }
+    }
+    
+    public void moveLower(Stack<TreeNode> stack) {
+        TreeNode node = stack.peek();
+        if (node.left == null) {
+            node = stack.pop();
+            while (!stack.isEmpty() && stack.peek().left == node) {
+                node = stack.pop();
+            }
+            return;
+        }
+        
+        node = node.left;
+        while (node != null) {
+            stack.push(node);
+            node = node.right;
+        }
+    }
+}
