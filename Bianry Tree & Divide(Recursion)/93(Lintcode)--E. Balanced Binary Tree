@@ -59,7 +59,6 @@ Example  3:
  * }
  */
 
-
 // This problem is Binary Tree and Divide
 // Use Divide, and construct own struct(class)
 
@@ -129,5 +128,31 @@ public class Solution {
             result.isBalanced = true;
             return result;
         }
+    }
+}
+
+
+
+// Method 2 (without ResultType)
+public class Solution {
+    public boolean isBalanced(TreeNode root) {
+        return maxDepth(root) != -1;
+    }
+
+    private int maxDepth(TreeNode root) {
+        // exit of recursion
+	if (root == null) {
+            return 0;
+        }
+	
+	// Divide
+        int left = maxDepth(root.left);
+        int right = maxDepth(root.right);
+	
+	// Conquer
+        if (left == -1 || right == -1 || Math.abs(left-right) > 1) {
+            return -1;
+        }
+        return Math.max(left, right) + 1;
     }
 }
