@@ -1,0 +1,48 @@
+228. Middle of Linked List
+
+Find the middle node of a linked list.
+
+Example
+Example 1:
+
+Input:  1->2->3
+Output: 2	
+Explanation: return the value of the middle node.
+Example 2:
+
+Input:  1->2
+Output: 1	
+Explanation: If the length of list is  even return the value of center left one.	
+Challenge
+If the linked list is in a data stream, can you find the middle without iterating the linked list again?
+
+
+"""
+Definition of ListNode
+class ListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+# two same direction pointers (fast and slow) 
+# Time complexity O(n/2)
+class Solution:
+    """
+    @param head: the head of linked list.
+    @return: a middle node of the linked list
+    """
+    # the last ListNode has next, which is None
+    def middleNode(self, head):
+        # write your code here
+        if(head == None or head.next == None):
+            return head
+        
+        # set two pointers(fast and slow)
+        slow = head
+        fast = head.next
+        
+        while(fast != None and fast.next != None):
+            slow = slow.next
+            fast = fast.next.next
+        
+        return slow
