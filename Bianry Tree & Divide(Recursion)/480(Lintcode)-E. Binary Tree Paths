@@ -23,8 +23,6 @@ Explanation：
 2  
 
 
-
-
 /**
  * Definition of TreeNode:
  * public class TreeNode {
@@ -37,21 +35,16 @@ Explanation：
  * }
  */
 
-
 // Binary Tree, Recursion, Divide
-
 // 1st method: Recursion
-/*
 public class Solution {
 
-    public List<String> binaryTreePaths(TreeNode root) {
-        
+    public List<String> binaryTreePaths(TreeNode root) {     
         String sb = "";
         ArrayList<String> result = new ArrayList<String>();
         
         findPath(root, result, sb);
-        return result;
-        
+        return result;        
     }
     
     public void findPath(TreeNode root, ArrayList<String> result, String s){
@@ -62,11 +55,9 @@ public class Solution {
         
         s = s+"->"+root.val;
         
-        if(root.left==null &&root.right==null){
-            
+        if(root.left==null &&root.right==null){          
             // string.substring(start,end): start和end是string的index，在string中从start取到end
-            // 从index=2，开始取，相当于把最早写入的‘->’不读取
-            
+            // 从index=2，开始取，相当于把最早写入的‘->’不读取            
             result.add(s.substring(2));
             return;
             
@@ -76,43 +67,41 @@ public class Solution {
             
         }
         if(root.right!=null){
-            findPath(root.right, result, s);
-            
-        }
-        
+            findPath(root.right, result, s);            
+        }        
     }
 }
-*/
 
 
 // 2nd method: Divide
-public class Solution{
-    
-    public List<String> binaryTreePaths(TreeNode root){
+public class Solution {
+    public List<String> binaryTreePaths(TreeNode root) {
+        // write your code here
+        List<String> result = new LinkedList<>();
         
-        List<String> results = new ArrayList<>();
-        if (root == null){
-            return results;
+        // exit of recursion
+        if(root == null){
+            return result;
         }
         
+        // Divide
         List<String> left = binaryTreePaths(root.left);
         List<String> right = binaryTreePaths(root.right);
         
-        // 遍历left中的每个string，加上 root.val -> 
-        for (String result : left){
-            results.add(root.val + "->" + result);
+        // Conquer (add all paths from root to leaf)
+        for(String path: left){
+            result.add(root.val + "->" + path);
         }
         
-        for (String result: right){
-            results.add(root.val + "->" + result);
+        for(String path : right){
+            result.add(root.val + "->" + path);
         }
         
-
-        if (results.size() == 0){
-            results.add("" + root.val);
+        // if the above two for loops don't add any node into result, this shows that it's a leaf
+        if(result.size() == 0){
+            result.add(Integer.toString(root.val));
         }
-
         
-        return results;
+        return result;
     }
 }
