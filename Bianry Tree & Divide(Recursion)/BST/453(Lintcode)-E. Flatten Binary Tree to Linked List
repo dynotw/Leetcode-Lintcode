@@ -41,10 +41,6 @@ Notice
 Don't forget to mark the left child of each node to null. Or you will get Time Limit Exceeded or Memory Limit Exceeded.
 
 
-
-
-
-
 /**
  * Definition of TreeNode:
  * public class TreeNode {
@@ -59,7 +55,6 @@ Don't forget to mark the left child of each node to null. Or you will get Time L
 
 // Binary Tree, Divide, Traverse
 // This problem is difficult, I can't figure out
-/*
 // 自己的做法，错误在Left.right = Right
 // Right应该放在Left的leaf.right而不是直接放在Left.right。因为这样使得原本的Left.right所引导的subtree消失了。
 public class Solution {
@@ -91,7 +86,46 @@ public class Solution {
         return root;
     }
 }
-*/
+
+// Pyhthon 
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: a TreeNode, the root of the binary tree
+    @return: nothing
+    """
+    def flatten(self, root):
+        # write your code here
+        # exit of recursion
+        if(root == None):
+            return
+        # Divide
+        left = self.flatten(root.left)
+        right = self.flatten(root.right)
+        
+        # Conquer
+        root.left = None
+        
+        # this if statement is important. Take 5 or leaf for example to figure out.
+        if(left == None):
+            return root
+        else:
+            root.right = left
+        
+        while(left.right != None):
+            left = left.right
+        
+        left.right = right
+        
+        return root
+
 
 // Divide & Conquer in BST, Compared to 1534, 同时对Binary Tree Traversal的基础上进行改动
 // 2nd method, Own method based on Preorder in Binary Tree
@@ -178,4 +212,3 @@ public class Solution {
         return root;
     }
 }
-*/
