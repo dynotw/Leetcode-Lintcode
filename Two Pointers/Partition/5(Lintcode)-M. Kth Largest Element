@@ -85,7 +85,9 @@ public class Solution {
 }
 */
 
-// 2nd Quick Select, meet the chanllenge
+// 2nd Quick Select, meet the chanllenge O(n)
+// Because partition use O(n) to partition array: T(n) = T(n/2) + O(n), compared with T(n)=2 * T(n/2) +O(n)  quciksort
+// Because quickselect always sort one partition instead of two partition
 public class Solution {
     /**
      * @param n: An integer
