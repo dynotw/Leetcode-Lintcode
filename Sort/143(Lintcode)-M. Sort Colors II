@@ -1,0 +1,122 @@
+143. Sort Colors II
+
+Given an array of n objects with k different colors (numbered from 1 to k), sort them so that objects of the same color are adjacent, with the colors in the order 1, 2, ... k.
+
+Example
+Example1
+
+Input: 
+[3,2,2,1,4] 
+4
+Output: 
+[1,2,2,3,4]
+Example2
+
+Input: 
+[2,1,1,2,2] 
+2
+Output: 
+[1,1,2,2,2]
+Challenge
+A rather straight forward solution is a two-pass algorithm using counting sort. That will cost O(k) extra memory. Can you do it without using extra memory?
+
+Notice
+You are not suppose to use the library's sort function for this problem.
+k <= n
+
+
+// This problem is just sort problem, we can use quicksort or merge sort, 
+// Quicksort: time complexity is O(nlogn), worst is O(n^2); space complexity is O(1)
+// Mergesort: time complexity is O(nlogn), space complexity is O(n)
+// But because this problem is special, we modify quicksort to a special edition(rainbow sort, time complexity is O(nlogk), space complexity is O(1))
+// Also because we know the range of elements in this array, we can use cotinuing sort as well: time complexity is O(n+k), space complexity is O(n+k)
+// Rainbow sort and continuing sort isn't general
+
+// Rainbow Sort
+public class Solution {
+    /*
+     * @param colors: A list of integer
+     * @param k: An integer
+     * @return: nothing
+     */
+    public void sortColors2(int[] colors, int k) {
+        if (colors == null || colors.length < 2) {
+            return;
+        }        
+        sort(colors, 0, colors.length - 1, 1, k);
+    }
+
+    private void sort(int[] colors, int start, int end, int colorFrom, int colorTo) {
+
+        //若处理区间长度为小于等于1或颜色区间长度为1，则不需要再进行处理
+        if (start >= end || colorFrom == colorTo) {
+            return;
+        }
+
+        //设置左右指针以及中间的颜色
+        int left = start;
+        int right = end;
+        int colorMid = colorFrom + (colorTo - colorFrom) / 2;
+      
+        while (left <= right) {
+
+            //找到左侧大于中间颜色的位置
+            while (left <= right && colors[left] <= colorMid) {
+                left++;
+            }
+            //找到右侧小于等于中间颜色的位置
+            while (left <= right && colors[right] > colorMid) {
+                right--;
+            }
+            //交换左右指针指向的颜色
+            if (left <= right) {
+                int temp = colors[left];
+                colors[left] = colors[right];
+                colors[right] = temp;
+            }
+        }
+
+        //继续递归处理左右两半序列
+        sort(colors, start, right, colorFrom, colorMid);
+        sort(colors, left, end, colorMid + 1, colorTo);
+    }
+}
+
+
+
+// continuing sort
+public class Solution {
+    /**
+     * @param colors: A list of integer
+     * @param k: An integer
+     * @return: nothing
+     */
+    public void sortColors2(int[] colors, int k) {
+        // write your code here
+        int max = Arrays.stream(colors).max().getAsInt(); 
+        int min = Arrays.stream(colors).min().getAsInt(); 
+        int range = max - min + 1; 
+        int count[] = new int[k]; 
+        int output[] = new int[colors.length]; 
+        for (int i = 0; i < colors.length; i++)  
+        { 
+            count[colors[i] - min]++; 
+        } 
+  
+        for (int i = 1; i < count.length; i++)  
+        { 
+            count[i] += count[i - 1]; 
+        } 
+  
+        for (int i = colors.length - 1; i >= 0; i--)  
+        { 
+            output[count[colors[i] - min] - 1] = colors[i]; 
+            count[colors[i] - min]--; 
+        } 
+  
+        for (int i = 0; i < colors.length; i++) 
+        { 
+            colors[i] = output[i]; 
+        } 
+    }
+}
