@@ -1,0 +1,74 @@
+57. 3Sum
+Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
+
+Example
+Example 1:
+
+Input:[2,7,11,15]
+Output:[]
+Example 2:
+
+Input:[-1,0,1,2,-1,-4]
+Output:	[[-1, 0, 1],[-1, -1, 2]]
+Notice
+Elements in a triplet (a,b,c) must be in non-descending order. (ie, a ≤ b ≤ c)
+
+The solution set must not contain duplicate triplets.
+
+
+
+
+// two sum + 一层for loop
+public class Solution {
+    /**
+     * @param numbers: Give an array numbers of n integer
+     * @return: Find all unique triplets in the array which gives the sum of zero.
+     */
+    public List<List<Integer>> threeSum(int[] numbers) {
+        // write your code here
+        List<List<Integer>> result = new LinkedList<>();
+        for(int i=0; i<numbers.length; i++){
+            List<List<Integer>> temp = twoSum(numbers, -numbers[i], i);
+            for(List<Integer> pair : temp){
+                if(pair.size() == 2){
+                    pair.add(numbers[i]);
+                    Collections.sort(pair);
+                    if(result.contains(pair)){
+                        continue;
+                    }
+                    else{
+                        result.add(pair);
+                    }
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    // target, index 是 for loop中输入元素的相反数及index
+    // index是为了在two sum循环时，避开此元素。以防出现此元素在tipple pair中出现多次
+    // 去相反数是因为，three sum = 0， 所以numbers[i] + two sum = 0 -> two sum = - numbers[i](target)
+    public List<List<Integer>> twoSum(int[] numbers, int target, int index){
+        
+        List<List<Integer>> result = new LinkedList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        
+        for (int i =0; i < numbers.length; i++){
+            if(i == index){
+                continue;
+            }
+            
+            if (map.containsKey(numbers[i])){
+                List<Integer> temp = new LinkedList<>();
+                temp.add(target - numbers[i]);
+                temp.add(numbers[i]);
+                result.add(temp);
+            }
+            
+            map.put((target - numbers[i]), i);
+        }
+        
+        return result;
+    }
+}
