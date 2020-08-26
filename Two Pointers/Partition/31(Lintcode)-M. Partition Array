@@ -31,7 +31,9 @@ If all elements in nums are smaller than k, then return nums.length
 
 
 // Two pointers, partition
-// quite similar to QuickSort, but a little different:1. left < right; 2. for right pointer, nums[right] >= k (problem mentions it)
+// quite similar to QuickSort, but a little different: 1. left < right; 2. for right pointer, nums[right] >= k (problem mentions it)
+// we have to use left < right, because the k may not be in the nums, compared with pivot must be in nums(QuickSort)
+// for example: [3,3,3] with 2. If we still use left<=right, then right will become -1;
 public class Solution {
     /**
      * @param nums: The integer array you should partition
@@ -54,23 +56,21 @@ public class Solution {
             }
             while (left < right && nums[right] >= k){
                 right--;
-            }
-            
+            }          
             if (left < right){
                 int temp = nums[left];
                 nums[left] = nums[right];
-                nums[right] = temp;
-                
+                nums[right] = temp;            
                 left++;
                 right--;
             }
         }
         
-        // 对return的分类不是很懂
+        // Because we use left < right, left pointer must stop before k
         if (nums[left] < k){
             return left + 1;
         }
-        else {
+        else{
             return left;
         }
     }
