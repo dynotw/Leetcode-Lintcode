@@ -35,7 +35,7 @@ The solution set must not contain duplicate subsets.
 
 
 
-// DFS classical probelm in Combination
+// DFS classical probelm
 class Solution {
     /**
      * @param S: A set of numbers.
@@ -46,11 +46,11 @@ class Solution {
         //因为return的是List<List<Integer>>,所以我们要new一个出来 
         List<List<Integer>> results = new ArrayList<>();
         
-        // eliminate special case
         if (nums == null) {
             return results;
         }
-        if (nums.length == 0) {
+        else if (nums.length == 0) {
+            results.add(new ArrayList<Integer>());
             return results;
         }
         
@@ -69,7 +69,7 @@ class Solution {
                         List<List<Integer>> results) {
         // 2. 递归的拆解
         // deep copy
-        // results.add(subset);
+        // results.add(subset)是错误的，如果直接subset那么引用传递，不会生成新的subset，只是original subset一直在变化而已
         // 第一个存入的绝对是[]的空List
         results.add(new ArrayList<Integer>(subset));
         
@@ -78,7 +78,7 @@ class Solution {
             subset.add(nums[i]);
             // 寻找所有以 [1]; [1,2] 开头的集合，并扔到 results
             helper(subset, nums, i + 1, results);
-            // [1] -> [0]; [1,2] -> [1]  回溯
+            // [1] -> []; [1,2] -> [1]  回溯
             subset.remove(subset.size() - 1);
         }
         
