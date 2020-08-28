@@ -38,6 +38,8 @@ public class Solution {
             return result;
         }
         
+        // This sort is important, beause 'if statement' in dfs will break, if candidate[i] > reaminTarget.
+        // If we don't sort: [8,7,4,3], target = 3, then result = []. Because the first number 7 > 3, break happens, no following recursion.
         Arrays.sort(candidates);
         
         // 防止访问重复点
