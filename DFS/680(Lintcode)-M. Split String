@@ -1,0 +1,99 @@
+680. Split String
+
+Give a string, you can choose to split the string after one character or two adjacent characters, and make the string to be composed of only one character or two characters. 
+Output all possible results.
+
+Example
+Example1
+
+Input: "123"
+Output: [["1","2","3"],["12","3"],["1","23"]]
+Example2
+
+Input: "12345"
+Output: [["1","23","45"],["12","3","45"],["12","34","5"],["1","2","3","45"],["1","2","34","5"],["1","23","4","5"],["12","3","4","5"],["1","2","3","4","5"]]
+
+
+// DFS in Combination
+/*
+算法步骤
+对字符串进行深度优先搜索，当前位置达到字符串末尾作为边界。搜索时有两种情况：
+
+1. 切割当前的1个字符：
+
+将这1个字符单独作为字符串存入列表
+
+当前位置步进1
+
+2. 切割当前的连续2个字符（需满足当前位置不是字符串末尾）：
+
+将连续2个字符保存为字符串存入列表
+
+当前位置步进2
+
+复杂度分析
+时间复杂度：O(2^n), n为字符串长度
+
+除了字符串最后一位，其他位置都有两种切割方式
+空间复杂度：O(2^n^2),n为字符串长度
+
+存储所有情况需要所有切分方式*n 的空间
+*/
+
+// DFS in Combination
+/*
+算法步骤
+对字符串进行深度优先搜索，当前位置达到字符串末尾作为边界。搜索时有两种情况：
+
+1. 切割当前的1个字符：
+
+将这1个字符单独作为字符串存入列表
+
+当前位置步进1
+
+2. 切割当前的连续2个字符（需满足当前位置不是字符串末尾）：
+
+将连续2个字符保存为字符串存入列表
+
+当前位置步进2
+
+复杂度分析
+时间复杂度：O(2^n), n为字符串长度
+
+除了字符串最后一位，其他位置都有两种切割方式
+空间复杂度：O(2^n^2),n为字符串长度
+
+存储所有情况需要所有切分方式*n 的空间
+*/
+
+public class Solution {
+    /*
+     * @param : a string to be split
+     * @return: all possible split string array
+     */
+    public List<List<String>> splitString(String s) {
+        List<List<String>> result = new ArrayList<>();
+        List<String> subset = new ArrayList<>();
+        helper(s, 0, subset, result);
+        return result;
+    }
+    
+    private void helper(String s, int index, List<String> current, List<List<String>> result) {
+        if (index == s.length()) {
+            result.add(new ArrayList<>(current));
+            return;
+        }
+        
+        // Option 1, split one Character
+        current.add(String.valueOf(s.charAt(index)));
+        helper(s, index + 1, current, result);
+        current.remove(current.size() - 1);
+        
+        // Option 2, split two Character (Ensure index won't be out bound, so index < s.length-1)
+        if (index < s.length() - 1) {
+            current.add(s.substring(index, index + 2));
+            helper(s, index + 2, current, result);
+            current.remove(current.size() - 1);
+        }
+    }
+}
