@@ -31,6 +31,8 @@ You can assume that there is no duplicate numbers in the list.
 
 
 // DFS in permutation
+// This problem need boolean[] to avoid repeated, if we still use a HashSet above boolean[], this HashSet is redundant. 
+// If we just use HashSet is not enough. For example, [1,2] ->[1,1] [1,2] [2,1] [2,2] (each element can be shown array.length times)
 public class Solution {
     /*
      * @param nums: A list of integers.
@@ -41,6 +43,7 @@ public class Solution {
         List<Integer> subset = new ArrayList<>();
         
         // The function of the boolean[] is to restrict the for loop in DFS function
+        // Main aim is to avoid repeated
         boolean[] visited = new boolean[nums.length];
         
         if (nums == null) {
@@ -62,9 +65,9 @@ public class Solution {
                 return;
         }
         
-        // There's no startIndex anymore, so whether each number can be repeat depends on the HashSet
-        // Use the HashSet means each number only use once
-        // without HashSet, each number can be used twice
+        // There's no startIndex anymore, so whether each number can be repeat depends on the boolean[]
+        // Use the boolean[] means each number only use once
+        // without boolean[], each number can be used array.length times
         for (int i = 0; i < nums.length; i++) {
             if(visited[i]){
                 continue;
