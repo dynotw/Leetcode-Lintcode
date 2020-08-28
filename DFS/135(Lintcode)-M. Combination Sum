@@ -69,7 +69,7 @@ public class Solution {
             subset.add(candidates[i]);
             // 注意此处的dfs调用，我的startIndex是从i不是从i+1了
             // i表示candidates[i]可以repeat unlimited times
-            // i+1,每个元素只能用一次（是每个元素，不是相同元素） 
+            // i+1,每个元素只能用一次（是每个元素，不是相同元素）,比较17-subset这道对比即可 
             dfs(candidates, remianTarget - candidates[i], i, subset, result, visited);
             subset.remove(subset.size() - 1);
         }
