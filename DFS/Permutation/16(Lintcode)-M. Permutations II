@@ -23,9 +23,8 @@ Challenge
 Using recursion to do it is acceptable. If you can do it without recursion, that would be great!
 
 
-
-
 // DFS in permutation
+// this problem is different from Permutation(15), there could be same elements in nums
 public class Solution {
     /*
      * @param :  A list of integers
@@ -44,7 +43,9 @@ public class Solution {
             return result;
         }
         
-        Arrays.sort(nums);
+        // If I've used HashSet, I don't need to sort. However, we need to sort firstly, if we use jiuzhang's method, which is without HashSet
+        // the aim of sort is to put same element together, for following boolean[], which is the if statement in dfs
+        // Arrays.sort(nums);
         dfs(nums, subset, result, visited, visited1);
         return result;
     }
@@ -69,8 +70,61 @@ public class Solution {
             visited1[i] = true;
             dfs(nums, subset, result, visited, visited1);
             subset.remove(subset.size() -1);
-            visited1[i] = false;
-            
+            visited1[i] = false;            
         }
     } 
 }
+
+
+
+// Jiuzhang's method, which don't use HashSet, but we need to sort firstly.
+public class Solution {
+    /*
+     * @param :  A list of integers
+     * @return: A list of unique permutations
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> results = new LinkedList<>();
+        List<Integer> subset = new LinkedList<>();
+        boolean[] visited = new boolean[nums.length];
+        if (nums == null) {
+            return results;
+        }
+        
+        Arrays.sort(nums);
+        dfs(nums, visited, subset, results);
+        
+        return results;
+    }
+    
+    private void dfs(int[] nums,
+                     boolean[] visited,
+                     List<Integer> permutation,
+                     List<List<Integer>> results) {
+                         
+        if (nums.length == permutation.size()) {
+            results.add(new ArrayList<Integer>(permutation));
+            return;
+        }
+        
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i]) {
+                continue;
+            }
+            // Sort is for this if statement
+            if (i > 0 && nums[i] == nums[i - 1] && !visited[i - 1]) {
+                System.out.println("nums is "+ Arrays.toString(nums));
+                System.out.println("i is " + i);
+                System.out.println("visited is " + Arrays.toString(visited));
+                System.out.println("permutation is " + permutation);
+                continue;
+            }
+            
+            permutation.add(nums[i]);
+            visited[i] = true;
+            dfs(nums, visited, permutation, results);
+            visited[i] = false;
+            permutation.remove(permutation.size() - 1);
+        }
+    }
+ };
