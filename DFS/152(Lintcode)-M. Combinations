@@ -47,6 +47,8 @@ public class Solution {
         if (subset.size() == k){
         // new 一个subset
             result.add(new ArrayList(subset));
+            // This return can be removed, becasue thefollowing for loop is from i+1, 不会出现recursion死循环的情况。 
+            // However, for loop is from i, we must use return to exit recursion 
             return;
         }
         
