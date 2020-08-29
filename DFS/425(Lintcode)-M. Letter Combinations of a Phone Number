@@ -1,0 +1,65 @@
+425. Letter Combinations of a Phone Number
+Given a digit string excluded 0 and 1, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters (just like on the telephone buttons) is given below.
+
+1	2
+ABC	3
+DEF
+4
+GHI	5
+JKL	6
+MNO
+7
+PQRS	8
+TUV	9
+WXYZ
+Example
+Example 1:
+
+Input: "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]
+Explanation: 
+'2' could be 'a', 'b' or 'c'
+'3' could be 'd', 'e' or 'f'
+Example 2:
+
+Input: "5"
+Output: ["j", "k", "l"]
+Notice
+Although the answer above is in lexicographical order, your answer could be in any order you want.
+
+
+// DFS in combination
+public class Solution {
+    /**
+     * @param digits: A digital string
+     * @return: all posible letter combinations
+     */
+    public List<String> letterCombinations(String digits) {
+        // index of string represent number
+        String[] phone = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        List<String> result = new ArrayList<>();
+        if (digits.length() == 0) {
+            return result;
+        }
+
+        dfs(0, "", digits, phone, result);
+        return result;
+    }
+    
+    private void dfs(int index, String str, String digits, String phone[], List<String> ans) {
+        if (index == digits.length()) {
+            // why can this place add str directly without new one?
+            // Because in the dfs recursion, the input is str + c rather than str, ther're two strings.
+            // Each dfs is a new String, so we don't need remove method at end, either.
+            ans.add(str);
+            return;
+        }
+        // d is index in phone, input index is index in digits
+        int d = digits.charAt(index) - '0';
+        for (char c : phone[d].toCharArray()) {
+            dfs(index + 1, str + c, digits, phone, ans);
+        }
+    }
+}
