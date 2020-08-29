@@ -38,6 +38,8 @@ Can you do it without recursion?
 
 
 // DFS in permutaion
+// This problem just quite similar to permutation2, just permutaion of "." and Q, and "." is duplicated element. 
+// In permutation2 use HashSet to avoid repeated result, this problem use isValid to avoid it.
 public class Solution {
     /*
      * @param n: The number of queens
@@ -82,7 +84,7 @@ public class Solution {
         int rowNumber = subset.size();
         // i is equal to rowIndex
         for (int i = 0; i < subset.size(); i++) {
-            // at same column
+            // i+1's Q is at same column as the new Q
             if (subset.get(i) == columnIndex) {
                 return false;
             }
