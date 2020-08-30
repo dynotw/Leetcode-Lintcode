@@ -1,0 +1,78 @@
+642. Moving Average from Data Stream
+
+Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.
+
+Example
+Example 1:
+
+MovingAverage m = new MovingAverage(3);
+m.next(1) = 1 // return 1.00000
+m.next(10) = (1 + 10) / 2 // return 5.50000
+m.next(3) = (1 + 10 + 3) / 3 // return 4.66667
+m.next(5) = (10 + 3 + 5) / 3 // return 6.00000
+
+
+// This problem we need to think about int and double
+public class MovingAverage {
+    /*
+    * @param size: An integer
+    */
+    private Queue<Integer> queue;
+    private double sum = 0;
+    private int size;
+    
+    public MovingAverage(int size) {
+        // do intialization if necessary
+        this.size = size;
+        this.queue = new LinkedList<>(); 
+    }
+
+    /*
+     * @param val: An integer
+     * @return:  
+     */
+    public double next(int val) {
+        // write your code here
+        sum = sum + val;
+        queue.offer(val);
+        if(queue.size() > size){
+            double move = queue.poll();
+            sum = sum - move;
+        }
+        
+        // System.out.println(queue);
+        return sum/queue.size();
+    }
+}
+
+// Python
+class MovingAverage:
+    """
+    @param: size: An integer
+    """
+    
+    def __init__(self, size):
+        self.sum = 0
+        self.max_size = size
+        self.queue = list()
+
+    """
+    @param: val: An integer
+    @return:  
+    """
+    
+    # 注意self.变量的
+    def next(self, val):
+        self.sum = self.sum + val
+        self.queue.append(val)
+        
+        # 队列中的元素过多时，弹出队首元素
+        if len(self.queue) > self.max_size:
+            self.sum = self.sum - self.queue.pop(0)
+        
+        return self.sum / len(self.queue)
+
+
+# Your MovingAverage object will be instantiated and called as such:
+# obj = MovingAverage(size)
+# param = obj.next(val)
