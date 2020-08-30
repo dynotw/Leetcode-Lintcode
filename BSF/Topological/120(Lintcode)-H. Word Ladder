@@ -36,21 +36,23 @@ class Solution:
     """
     def ladderLength(self, start, end, dict):
         dict.add(end)
-        queue = collections.deque([start])
+        queue = list()
+        queue.append(start)
         distance = {start: 1}
             
         while queue:
-            word = queue.popleft()
+            word = queue.pop(0)
             if word == end:
                 return distance[word]
             
             for next_word in self.get_next_words(word):
-                if next_word not in dict or next_word in distance:
+                if (next_word not in dict or next_word in distance):
                     continue
                 queue.append(next_word)
                 distance[next_word] = distance[word] + 1
         return 0
-    // list all transformation words
+        
+    # list all transformation words
     def get_next_words(self, word):
         words = []
         for i in range(len(word)):
