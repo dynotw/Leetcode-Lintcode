@@ -64,7 +64,8 @@ public class Solution {
 
 
 
-// Python
+# Python is so easy to deal string
+# There's a trap in this problem, left and right can be very big
 class Solution:
     """
     @param str: A String
@@ -74,22 +75,16 @@ class Solution:
     """
     def RotateString2(self, str, left, right):
         # write your code here
-        
-        length = len(str)
-        
-        if left == right:
-            return str
-        
-        elif left > right:
-            dif = (left - right)%length
-            part1 = str[0:dif]
-            part2 = str[dif:]
+        if(left > right):
+            distance = left - right
+            # this step is very important, because distance can be very large
+            index = distance % len(str)
             
-            return part2+part1
+            return str[index:] + str[:index]
         
         else:
-            dif = (right - left)%length
-            part1 = str[:length-dif]
-            part2 = str[length-dif:]
+            distance = right - left
+            # this step is very important, because distance can be very large
+            index = distance % len(str)
             
-            return part2+part1
+            return str[len(str) - index:] + str[:len(str) - index]
