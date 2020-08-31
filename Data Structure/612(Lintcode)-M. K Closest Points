@@ -1,0 +1,66 @@
+612. K Closest Points
+
+Given some points and an origin point in two-dimensional space, find k points which are nearest to the origin.
+Return these points sorted by distance, if they are same in distance, sorted by the x-axis, and if they are same in the x-axis, sorted by y-axis.
+
+Example
+Example 1:
+
+Input: points = [[4,6],[4,7],[4,4],[2,5],[1,1]], origin = [0, 0], k = 3 
+Output: [[1,1],[2,5],[4,4]]
+Example 2:
+
+Input: points = [[0,0],[0,9]], origin = [3, 1], k = 1
+Output: [[0,0]]
+
+
+/**
+ * Definition for a point.
+ * class Point {
+ *     int x;
+ *     int y;
+ *     Point() { x = 0; y = 0; }
+ *     Point(int a, int b) { x = a; y = b; }
+ * }
+ */
+//基于 PriorityQueue 的方法 PriorityQueue 里从远到近排序。当 PQ 里超过 k 个的时候，就 pop 掉一个。 时间复杂度O(nlogk)
+public class Solution {
+    /**
+     * @param points a list of points
+     * @param origin a point
+     * @param k an integer
+     * @return the k closest points
+     */
+    private Point global_origin = null;
+    public Point[] kClosest(Point[] points, Point origin, int k) {
+        // Write your code here
+        global_origin = origin;
+        PriorityQueue<Point> pq = new PriorityQueue<Point> (k, new Comparator<Point> () {
+            @Override
+            public int compare(Point a, Point b) {
+                int diff = getDistance(b, global_origin) - getDistance(a, global_origin);
+                if (diff == 0)
+                    diff = b.x - a.x;
+                if (diff == 0)
+                    diff = b.y - a.y;
+                return diff;
+            }
+        });
+
+        for (int i = 0; i < points.length; i++) {
+            pq.offer(points[i]);
+            if (pq.size() > k)
+                pq.poll();
+        }
+        
+        k = pq.size();
+        Point[] ret = new Point[k];  
+        while (!pq.isEmpty())
+            ret[--k] = pq.poll();
+        return ret;
+    }
+    
+    private int getDistance(Point a, Point b) {
+        return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
+    }
+}
