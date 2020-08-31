@@ -1,0 +1,86 @@
+209. First Unique Character in a String
+
+Find the first unique character in a given string. You can assume that there is at least one unique character in the string.
+
+Example
+Example 1:
+	Input: "abaccdeff"
+	Output:  'b'
+	
+	Explanation:
+	There is only one 'b' and it is the first one.
+
+
+Example 2:
+	Input: "aabccd"
+	Output:  'b'
+	
+	Explanation:
+	'b' is the first one.
+  
+  
+  // This method is bad, with high time complexity O(n^2)
+  public class Solution {
+    /**
+     * @param str: str: the given string
+     * @return: char: the first unique character in a given string
+     */
+    public char firstUniqChar(String str) {
+        // Write your code here
+        List<Character> elements = new LinkedList<>();
+        Set<Character> visited = new HashSet<>();
+        
+        for (int i=0; i<str.length(); i++){ // O(n)
+            char element = str.charAt(i);
+            if(visited.contains(element)){
+                if(elements.contains(element)){ //O(n)
+                    // 必须要new Character(element)
+                    elements.remove(new Character(element));
+                }
+            }
+            
+            else{
+                elements.add(element);
+                visited.add(element);
+            }
+            System.out.println(elements);
+        }
+        
+        return elements.get(0);
+    }
+}
+
+// Use HashMap instead of HashSet and LinkedList, both of time complexity and space complexity get improved
+public class Solution {
+    /**
+     * @param str: str: the given string
+     * @return: char: the first unique character in a given string
+     */
+    public char firstUniqChar(String str) {
+        // Write your code here
+        Map<Character, Integer> map = new HashMap<>();
+        
+        for(int i=0; i<str.length(); i++){
+            char element = str.charAt(i);
+            if(map.containsKey(element)){
+                // if the element appears more than once, we don't care about the element
+                map.put(element,2);
+            }
+            else{
+                map.put(element,1);
+            }
+        }
+        
+        for(int i=0; i<str.length(); i++){
+            char element = str.charAt(i);
+            if(map.get(element) == 1){
+                return element;
+            }
+        }
+        
+        // The following, I don't know why I have to add it.
+        // Without these, error: missing return statement
+        char temp = 'a';
+        return temp;
+    }
+}
