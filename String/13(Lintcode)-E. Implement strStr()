@@ -21,7 +21,8 @@ O(n2) is acceptable. Can you implement an O(n) algorithm? (hint: KMP)
 Clarification
 Do I need to implement KMP Algorithm in a real interview?
 
-Not necessary. When you meet this problem in a real interview, the interviewer may just want to test your basic implementation ability. But make sure you confirm with the interviewer first.
+Not necessary. When you meet this problem in a real interview, the interviewer may just want to test your basic implementation ability. 
+But make sure you confirm with the interviewer first.
 
 
 // it should use KMP, but KMP is quite difficult, so Iuse normal one
