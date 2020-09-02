@@ -59,7 +59,7 @@ It's guaranteed there is only one available solution
  */
 
 // Graph, BFS, recommend 2nd method
-// 1st method, this method is more like BFS in Binary Tree, because I get the size of queue, and use the size to control for loop 
+// 1st method, this method is more like BFS in Binary Tree, because I get the size of queue, and use the size to control for loop， 不同it's unnesaccery  
 public class Solution {
     /*
      * @param graph: a list of Undirected graph node
@@ -117,6 +117,17 @@ public class Solution {
 }
 
 // 2nd method, this method is more like BFS in Graph Traverse
+/**
+ * Definition for graph node.
+ * class UndirectedGraphNode {
+ *     int label;
+ *     ArrayList<UndirectedGraphNode> neighbors;
+ *     UndirectedGraphNode(int x) { 
+ *         label = x; neighbors = new ArrayList<UndirectedGraphNode>(); 
+ *     }
+ * };
+ */
+
 public class Solution {
     /*
      * @param graph: a list of Undirected graph node
@@ -130,38 +141,34 @@ public class Solution {
                                           UndirectedGraphNode node,
                                           int target) {
         // write your code here
-        if (node == null) {
+        //eliminate edge condition
+        if(graph == null || values == null || node == null){
             return null;
         }
+        // 在bfs中，我将判断放在了while内部，这样就忽略了queue中的第一个object，which is offered out of bfs
+        if(values.get(node) == target){
+            return node;
+        }
         
+        // bfs
         Queue<UndirectedGraphNode> queue = new LinkedList<>();
+        Set<UndirectedGraphNode> hashset = new HashSet<>();
         queue.offer(node);
-        
-        HashSet<UndirectedGraphNode> hashset = new HashSet<>();
         hashset.add(node);
         
-        while(!queue.isEmpty()){
-            UndirectedGraphNode currentNode = queue.poll();
-            if (values.get(currentNode) == target){
-                return currentNode;
-            }
+        while(! queue.isEmpty()){
+            UndirectedGraphNode head = queue.poll();
             
-            for (UndirectedGraphNode neighbor : currentNode.neighbors){
-                if (values.get(neighbor) == target){
-                    return neighbor;
+            for (UndirectedGraphNode neigh : head.neighbors){
+                if(values.get(neigh) == target){
+                    return neigh;
                 }
                 
-                else{
-                    if (!hashset.contains(neighbor)){
-                        queue.offer(neighbor);
-                        hashset.add(neighbor);
-                    }
+                if(! hashset.contains(neigh)){
+                    queue.offer(neigh);
                 }
             }
         }
-        
         return null;
     }
 }
-
-
