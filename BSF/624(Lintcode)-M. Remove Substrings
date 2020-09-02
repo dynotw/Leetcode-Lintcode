@@ -1,0 +1,60 @@
+624. Remove Substrings
+
+Given a string s and a set of n substrings. You are supposed to remove every instance of those n substrings from s so that s is of the minimum length and output this minimum length.
+
+Example
+Example 1:
+
+Input:
+"ccdaabcdbb"
+["ab","cd"]
+Output:
+2
+Explanation: 
+ccdaabcdbb -> ccdacdbb -> cabb -> cb (length = 2)
+Example 2:
+
+Input:
+"abcabd"
+["ab","abcd"]
+Output:
+0
+Explanation: 
+abcabd -> abcd -> "" (length = 0)
+
+
+
+class Solution:
+    """
+    @param: s: a string
+    @param: dict: a set of n substrings
+    @return: the minimum length
+    """
+    def minLength(self, s, dict):
+        visited = set()
+        queue = list()
+        queue.append(s)
+        # 初始化为极大值
+        length = sys.maxsize
+        while (len(queue) > 0):
+            s = queue.pop(0)
+            for word in dict:
+                index = s.find(word)
+                while(index != -1):
+                    # next为删除下标index开始的word之后的字符串
+                    next = s[:index] + s[index + len(word):]
+                    
+                    # 如果这个字符串没有出现过，压入队列，更新答案
+                    if next not in visited:
+                        visited.add(next)
+                        queue.append(next)
+                        # 更新剩下的字符串的最短长度
+                        length = min(length, len(next))
+                        # 0 is possible minimum length, so there's no need to bfs anymore
+                        if(length == 0):
+                            return 0
+                        
+                    # 寻找s中下标从index+1开始到末尾第一次出现的word的首下标
+                    index = s.find(word, index + 1)
+
+        return length
