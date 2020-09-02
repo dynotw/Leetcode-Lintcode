@@ -1,0 +1,136 @@
+787. The Maze
+
+There is a ball in a maze with empty spaces and walls. The ball can go through empty spaces by rolling up, down, left or right, but it won't stop rolling until hitting a wall. 
+When the ball stops, it could choose the next direction.
+
+Given the ball's start position, the destination and the maze, determine whether the ball could stop at the destination.
+
+The maze is represented by a binary 2D array. 1 means the wall and 0 means the empty space. You may assume that the borders of the maze are all walls. 
+The start and destination coordinates are represented by row and column indexes.
+
+Example
+Example 1:
+
+Input:
+map = 
+[
+ [0,0,1,0,0],
+ [0,0,0,0,0],
+ [0,0,0,1,0],
+ [1,1,0,1,1],
+ [0,0,0,0,0]
+]
+start = [0,4]
+end = [3,2]
+Output:
+false
+Example 2:
+
+Input:
+map = 
+[[0,0,1,0,0],
+ [0,0,0,0,0],
+ [0,0,0,1,0],
+ [1,1,0,1,1],
+ [0,0,0,0,0]
+]
+start = [0,4]
+end = [4,4]
+Output:
+true
+Notice
+1.There is only one ball and one destination in the maze.
+2.Both the ball and the destination exist on an empty space, and they will not be at the same position initially.
+3.The given maze does not contain border (like the red rectangle in the example pictures), but you could assume the border of the maze are all walls.
+5.The maze contains at least 2 empty spaces, and both the width and height of the maze won't exceed 100.
+
+
+
+
+class Coordinate{
+    int x;
+    int y;
+    
+    public Coordinate(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+}
+// It's Stop at destination, instead of through destination
+// 对于经过的点不能简单地标记为1，因为此题是可能走回头路的,所以本题另建了visited[][]。此作用是防止queue重复添加相同点，同时不改变maze[][]，因此不影响回头路。
+public class Solution {
+    /**
+     * @param maze: the maze
+     * @param start: the start
+     * @param destination: the destination
+     * @return: whether the ball could stop at the destination
+     */
+    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+        // write your code here
+        // eliminate edge condition
+        if(maze == null || start == null || destination == null){
+            return false;
+        }
+        if(start[0] > maze.length || start[1] > maze[0].length || destination[0] > maze.length || destination[1] > maze[0].length){
+            return false;
+        }
+        
+        List<Coordinate> result = new ArrayList<>();
+        Queue<Coordinate> queue = new LinkedList<>();
+        int[][] visited = new int[maze.length][maze[0].length];
+        queue.offer(new Coordinate(start[0], start[1]));
+        visited[start[0]][start[1]] = 1;
+        
+        while(!queue.isEmpty()){
+            int[] directionX = {-1,1,0,0};
+            int[] directionY = {0,0,-1,1};
+            Coordinate head = queue.poll();
+            if(head.x == destination[0] && head.y == destination[1]){
+                return true;
+            }
+            
+            for(int i=0; i<4; i++){
+                // System.out.println("i is " + i);
+                Coordinate next = new Coordinate(head.x, head.y);
+                // System.out.println("最初x是 " + next.x + "最初y是 " + next.y);
+                
+                while(isValidPostion(maze, next)){
+                    next.x = next.x + directionX[i];
+                    next.y = next.y + directionY[i];
+                    // System.out.println("中途x是 " + next.x + "中途y是 " + next.y);
+                }
+                next.x = next.x - directionX[i];
+                next.y = next.y - directionY[i];
+                
+                if(isValidPostion(maze, next) && visited[next.x][next.y] != 1){
+                    queue.add(next);
+                    // System.out.println("最终x是 " + next.x + "最终y是 " + next.y);
+                    visited[next.x][next.y] = 1;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    private boolean isValidPostion(int[][] maze, Coordinate point){
+        int height = maze.length;
+        int width = maze[0].length;
+        
+        if(point.x >= height || point.x < 0){
+            return false;
+        }
+        
+        if(point.y >= width || point.y <0){
+            return false;
+        }
+        
+        if(maze[point.x][point.y] == 1){
+            return false;
+        }
+        
+        else{
+            return true;
+        }
+    }
+}
