@@ -23,8 +23,15 @@ Output:
 
 
 // BFS in matrix, 多点同时BFS
-// 因为是多个起点的bfs，所以我们需要先用for loop确定所有符合要求的起点
+// 因为是多个起点的bfs，所以我们需要先用for loop确定所有符合要求的起点(这是这题的特殊，即多起点bfs)
 // (因为得把所有的zombie都先存入queue)
+设地图的大小为N * M。
+时间复杂度
+宽度优先搜索遍历整张图的时间复杂度为O(N * M)。
+
+空间复杂度
+宽度优先搜索队列的开销为O(N * M)。
+
 class Coordinate{
     int x;
     int y;
