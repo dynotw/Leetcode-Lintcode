@@ -75,7 +75,6 @@ public class Solution {
             return false;
         }
         
-        List<Coordinate> result = new ArrayList<>();
         Queue<Coordinate> queue = new LinkedList<>();
         int[][] visited = new int[maze.length][maze[0].length];
         queue.offer(new Coordinate(start[0], start[1]));
