@@ -24,6 +24,7 @@ The position of the first occurrence of a string is
 // 13 has no time complexity requirement, so we can use naive method, but 594 requires O(m+n), so we need to use KMP Alogrithm, which is designed for string match
 // https://www.youtube.com/watch?v=BXCEFAzhxGY&t=327s
 # 暴力解法O(n)^2， 时间复杂度不行； 字符串匹配使用KMP(1st get prefix & suffix table of pattern; 2nd matching text and pattern)
+# 无语了，Python有内置的xxx.find(xxx)函数，Java有xxx.indexOf(xxx)。只是这些内置方法的time complexity不太行
 class Solution:
     """
     @param: source: A source string
