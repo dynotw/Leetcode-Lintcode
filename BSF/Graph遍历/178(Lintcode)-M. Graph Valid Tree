@@ -90,7 +90,102 @@ public class Solution {
             graph.get(u).add(v);
             graph.get(v).add(u);
         }
-  
         return graph;
+    }
+}
+
+
+// Choose Unnion-Find Data Structure
+// Check whether it's a valid tree: 1. n points with n-1 edges? 2. whether there's a circle
+class DisjointUnionSets{ // Union-Find 
+    int[] rank;
+    int[] parent; 
+    int n; 
+  
+    public DisjointUnionSets(int n){ 
+        rank = new int[n]; 
+        parent = new int[n]; 
+        this.n = n; 
+        makeSet(); 
+    } 
+  
+    // Creates n sets with single item in each 
+    void makeSet(){ 
+        for (int i = 0; i < n; i++) { 
+            parent[i] = i; 
+        } 
+    } 
+  
+    // Returns representative of x's set, it's compression-find method
+    // First time, it's O(n), but later it's O(1), because it becomes faltten, after first find
+    int find(int x){ 
+        if (parent[x] != x) { 
+            parent[x] = find(parent[x]); 
+        } 
+        return parent[x]; 
+    } 
+  
+    // Unites the set that includes x and the set, Union by rank method. If merge, return true; unless return false;
+    // Question: Do we initialize value of rank[]? Answer: the default value is 0, when we new int[]
+    // If the Union-Find is flatten(have done union or find), it's O(1). Unless it's O(n)
+    boolean union(int x, int y){ 
+        // Find representatives of two sets 
+        int xRoot = find(x); 
+        int yRoot = find(y); 
+  
+        // Elements are in the same set, no need to unite anything. 
+        if (xRoot == yRoot){
+            return false; 
+        }
+        
+        // If x's rank is less than y's rank 
+        if (rank[xRoot] < rank[yRoot]) 
+            // Then move x under y  so that depth of tree remains less 
+            parent[xRoot] = yRoot; 
+  
+        // y's rank is less than x's rank 
+        else if (rank[yRoot] < rank[xRoot]) 
+            parent[yRoot] = xRoot; 
+        //  ranks are the same
+        else{ 
+            // Then move y under x (doesn't matter which one goes where) 
+            parent[yRoot] = xRoot; 
+  
+            // And increment the result tree's rank by 1 
+            rank[xRoot] = rank[xRoot] + 1; 
+        } 
+        return true;
+    } 
+}
+
+
+public class Solution {
+    /**
+     * @param n: An integer
+     * @param edges: a list of undirected edges
+     * @return: true if it's a valid tree, or false
+     */
+    public boolean validTree(int n, int[][] edges) {
+        // write your code here
+        // eliminate edge condition
+        if(edges == null){
+            return false;
+        }
+        int size = edges.length;
+        
+        // check whether n points with n-1 edges
+        if(size != n -1){
+            return false;
+        }
+        
+        // check wether there's a circle
+        DisjointUnionSets result = new DisjointUnionSets(n);
+        for(int[] edge: edges){
+            if(! result.union(edge[0], edge[1])){
+                return false;
+            }
+        }
+        
+        return true;
     }
 }
