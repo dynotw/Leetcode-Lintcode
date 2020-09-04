@@ -1,0 +1,119 @@
+462. Total Occurrence of Target
+
+Given a target number and an integer array sorted in ascending order. Find the total number of occurrences of target in the array.
+
+Example
+Example1:
+
+Input: [1, 3, 3, 4, 5] and target = 3, 
+Output: 2.
+Example2:
+
+Input: [2, 2, 3, 4, 6] and target = 4, 
+Output: 1.
+Example3:
+
+Input: [1, 2, 3, 4, 5] and target = 6, 
+Output: 0.
+Challenge
+Time complexity in O(logn)
+
+
+
+// Binary Search
+// find the first postion and last position, then get the difference between them.
+public class Solution {
+    /**
+     * @param A: A an integer array sorted in ascending order
+     * @param target: An integer
+     * @return: An integer
+     */
+    public int totalOccurrence(int[] A, int target) {
+        // write your code here
+        
+        int first = firstPosition(A, target);
+        int last = lastPosition(A, target);
+        
+        if(first == -1 || last == -1){
+            return 0;
+        }
+        
+        else{
+            return last - first + 1;
+        }
+    }
+    
+    private int firstPosition(int[] A, int target){
+        // eliminate edge condition
+        if(A == null || A.length == 0){
+            return -1;
+        }
+        
+        // set two pointers
+        int left = 0;
+        int right = A.length - 1;
+        
+        while(left + 1<right){ // must remember it's left+1 < right
+            int mid = left + (right-left)/2;
+            
+            if(A[mid] < target){
+                left = mid;
+            }
+            
+            else if(A[mid] == target){
+                right = mid;
+            }
+            
+            else{
+                right = mid;
+            }
+        }
+        
+        if(A[left] == target){
+            return left;
+        }
+        else if(A[right] == target){
+            return right;
+        }
+        else{
+            return -1;
+        }
+    }
+    
+    private int lastPosition(int[] A, int target){
+        // eliminate edge condition
+        if(A == null || A.length == 0){
+            return -1;
+        }
+        
+        // set two pointers
+        int left = 0;
+        int right = A.length - 1;
+        
+        while(left + 1<right){ // must remember it's left+1 < right
+            int mid = left + (right-left)/2;
+            
+            if(A[mid] < target){
+                left = mid;
+            }
+            
+            else if(A[mid] == target){
+                left = mid;
+            }
+            
+            else{
+                right = mid;
+            }
+        }
+        
+        if(A[right] == target){
+            return right;
+        }
+        else if(A[left] == target){
+            return left;
+        }
+        else{
+            return -1;
+        }
+    }
+}
