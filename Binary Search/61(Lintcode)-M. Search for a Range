@@ -1,0 +1,91 @@
+61. Search for a Range
+
+Given a sorted array of n integers, find the starting and ending position of a given target value.
+
+If the target is not found in the array, return [-1, -1].
+
+Example
+Example 1:
+
+Input:
+[]
+9
+Output:
+[-1,-1]
+
+Example 2:
+
+Input:
+[5, 7, 7, 8, 8, 10]
+8
+Output:
+[3, 4]
+Challenge
+O(log n) time.
+
+
+// twice binary search, 直接套模板
+public class Solution {
+    /**
+     * @param A: an integer sorted array
+     * @param target: an integer to be inserted
+     * @return: a list of length 2, [index1, index2]
+     */
+    public int[] searchRange(int[] A, int target) {
+        // write your code here
+        int[] result = {-1,-1};
+        // eliminate edge condition
+        if(A == null || A.length == 0){
+            return result;
+        }
+        
+        // first position
+        int start =0;
+        int end = A.length-1;
+        while(start + 1< end){
+            int mid = start + (end-start)/2;
+            if(A[mid] < target){
+                start = mid;
+            }
+            else if(A[mid] == target){
+                start = mid;
+            }
+            else{
+                end = mid;
+            }
+        }
+        
+        // last position
+        int start1 =0;
+        int end1 = A.length-1;
+        while(start1 + 1< end1){
+            int mid1 = start1 + (end1-start1)/2;
+            if(A[mid1] < target){
+                start1 = mid1;
+            }
+            else if(A[mid1] == target){
+                end1 = mid1;
+            }
+            else{
+                end1 = mid1;
+            }
+        }
+        
+        // order: start1 -> end1 -> start -> end
+        if(A[end1] == target){
+            result[0] = end1;
+        }
+        if(A[start1] == target){
+            result[0] = start1;
+        }
+
+        if(A[start] == target){
+            result[1] = start;
+        }
+        if(A[end] == target){
+            result[1] = end;
+        }
+        
+        return result;
+    }
+}
