@@ -1,0 +1,155 @@
+600. Smallest Rectangle Enclosing Black Pixels
+
+An image is represented by a binary matrix with 0 as a white pixel and 1 as a black pixel. The black pixels are connected, i.e., there is only one black region. Pixels are connected horizontally and vertically. Given the location (x, y) of one of the black pixels, return the area of the smallest (axis-aligned) rectangle that encloses all black pixels.
+
+Example
+Example 1:
+
+Input：["0010","0110","0100"]，x=0，y=2
+Output：6
+Explanation：
+The upper left coordinate of the matrix is (0,1), and the lower right coordinate is (2,2).
+Example 2:
+
+Input：["1110","1100","0000","0000"], x = 0, y = 1
+Output：6
+Explanation：
+The upper left coordinate of the matrix is (0, 0), and the lower right coordinate is (1,2).
+
+
+
+/*
+算法思路
+二分找到四个方向上黑色像素点出现的坐标极值
+
+代码思路
+这边以二分最左侧黑色像素为例
+设置左指针为0，右指针为y，因为我们保证y列上存在黑色像素，最左侧黑色像素所在列一定在y或者其左侧
+若mid所在列存在黑色像素，说明最左侧黑色像素在mid列或者其左侧，r = mid，否则l = mid
+判断l列是否存在黑色像素，若存在则left = l，否则left = r。注意一定要先判l列，因为r可能存在黑色像素，但并不是最左侧
+以此类推继续找到最右侧，最上侧，最下侧的黑色像素所在列或行
+计算面积(right - left + 1) * (bottom - top + 1)并将其返回
+这里提一种优化，找到最左处和最右处的黑色像素位置left和right后，在找最上和最下坐标时，对于行的判断只需要扫描[row,left]到[row,right]即可
+
+复杂度分析
+空间复杂度：O(1)
+时间复杂度：O(MlogN+NlogM)（最坏情况）
+最坏情况即只有一个黑色像素点，那么每次判断列上或行上是否又黑色像素点需要扫描完整列或整行
+
+二分的做法当遇到黑色像素点很少且给出的矩阵很大时效率会变得极低，而此时BFS的效率会相对高很多
+*/
+// Four direction binary search
+public class Solution {
+    /**
+     * @param image: a binary matrix with '0' and '1'
+     * @param x: the location of one of the black pixels
+     * @param y: the location of one of the black pixels
+     * @return: an integer
+     */
+    public int minArea(char[][] image, int x, int y) {
+        if (image == null || image.length == 0 || image[0].length == 0) {
+            return 0;
+        }
+
+        int n = image.length;
+        int m = image[0].length;
+        int l = 0, r = 0;
+        int left = 0, right = 0, top = 0, bottom = 0;
+        
+        //二分最左侧黑色像素坐标
+        l = 0;
+        r = y;
+        while (l + 1 < r) {
+            int mid = l + (r - l) / 2;
+            if (check_column(image, mid)) {
+                r = mid;
+            } else {
+                l = mid;
+            }
+        }
+        if (check_column(image, l)){
+            left = l;
+        }
+        else{
+            left = r;
+        }
+
+        //二分最右侧黑色像素坐标
+        l = y;
+        r = m - 1;
+        while (l + 1 < r) {
+            int mid = l + (r - l) / 2;
+            if (check_column(image, mid)) {
+                l = mid;
+            } 
+            else {
+                r = mid;
+            }
+        }
+        if (check_column(image, r)) {
+            right = r;
+        }
+        else{
+            right = l;
+        }
+
+        //二分最上侧黑色像素坐标
+        l = 0;
+        r = x;
+        while (l + 1 < r) {
+            int mid = l + (r - l) / 2;
+            if (check_row(image, mid, left, right)) {
+                r = mid;
+            }
+            else {
+                l = mid;
+            }
+        }
+        if (check_row(image, l, left, right)) {
+            top = l;
+        }
+        else{
+            top = r;
+        }
+
+        //二分最下侧黑色像素坐标
+        l = x;
+        r = n - 1;
+        while (l + 1 < r) {
+            int mid = l + (r - l) / 2;
+            if (check_row(image, mid, left, right)) {
+                l = mid;
+            } 
+            else {
+                r = mid;
+            }
+        }
+        if (check_row(image, r, left, right)) {
+            bottom = r;
+        }
+        else{
+            bottom = l;
+        }
+        return (right - left + 1) * (bottom - top + 1);
+    }
+
+    //判断列上是否存在黑色像素
+    private boolean check_column(char[][] image, int col) {
+        for (int i = 0; i < image.length; i++) {
+            if (image[i][col] == '1') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //判断行上是否存在黑色像素
+    private boolean check_row(char[][] image, int row ,int left ,int right) {
+        for (int j = left; j <= right; j++) {
+            if (image[row][j] == '1') {
+                return true;
+            }
+        }
+        return false;
+    }
+}
