@@ -1,0 +1,66 @@
+459. Closest Number in Sorted Array
+
+Given a target number and an integer array A sorted in ascending order, find the index i in A such that A[i] is closest to the given target.
+
+Return -1 if there is no element in the array.
+
+Example
+Example 1:
+
+Input: [1, 2, 3] , target = 2
+Output: 1.
+Example 2:
+
+Input: [1, 4, 6], target = 3
+Output: 1.
+Example 3:
+
+Input: [1, 4, 6], target = 5,
+Output: 1 or 2.
+Challenge
+O(logn) time complexity.
+Notice
+There can be duplicate elements in the array, and we can return any of the indices with same value.
+
+
+// 不用看，跟基本Binary Search模板基本一模一样
+public class Solution {
+    /**
+     * @param A: an integer array sorted in ascending order
+     * @param target: An integer
+     * @return: an integer
+     */
+    public int closestNumber(int[] A, int target) {
+        // write your code here
+        if(A == null || A.length == 0){
+            return -1;
+        }
+        
+        // set two pointers
+        int left = 0;
+        int right = A.length - 1;
+        
+        while(left + 1<right){ // must remember it's left+1 < right
+            int mid = left + (right-left)/2;
+            
+            if(A[mid] < target){
+                left = mid;
+            }
+            
+            else if(A[mid] == target){
+                right = mid;
+            }
+            
+            else{
+                right = mid;
+            }
+        }
+        
+        if(Math.abs(A[left] - target) < Math.abs(A[right] - target)){
+            return left;
+        }
+        else{
+            return right;
+        }
+    }
+}
