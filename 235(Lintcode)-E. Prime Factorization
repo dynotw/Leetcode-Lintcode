@@ -1,0 +1,44 @@
+235. Prime Factorization
+
+Prime factorize a given integer.
+
+Example
+Example 1:
+
+Input: 10
+Output: [2, 5]
+Example 2:
+
+Input: 660
+Output: [2, 2, 3, 5, 11]
+Notice
+You should sort the factors in ascending order.
+
+
+
+// This problem is more related to mathmatics
+// turn num into sqrt(num), so reduce for loop times
+public class Solution {
+    /**
+     * @param num: An integer
+     * @return: an integer array
+     */
+    public List<Integer> primeFactorization(int num) {
+        // write your code here
+        List<Integer> result = new ArrayList<>();
+
+        for (int i=2; i*i <= num; i++){ // 2 is 1st prime factor, so i starts from 2
+            while(num % i == 0){
+                num = num/i;
+                result.add(i);
+            }
+        }
+        
+        if(num != 1){
+            result.add(num);
+            return result;
+        }
+        
+        return result;
+    }
+}
