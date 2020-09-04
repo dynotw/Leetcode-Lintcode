@@ -32,6 +32,7 @@ O(m+n) time and O(1) extra space
 
 
 // 可以类比28 Search a 2D Matrix，但两者还是差了一些的
+// time:O(m+n); space:O(1)
 public class Solution {
     /**
      * @param matrix: A list of lists of integers
