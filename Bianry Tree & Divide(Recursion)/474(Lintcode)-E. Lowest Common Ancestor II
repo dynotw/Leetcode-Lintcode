@@ -51,25 +51,20 @@ public class Solution {
      * @return: The lowest common ancestor of A and B
      */
 
-    
 // Binary Tree, Divide
 // Understand the Lowest Common Ancestor(LCA)
 // This problem is quite similar to 88, I just use the same code. 
 
     public ParentTreeNode lowestCommonAncestorII(ParentTreeNode root, ParentTreeNode A, ParentTreeNode B) {
         // write your code here
-        
-        
         // 递归结束条件和排除特殊情况
         if (root == null){
             return null;
-        }
-        
+        }        
         if (A == root || B == root){
             return root;
         }
-        
-        
+                
         // Divide
         ParentTreeNode left = lowestCommonAncestorII(root.left, A, B);
         ParentTreeNode right = lowestCommonAncestorII(root.right, A, B);
@@ -80,22 +75,48 @@ public class Solution {
             分别对应: 1.left return LCA, right return null; 
                       2.left return null, right return LCA; 
                       3.left and right 最深层分别return p或q,然后逐层return各自的root 
-        */
-        
-        
+        */        
         // Conquer
         if (left != null && right != null){
             return root;
-        }
-        
+        }      
         else if (left != null){
             return left;
-        } 
-        
+        }        
         else if (right != null){
             return right;
+        }      
+        return null;
+    }
+}
+
+
+// method 2, nothing about Divide & Conquer, just use the parentNode.parent
+public class Solution {
+    /*
+     * @param root: The root of the tree
+     * @param A: node in the tree
+     * @param B: node in the tree
+     * @return: The lowest common ancestor of A and B
+     */
+    public ParentTreeNode lowestCommonAncestorII(ParentTreeNode root,
+                                                 ParentTreeNode A,
+                                                 ParentTreeNode B) {
+        Set<ParentTreeNode> parentSet = new HashSet<>();
+        // 把A的祖先节点都加入到哈希表中
+        ParentTreeNode curr = A;
+        while (curr != null) {
+            parentSet.add(curr);
+            curr = curr.parent;
         }
-        
+        // 遍历B的祖先节点，第一个在哈希表中出现的即为答案
+        curr = B;
+        while (curr != null) {
+            if (parentSet.contains(curr)) {
+                return curr;
+            }
+            curr = curr.parent;
+        }
         return null;
     }
 }
