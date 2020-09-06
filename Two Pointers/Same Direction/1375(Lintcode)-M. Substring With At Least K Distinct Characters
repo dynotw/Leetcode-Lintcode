@@ -1,0 +1,57 @@
+1375. Substring With At Least K Distinct Characters
+
+Given a string S with only lowercase characters.
+
+Return the number of substrings that contains at least k distinct characters.
+
+Example
+Example 1:
+
+Input: S = "abcabcabca", k = 4
+Output: 0
+Explanation: There are only three distinct characters in the string.
+Example 2:
+
+Input: S = "abcabcabcabc", k = 3
+Output: 55
+Explanation: Any substring whose length is not smaller than 3 contains a, b, c.
+    For example, there are 10 substrings whose length are 3, "abc", "bca", "cab" ... "abc"
+    There are 9 substrings whose length are 4, "abca", "bcab", "cabc" ... "cabc"
+    ...
+    There is 1 substring whose length is 12, "abcabcabcabc"
+    So the answer is 1 + 2 + ... + 10 = 55.
+Notice
+10 ≤ length(S) ≤ 1,000,000
+1 ≤ k ≤ 26
+
+
+
+//
+class Solution:
+    """
+    @param s: a string
+    @param k: an integer
+    @return: the number of substrings there are that contain at least k distinct characters
+    """
+    def kDistinctCharacters(self, s, k):
+        # Write your code here
+        left = 0
+        right = 0
+        sum = 0
+        visited = list()
+        while(right < len(s) and left <= right):
+            visited.append(s[right])
+            if(len(set(visited)) < k):
+                right += 1
+            else:
+                sum += len(s) - right
+                left += 1
+                # 使用前先判断一下visited是否为空
+                visited.pop(0)
+                if(right - left + 1< k):
+                    right += 1
+                    continue
+                # 这里删去vsited最后一个元素是因为，每次for loop都要添加当前的s[right],但在此情况下right所对应的index并没有后移
+                if(len(visited) != 0):
+                    visited.pop()
+        return sum
