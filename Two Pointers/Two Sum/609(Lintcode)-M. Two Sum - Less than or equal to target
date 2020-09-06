@@ -1,0 +1,50 @@
+609. Two Sum - Less than or equal to target
+中文English
+Given an array of integers, find how many pairs in the array such that their sum is less than or equal to a specific target number. Please return the number of pairs.
+
+Example
+Example 1:
+
+Input: nums = [2, 7, 11, 15], target = 24. 
+Output: 5. 
+Explanation:
+2 + 7 < 24
+2 + 11 < 24
+2 + 15 < 24
+7 + 11 < 24
+7 + 15 < 24
+Example 2:
+
+Input: nums = [1], target = 1. 
+Output: 0. 
+
+
+//
+class Solution:
+    """
+    @param s: a string
+    @param k: an integer
+    @return: the number of substrings there are that contain at least k distinct characters
+    """
+    def kDistinctCharacters(self, s, k):
+        # Write your code here
+        left = 0
+        right = 0
+        sum = 0
+        visited = list()
+        while(right < len(s) and left <= right):
+            visited.append(s[right])
+            if(len(set(visited)) < k):
+                right += 1
+            else:
+                sum += len(s) - right
+                left += 1
+                # 使用前先判断一下visited是否为空
+                visited.pop(0)
+                if(right - left + 1< k):
+                    right += 1
+                    continue
+                # 这里删去vsited最后一个元素是因为，每次for loop都要添加当前的s[right],但在此情况下right所对应的index并没有后移
+                if(len(visited) != 0):
+                    visited.pop()
+        return sum
