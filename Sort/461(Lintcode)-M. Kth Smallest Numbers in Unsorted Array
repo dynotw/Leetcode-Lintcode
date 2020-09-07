@@ -1,0 +1,69 @@
+461. Kth Smallest Numbers in Unsorted Array
+
+Find the kth smallest number in an unsorted integer array.
+
+Example
+Example 1:
+
+Input: [3, 4, 1, 2, 5], k = 3
+Output: 3
+Example 2:
+
+Input: [1, 1, 1], k = 2
+Output: 1
+Challenge
+An O(nlogn) algorithm is acceptable, if you can do it in O(n), that would be great.
+
+
+
+//
+// Quick Select, it's O(n)
+public class Solution {
+    /**
+     * @param k: An integer
+     * @param nums: An integer array
+     * @return: kth smallest element
+     */
+    public int kthSmallest(int k, int[] nums) {
+        // write your code here
+        int start=0;
+        int end = nums.length - 1;
+        System.out.println(Arrays.toString(nums));
+        return quickSelect(k, nums, start, end);
+    }
+    
+    private int quickSelect(int k, int[] nums, int start, int end){
+        if(start >= end){
+            return nums[k-1];
+        }
+        
+        int left = start;
+        int right = end;
+        int pivot = nums[left];
+        
+        while(left<=right){
+            while(left<=right && nums[left]<pivot){
+                left++;
+            }
+            while(left<=right && nums[right]>pivot){
+                right--;
+            }
+            if(left<=right){
+                int temp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = temp;
+                left++;
+                right--;
+            }
+        }    
+        if(k-1 <= right){
+            return quickSelect(k, nums, start, right);
+        }
+        else if(k-1 >= left){
+            return quickSelect(k, nums, left, end);
+        }
+        else{
+            return nums[k-1];
+        }
+    }
+}
