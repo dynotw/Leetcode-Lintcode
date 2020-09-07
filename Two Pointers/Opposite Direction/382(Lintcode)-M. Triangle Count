@@ -1,0 +1,54 @@
+382. Triangle Count
+
+Given an array of integers, how many three numbers can be found in the array, so that we can build an triangle whose three edges length is the three numbers that we find?
+
+Example
+Example 1:
+
+Input: [3, 4, 6, 7]
+Output: 3
+Explanation:
+They are (3, 4, 6), 
+         (3, 6, 7),
+         (4, 6, 7)
+Example 2:
+
+Input: [4, 4, 4, 4]
+Output: 4
+Explanation:
+Any three numbers can form a triangle. 
+So the answer is C(3, 4) = 4
+
+
+//
+时间复杂度为O(n^2)。外层遍历最大边是n，内层循环移动双指针是n
+空间复杂度为O(1)，只需占用常量空间
+# check whether is triangle: any two .....
+# 为了简化三角形的检验条件，选择最短两边之和大于最长边
+class Solution:
+    """
+    @param S: A list of integers
+    @return: An integer
+    """
+    def triangleCount(self, S):
+        # write your code here#
+        # eliminate edge condition
+        if(len(S) < 3):
+            return 0
+        # sort firstly
+        S = sorted(S)
+        print(S)
+        num = 0
+        for i in range(2, len(S)):
+            left = 0
+            right = i-1
+            while(left < right):
+                if(S[left] + S[right] <= S[i]):
+                    left += 1
+                else:
+                    num += right - left
+                    right -= 1
+            
+            print("i is " + str(i) + " num is " + str(num))
+        
+        return num
