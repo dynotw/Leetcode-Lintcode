@@ -22,29 +22,32 @@ Output: 0.
 //
 class Solution:
     """
-    @param s: a string
-    @param k: an integer
-    @return: the number of substrings there are that contain at least k distinct characters
+    @param nums: an array of integer
+    @param target: an integer
+    @return: an integer
     """
-    def kDistinctCharacters(self, s, k):
-        # Write your code here
-        left = 0
-        right = 0
+    # all method has to sort array firstly
+    # 双指针，left和right两者最多移动n次,加上two pointer之前sort了，所以时间复杂度O(nlogn)
+    def twoSum5(self, nums, target):
+        # write your code here
+        # eliminate edge condition
+        if(nums == None or len(nums)<2):
+            return 0
+        # sort firstly
+        nums.sort()
+        # two pointers
+        left = 0; right = len(nums)-1
         sum = 0
-        visited = list()
-        while(right < len(s) and left <= right):
-            visited.append(s[right])
-            if(len(set(visited)) < k):
-                right += 1
-            else:
-                sum += len(s) - right
-                left += 1
-                # 使用前先判断一下visited是否为空
-                visited.pop(0)
-                if(right - left + 1< k):
-                    right += 1
-                    continue
-                # 这里删去vsited最后一个元素是因为，每次for loop都要添加当前的s[right],但在此情况下right所对应的index并没有后移
-                if(len(visited) != 0):
-                    visited.pop()
+        while(left<right):
+            while(right > left):
+                if(nums[left] + nums[right] > target):
+                    right = right -1
+                else:
+                    break
+            
+            if(nums[left] + nums[right] <= target):
+                sum += right-left
+            
+            left += 1
+        
         return sum
