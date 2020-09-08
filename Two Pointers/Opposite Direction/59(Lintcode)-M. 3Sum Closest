@@ -1,0 +1,80 @@
+59. 3Sum Closest
+
+Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target. Return the sum of the three integers.
+
+Example
+Example 1:
+
+Input:[2,7,11,15],3
+Output:20
+Explanation:
+2+7+11=20
+Example 2:
+
+Input:[-1,2,1,-4],1
+Output:2
+Explanation:
+-1+2+1=2
+Challenge
+O(n^2) time, O(1) extra space
+
+Notice
+You may assume that each input would have exactly one solution.
+
+
+时间复杂度
+数组排序的时间复杂度为O(1)
+遍历过程，固定值为 n 次，双指针为 n 次，时间复杂度为 O(n^2)
+总时间复杂度：O(nlogn) + O(n^2)
+空间复杂度为O（1），只需要常量空间。
+
+
+# different from two sum closest, we need to return three sum rather than difference between 3 sum and target 
+class Solution:
+    """
+    @param numbers: Give an array numbers of n integer
+    @param target: An integer
+    @return: return the sum of the three integers, the sum closest target.
+    """
+    def threeSumClosest(self, numbers, target):
+        # write your code here
+        diff = sys.maxsize
+        threesum = 0
+        end = len(numbers)-1
+        numbers = sorted(numbers)
+        print(numbers)
+        for i in range(len(numbers)):
+            left = 0
+            if(left == i):
+                left += 1
+            right = len(numbers) - 1
+            if(right == i):
+                right -= 1
+                
+            while(left < right):
+                if(numbers[left] + numbers[right] + numbers[i] == target):
+                    return target
+
+                elif(numbers[left] + numbers[right] + numbers[i] < target):
+                    if(abs(numbers[left] + numbers[right] + numbers[i] - target) < diff):
+                        diff = abs(numbers[left] + numbers[right] + numbers[i] - target)
+                        threesum = numbers[left] + numbers[right] + numbers[i]
+                        print("second stage")
+                        print("i is " + str(i) + " left is " + str(left) + " right is " + str(right) + " threesum is " + str(threesum))
+                    left += 1
+                    if(left == i):
+                        left += 1
+                    
+                
+                else:
+                    if(abs(numbers[left] + numbers[right] + numbers[i] - target) < diff):
+                        diff = abs(numbers[left] + numbers[right] + numbers[i] - target)
+                        threesum = numbers[left] + numbers[right] + numbers[i]
+                        print("third stage")
+                        print("i is " + str(i) + " left is " + str(left) + " right is " + str(right) + " threesum is " + str(threesum))
+                    right -= 1
+                    if(right == i):
+                        right -= 1
+            
+        
+        return threesum
