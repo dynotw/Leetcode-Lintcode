@@ -66,16 +66,19 @@ public class Solution {
     }
 
     private boolean match(String pattern, String str, Map<Character, String> dict, Set<String> used) {
+        // exit of recursion(condition a)
         if (pattern.length() == 0) {
             return str.length() == 0;
         }
         Character ch = pattern.charAt(0);
-
-        // 此前已匹配过字母ch
+        
+        // 也算是 exit of recursion
+        // 此前已匹配过字母ch -- 笔记中的“是否有条件信息，可提前退出dfs”
         if (dict.containsKey(ch)) {
             String word = dict.get(ch);
 
             // ch对应的word当前无法和str的前缀匹配
+            // conditiion b
             if (!str.startsWith(word)) {
                 return false;
             }
@@ -85,9 +88,12 @@ public class Solution {
             return match(pattern.substring(1), str.substring(dict.get(ch).length()), dict, used);
         }
         
+        
         // 这个for loop就是为了枚举pattern的char可能对应的所有word in str
+        // 像combination、permutation的for loop取nums中的数；这里的for loop本质也是去一个数，但这个数是string slice的index
         for (int i = 0; i < str.length(); i++) {
             // 剩下的str不够pattern分： str剩下的char数量小于剩下pattern的char数量（pattern的每个char还分不到一个char in str）
+            // 这个应该算是剪枝
             if (str.length() - i -1< pattern.length() -1){
                 return false;
             }
@@ -95,7 +101,8 @@ public class Solution {
             String word = str.substring(0, i + 1);
 
             // 字符串已经有出现过，则可以进行剪枝
-            // 上面的if statement排除了，pattern的char一样，但str的word不同。这里是str的word相同，但pattern的char不同。
+            // 上面的if statement（第一部分的if）相同的情况，但略有差异。所以需要再次排除：上面pattern的char一样，但str的word不同。这里是str的word相同，但pattern的char不同。
+            // 虽然两者都是ch和str不匹配，但第一部分的if是根据ch来切入，所以如果ch不一样，str一样的情况无法被判断
             // 因为如果pattern相同那么此次dfs应该结束在if statement，不会进入for loop
             if (used.contains(word)) {
                 continue;
