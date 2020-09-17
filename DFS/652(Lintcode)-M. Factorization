@@ -1,0 +1,54 @@
+652. Factorization
+
+A non-negative numbers can be regarded as product of its factors.
+Write a function that takes an integer n and return all possible combinations of its factors.
+
+Example
+Example1
+
+Input: 8
+Output: [[2,2,2],[2,4]]
+Explanation:
+8 = 2 x 2 x 2 = 2 x 4
+Example2
+
+Input: 1
+Output: []
+Notice
+Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+The solution set must not contain duplicate combination.
+
+
+
+
+public class Solution {
+    /**
+     * @param n: An integer
+     * @return: a list of combination
+     */
+    public List<List<Integer>> getFactors(int n) {
+        List<List<Integer>> result = new ArrayList<>();
+        // In this problem, 1 can't be considered as a factor, so initial factor starts from 2 
+        dfs(n,2,new ArrayList<Integer>(),result);
+        return result;
+    }
+    
+    private void dfs(int n, int start, List<Integer> temp, List<List<Integer>> result) { 
+        // 此题的递归出口比较奇怪（不存在刻意编写的if statement作为递归出口），因为for loop不是infinite的
+        // 这里添加n。举例：input = 8； 先将[2,4]放入结果集，再从4继续dfs，放入[2,2,2]。继续dfs因为start=2 > Math.sqrt(2)，所以for loop自行结束，此分支的递归结束
+        //空队列不能作为结果
+        if (!temp.isEmpty()) {
+            temp.add(n);
+            result.add(new ArrayList<Integer>(temp));
+            temp.remove(temp.size()-1);
+        }
+        
+        for (int i = start; i <= Math.sqrt(n); i++) {//从biggerFactor--sqrt(n)查找因子
+            if (n % i == 0) {//若i是n的因子，则添加，然后将i作为start去查找不小于i的因子
+                temp.add(i);
+                dfs(n / i, i, temp, result);
+                temp.remove(temp.size() - 1);
+            }
+        }
+    }
+}
