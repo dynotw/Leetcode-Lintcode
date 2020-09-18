@@ -1,0 +1,67 @@
+427. Generate Parentheses
+
+Given n, and there are n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+Example
+Example 1:
+
+Input: 3
+Output: ["((()))", "(()())", "(())()", "()(())", "()()()"]
+Example 2:
+
+Input: 2
+Output: ["()()", "(())"]
+
+
+
+
+# the second dfs written by myself 
+class Solution:
+    """
+    @param n: n pairs
+    @return: All combinations of well-formed parentheses
+    """
+    def generateParenthesis(self, n):
+        # write your code here
+        result = list()
+        temp = ""
+        numLeft = n
+        numRight = n
+        
+        self.dfs(temp, result, numLeft, numRight)
+        
+        return result
+    
+    def dfs(self, temp, result, numLeft, numRight):
+        # exit of recursion (算有3个)
+        if(numRight == 0 and numLeft == 0):
+            result.append(temp)
+            return
+        # if numLeft = 0, then the following parentheses must ")". And there's no need to trackback(没有意义回溯了，因为numLeft已经用完了)
+        if(numLeft == 0):
+            for i in range(numRight):
+                temp = temp + ")"
+            result.append(temp)
+            return
+        
+        # 提前终止recursion        
+        if(numRight < numLeft):
+            return
+
+        
+        for i in range(2):
+            if (i==0):
+                numLeft = numLeft - 1
+                temp = temp + "("
+                print("i = " + str(i) + " temp is " + str(temp))
+                self.dfs(temp, result, numLeft, numRight)
+                temp = temp[:-1]
+                numLeft = numLeft + 1
+            
+            else:
+                numRight = numRight - 1
+                temp = temp + ")"
+                print("i = " + str(i) + " temp is " + str(temp))
+                self.dfs(temp, result, numLeft, numRight)
+                temp = temp[:-1]
+                numRight = numRight + 1
