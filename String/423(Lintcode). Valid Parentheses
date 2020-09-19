@@ -53,3 +53,34 @@ public class Solution {
         return stack1.isEmpty();
     }
 }
+
+
+class Solution:
+    """
+    @param s: A string
+    @return: whether the string is a valid parentheses
+    """
+    def isValidParentheses(self, s):
+        # write your code here
+        temp = list()
+        for i in s:
+            if(i in ["(", "{", "["]):
+                temp.append(i)
+            
+            elif(i == ")"):
+                if(len(temp) == 0 or temp[-1] != "("):
+                    return False
+                else:
+                    temp.pop()
+            elif(i == "]"):
+                if(len(temp) == 0 or temp[-1] != "["):
+                    return False
+                else:
+                    temp.pop()
+            elif(i == "}"):
+                if(len(temp) == 0 or temp[-1] != "{"):
+                    return False
+                else:
+                    temp.pop()
+            
+        return (len(temp) == 0)
