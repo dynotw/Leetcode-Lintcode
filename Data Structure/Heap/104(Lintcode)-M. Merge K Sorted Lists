@@ -14,6 +14,43 @@ Example 2:
 	Output:  2->5->6->7->null
 
 
+//Python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+import heapq
+# here's ListNode rather than integer
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        if not lists:
+            return None
+        heap = list()
+        index = 0
+        dummy = ListNode(0)
+        head = dummy
+        for i in lists:
+            if i:
+                heapq.heappush(heap, (i.val, index, i))
+                # heapd 无法排序相同的数，加一个index；，多一个第二的排序标准
+                index += 1
+                
+        for i in heap:
+            print(i)
+        
+        while heap:
+            head.next = heapq.heappop(heap)[2]
+            head = head.next
+            if(head.next is not None):
+                heapq.heappush(heap, (head.next.val, index, head.next))
+                index += 1
+        
+        return dummy.nextython
+
+
+
 
 //三种不同的解法： mergeHelper_v1_minHeap 小顶堆（优先队列） mergeHelper_v2_Divide_Conquer 分治思想，递归 mergeHelper_v3_Non_Recursive 两两合并，非递归 时间复杂度均为O(nlogk)
 相似题目1：486. Merge K Sorted Arrays 数组形式的解法链接点击此处，见Roger的题解(非九章学员可能没有访问权限) 相似题目2：577. Merge K Sorted Interval Lists 见Roger的题解
