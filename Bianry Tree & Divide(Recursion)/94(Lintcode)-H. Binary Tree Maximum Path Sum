@@ -113,8 +113,7 @@ public class Solution {
 
     private ResultType helper(TreeNode root) {
         if (root == null) {
-            // why return Integer.MIN_VALUE, it's hard to explain
-            // only need to run the code, to check (if root.val < 0)
+            // why return Integer.MIN_VALUE, only need to run the code, to check (if root.val < 0)
             return new ResultType(Integer.MIN_VALUE, Integer.MIN_VALUE);
         }
         // Divide
