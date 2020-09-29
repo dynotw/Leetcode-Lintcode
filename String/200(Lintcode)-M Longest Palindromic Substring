@@ -78,7 +78,8 @@ public class Solution {
 }
 
 
-// This method is O(n^2), and there's O(n), using Manacher's Alg0rithm. However, it's kind of complicated, so I give up it.
+// This method is O(n^2)
+// there's an another method in O(n), using Manacher's Algorithm. However, it's kind of complicated, so I give up it.
 public class Solution {
     /**
      * @param s: input string
