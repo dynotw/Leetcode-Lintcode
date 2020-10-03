@@ -1,0 +1,78 @@
+560. Subarray Sum Equals K
+
+Given an array of integers and an integer k, you need to find the total number of continuous subarrays whose sum equals to k.
+
+Example 1:
+
+Input:nums = [1,1,1], k = 2
+Output: 2
+ 
+
+Constraints:
+
+The length of the array is in range [1, 20,000].
+The range of numbers in the array is [-1000, 1000] and the range of the integer k is [-1e7, 1e7].
+
+
+
+
+// 本质和solution的一样，但space complexity高些
+// time: O(n), space: O(2n)
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        int sum = 0;
+        int count = 0;
+        Map<Integer, List<Integer>> mapping = new HashMap<>();
+        List<Integer> temp = new LinkedList<>();
+        mapping.put(0, temp);
+        mapping.get(0).add(-1);
+        for(int i =0; i < nums.length; i++){
+            sum += nums[i];
+            if(mapping.containsKey(sum - k)){
+                count += mapping.get(sum-k).size();
+            }
+            
+            if(mapping.containsKey(sum)){
+                mapping.get(sum).add(i);
+            }
+            
+            else{
+                List<Integer> temp1 = new LinkedList<>();
+                mapping.put(sum, temp1);
+                mapping.get(sum).add(i);
+            }
+
+        }
+        
+        return count;
+    }
+}
+
+// Solution, space conplexity is better
+// class Solution {
+//     public int subarraySum(int[] nums, int k) {
+//         int sum = 0;
+//         int count = 0;
+//         Map<Integer, Integer> mapping = new HashMap<>();
+//         mapping.put(0, 1);
+
+//         for(int i =0; i < nums.length; i++){
+//             sum += nums[i];
+//             if(mapping.containsKey(sum - k)){
+//                 count += mapping.get(sum-k);
+//             }
+            
+//             if(mapping.containsKey(sum)){
+//                 mapping.put(sum, mapping.get(sum)+1);
+//             }
+            
+//             else{
+//                 mapping.put(sum, 1);
+//             }
+            
+//             System.out.println(mapping);
+//         }
+        
+//         return count;
+//     }
+// }
