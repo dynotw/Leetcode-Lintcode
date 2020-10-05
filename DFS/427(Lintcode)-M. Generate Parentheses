@@ -47,6 +47,9 @@ class Solution:
         # 提前终止recursion        
         if(numRight < numLeft):
             return
+        
+        if(numRight < 0 or numLeft < 0):
+            return
 
         
         for i in range(2):
