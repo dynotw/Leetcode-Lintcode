@@ -1,0 +1,61 @@
+Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+
+Example 1:
+
+Input:
+[
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+]
+Output: [1,2,3,6,9,8,7,4,5]
+Example 2:
+
+Input:
+[
+  [1, 2, 3, 4],
+  [5, 6, 7, 8],
+  [9,10,11,12]
+]
+Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+
+
+
+
+# time: O(n*m); space: O(1)
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        # eliminate edge condition
+        if(len(matrix) == 0):
+            return []
+        
+        height = len(matrix)
+        width = len(matrix[0])
+        result = list()
+        result.append(matrix[0][0])
+        matrix[0][0] = "!"
+        x = 0
+        y = 0
+        while(len(result) < height * width):
+            while(self.valid(matrix, x, y+1)):
+                result.append(matrix[x][y+1])
+                matrix[x][y+1] = "!"
+                
+                y += 1
+            
+            while(self.valid(matrix, x+1 ,y)):
+                result.append(matrix[x+1][y])
+                matrix[x+1][y] = "!"
+                x +=1
+                
+            while(self.valid(matrix, x, y-1)):
+                result.append(matrix[x][y-1])
+                matrix[x][y-1] = "!"
+                y -=1
+            
+            while(self.valid(matrix, x-1, y)):
+                result.append(matrix[x-1][y])
+                matrix[x-1][y] = "!"
+                x -=1                
+        
+        return result
