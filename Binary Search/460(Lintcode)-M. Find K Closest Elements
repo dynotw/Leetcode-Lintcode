@@ -1,6 +1,7 @@
 460. Find K Closest Elements
 
-Given target, a non-negative integer k and an integer array A sorted in ascending order, find the k closest numbers to target in A, sorted in ascending order by the difference between the number and target. Otherwise, sorted in ascending order by number if the difference is same.
+Given target, a non-negative integer k and an integer array A sorted in ascending order, find the k closest numbers to target in A, 
+sorted in ascending order by the difference between the number and target. Otherwise, sorted in ascending order by number if the difference is same.
 
 Example
 Example 1:
@@ -90,5 +91,73 @@ public class Solution {
         }
         
         return result;
+    }
+}
+
+
+
+// Time complexity: O(logn + k); Space Complexity: O(k)
+class Solution {
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        List<Integer> result = new LinkedList<>();
+        
+        // elimanate edge condition
+        if (arr == null || arr.length < k){
+            return result;
+        }
+        if (x <= arr[0]){
+            int[] temp = Arrays.copyOfRange(arr, 0, k);
+            List<Integer> result1 =Arrays.stream(temp).boxed().collect(Collectors.toList()); 
+            return result1;
+        }
+        
+        if(x >= arr[arr.length - 1]){
+            int[] temp = Arrays.copyOfRange(arr, arr.length - k, arr.length);
+            List<Integer> result1 =Arrays.stream(temp).boxed().collect(Collectors.toList()); 
+            return result1;            
+        }
+        
+        
+        // binary search
+        int left = 0;
+        int right = arr.length - 1;
+        
+        while(left + 1 < right){
+            int mid = left + (right-left)/2;
+            
+            if(arr[mid] <= x){
+                left = mid;
+            }
+            else{
+                right = mid;
+            }
+        }
+        
+        int count = k;
+            
+        while(count > 0){
+            if(left < 0){
+                right ++;
+                count --;
+            }
+            else if (right > arr.length - 1){
+                left --;
+                count --;
+            }
+            else{
+                if(Math.abs(arr[left]-x) <= Math.abs(arr[right] - x)){
+                    left --;
+                    count--;
+                }                
+                else{
+                    right ++;
+                    count--;
+                }
+            }
+        }
+        
+        int[] temp = Arrays.copyOfRange(arr, left + 1, right);
+        List<Integer> result1 =Arrays.stream(temp).boxed().collect(Collectors.toList()); 
+        return result1;
     }
 }
