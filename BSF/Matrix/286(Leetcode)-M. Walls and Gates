@@ -1,0 +1,134 @@
+You are given a m x n 2D grid initialized with these three possible values.
+
+-1 - A wall or an obstacle.
+0 - A gate.
+INF - Infinity means an empty room. We use the value 231 - 1 = 2147483647 to represent INF as you may assume that the distance to a gate is less than 2147483647.
+Fill each empty room with the distance to its nearest gate. If it is impossible to reach a gate, it should be filled with INF.
+
+Example: 
+
+Given the 2D grid:
+
+INF  -1  0  INF
+INF INF INF  -1
+INF  -1 INF  -1
+  0  -1 INF INF
+After running your function, the 2D grid should be:
+
+  3  -1   0   1
+  2   2   1  -1
+  1  -1   2  -1
+  0  -1   3   4
+  
+  
+  
+  
+  from collections import deque
+from collections import defaultdict
+## 从room自行bfs，O(m^2 * n^2),太不行
+# class Solution:
+#     def wallsAndGates(self, rooms: List[List[int]]) -> None:
+#         """
+#         Do not return anything, modify rooms in-place instead.
+#         """
+#         if(rooms == None or len(rooms) == 0 or len(rooms[0]) == 0):
+#             return
+        
+#         height = len(rooms)
+#         width = len(rooms[0])
+#         for i in range(height):
+#             for j in range(width):
+#                 if(rooms[i][j] == 2147483647):
+#                     self.bfs(rooms, [i,j])
+        
+#         return
+        
+#     def bfs(self, rooms, position):
+#         queue = deque()
+#         queue.append(position)
+        
+#         directionHeight = [-1,1,0,0]
+#         directionWidth = [0,0,-1,1]
+        
+#         step = 0
+#         path = list()
+#         while(len(queue) != 0):
+#             step += 1
+#             size = len(queue)
+#             for j in range(size):
+#                 current = queue.popleft()
+#                 for i in range(4):
+#                     next_position = [current[0] + directionHeight[i], current[1] + directionWidth[i]]
+#                     if(self.isValid(rooms, next_position) and next_position not in path):
+#                         if(rooms[next_position[0]][next_position[1]] != 0):
+#                             queue.append(next_position)
+#                             path.append(next_position)
+#                             continue
+#                         if(rooms[next_position[0]][next_position[1]] == 0):
+#                             rooms[position[0]][position[1]] = step
+#                             return
+#         return
+    
+    
+#     def isValid(self, rooms, position):
+#         height = len(rooms)
+#         width = len(rooms[0])
+        
+#         # check whether is out of boundary
+#         if(position[0] < 0 or position[0] >= height):
+#             return False
+#         if(position[1] < 0 or position[1] >= width):
+#             return False
+        
+#         # check whether is room
+#         if(rooms[position[0]][position[1]] == -1):
+#             return False
+        
+#         return True
+## 我们从gate出发，并且一次性将所有gate放入queue
+# 关键所有的gate是同时进行下一步，并不是1st gate 结束才进行 2nd gate, 每个点绝对被离它最近的gate给标记，为防止重复标记， 将entry ！= 2147483647 都认为无效点
+# Time Complexity: O(mn); Space Complexity: O(mn)
+class Solution:
+    def wallsAndGates(self, rooms: List[List[int]]) -> None:
+        """
+        Do not return anything, modify rooms in-place instead.
+        """
+        if(rooms == None or len(rooms) == 0 or len(rooms[0]) == 0):
+            return
+        
+        height = len(rooms)
+        width = len(rooms[0])
+        queue = deque()
+        for i in range(height):
+            for j in range(width):
+                if(rooms[i][j] == 0):
+                    queue.append([i,j])
+        
+        # bfs
+        directionHeight = [-1,1,0,0]
+        directionWidth = [0,0,-1,1]        
+        while(len(queue) != 0):
+            start = queue.popleft()
+            for i in range(4):
+                current = [start[0]+ directionHeight[i], start[1]+directionWidth[i]]
+                if(self.isValid(rooms, current)):
+                    rooms[current[0]][current[1]] = rooms[start[0]][start[1]] + 1
+                    queue.append(current)
+        return
+                
+            
+    def isValid(self, rooms, position):
+        height = len(rooms)
+        width = len(rooms[0])
+        
+        # check whether is out of boundary
+        if(position[0] < 0 or position[0] >= height):
+            return False
+        if(position[1] < 0 or position[1] >= width):
+            return False
+        
+        # check whether is room
+        if(rooms[position[0]][position[1]] != 2147483647):
+            return False
+        
+        return True
