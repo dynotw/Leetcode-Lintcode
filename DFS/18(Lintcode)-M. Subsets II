@@ -55,6 +55,7 @@ class Solution {
             return results;
         }
         
+        // don't forget to sort 
         Arrays.sort(nums);
 
         List<Integer> subset = new ArrayList<Integer>();
@@ -102,7 +103,10 @@ public class Solution {
     public List<List<Integer>> subsetsWithDup(int[] nums) {
         // write your code here
         // new the return
+        
+        // don't forget to sort
         Arrays.sort(nums);
+        
         List<List<Integer>> result = new ArrayList<List<Integer>>();
         List<Integer> subset = new ArrayList<Integer>();
         
