@@ -81,6 +81,7 @@ class Solution {
             */
             // but this if statement, it's a liitle hard to understand. see 2nd method use HashSet来避免重复元素
             
+            // 同层的for loop，例如1 --> 2(1)，2(2)，2(3), this for loop, only pick up 2(1), because i = startIndex(which is 1)。 
             if (i != startIndex && nums[i]==nums[i-1]) {
                 continue;
             }
