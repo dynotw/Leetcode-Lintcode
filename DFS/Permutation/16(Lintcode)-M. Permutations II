@@ -112,6 +112,7 @@ public class Solution {
                 continue;
             }
             // Sort is for this if statement
+            // ! visited[i-1] == false， ensure it's in the same for loop
             if (i > 0 && nums[i] == nums[i - 1] && !visited[i - 1]) {
                 System.out.println("nums is "+ Arrays.toString(nums));
                 System.out.println("i is " + i);
