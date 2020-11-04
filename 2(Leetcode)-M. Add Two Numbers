@@ -1,0 +1,64 @@
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+ 
+
+Example 1:
+Input: l1 = [2,4,3], l2 = [5,6,4]
+Output: [7,0,8]
+Explanation: 342 + 465 = 807.
+
+Example 2:
+Input: l1 = [0], l2 = [0]
+Output: [0]
+
+Example 3:
+Input: l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
+Output: [8,9,9,9,0,0,0,1]
+
+
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+# 注意本题所有数字都是倒序
+# time complexity: O(n); space complexity: O(1)
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        # eliminate conrner conidition
+        if(l1.val == 0 and l1.next == None and l2.val == 0 and l2.next == None):
+            return ListNode(0)
+        
+        num1 = self.helper(l1)
+        num2 = self.helper(l2)
+        
+        num3 = num1 + num2
+        print(num3)
+        
+        dummy = ListNode(-1)
+        head = dummy
+        
+        # 新生成的ListNode是num3的倒序
+        while(num3 > 0):
+            value = num3 % 10
+            temp = num3 // 10
+            head.next = ListNode(value)
+            head = head.next
+            num3 = temp
+        
+        return dummy.next
+            
+        
+    def helper(self, l1):
+        num = 0
+        index = 0
+        while(l1):
+            num += l1.val * pow(10, index)
+            l1 = l1.next
+            index += 1
+        
+        return num
