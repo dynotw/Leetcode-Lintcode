@@ -1,0 +1,63 @@
+Implement a basic calculator to evaluate a simple expression string.
+
+The expression string contains only non-negative integers, +, -, *, / operators and empty spaces . The integer division should truncate toward zero.
+
+Example 1:
+
+Input: "3+2*2"
+Output: 7
+Example 2:
+
+Input: " 3/2 "
+Output: 1
+Example 3:
+
+Input: " 3+5 / 2 "
+Output: 5
+
+
+
+# use stack
+# time complexity: O(n); space complexity: O(n)
+class Solution:
+    def calculate(self, s: str) -> int:
+        num = 0
+        # eliminate corner condition
+        if(s == None or len(s) == 0):
+            return result
+        
+        # insert the operator before 1st digit
+        operator = '+'
+        temp = list()
+        
+        for i in range(len(s)):
+   
+            if(s[i].isdigit()):
+                num = num * 10 + int(s[i])
+                
+                # 读取数字后，不马上进行运算，是因为无法确定是否读取了整个数字，例114，我们需要联系读取3次，才能读取整个数字
+                # 不能读取了1之后，就马上进行运算
+                # if(operator == '+'):
+                #     temp.append(num)
+                # elif(operator == '-'):
+                #     temp.append(-1 * num)
+
+            if(s[i] == '+' or s[i] == '-' or s[i] == '*' or s[i] == '/' or i == len(s)-1):
+                if(operator == '+'):
+                    temp.append(num)
+                elif(operator == '-'):
+                    temp.append(-1 * num)
+                elif(operator == '*'):
+                    temp.append(temp.pop() * num)
+                else:
+                    temp.append(int(temp.pop() / num))
+                
+                num = 0
+                operator = s[i]
+
+        
+        result = 0
+        for i in temp:
+            result += i
+        
+        return result
