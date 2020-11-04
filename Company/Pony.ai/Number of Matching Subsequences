@@ -1,0 +1,35 @@
+Given string S and a dictionary of words words, find the number of words[i] that is a subsequence of S.
+
+Example :
+Input: 
+S = "abcde"
+words = ["a", "bb", "acd", "ace"]
+Output: 3
+Explanation: There are three words in words that are a subsequence of S: "a", "acd", "ace".
+
+
+
+
+# Because substring j is a char, find method is O(1)
+# time complexity: O(所有word的长度之和)；space complexity: O(1)
+class Solution:
+    def numMatchingSubseq(self, S: str, words: List[str]) -> int:
+        num = 0
+        for word in words:
+            index = 0
+            find = True
+            for j in word:
+                # .find() is quite similar to .index().
+                # if it doesn't find substring, .find() return -1; .index() report error
+                # start = index, end = len(S)
+                index = S.find(j, index, len(S))
+                if index == -1:
+                    find = False
+                    break
+                    
+                index += 1
+                
+            if find == True:
+                num += 1
+                
+        return num
