@@ -1,0 +1,34 @@
+Given a list of words and two words word1 and word2, return the shortest distance between these two words in the list.
+
+Example:
+Assume that words = ["practice", "makes", "perfect", "coding", "makes"].
+Input: word1 = “coding”, word2 = “practice”
+Output: 3
+
+Input: word1 = "makes", word2 = "coding"
+Output: 1
+
+
+
+# each word appear more than once in list
+# time complexity: O(n); space complexity: O(1)
+class Solution:
+    def shortestDistance(self, words: List[str], word1: str, word2: str) -> int:
+        if (word1 == word2):
+            return 0
+        
+        index_word1 = -1
+        index_word2 = -1
+        distance = len(words)-1
+        
+        for i in range(len(words)):
+            if(words[i] == word1):
+                index_word1 = i
+            if(words[i] == word2):
+                index_word2 = i
+            
+            # update distance
+            if(index_word1 != -1 and index_word2 != -1):
+                distance = min(distance, abs(index_word1 - index_word2))
+        
+        return distance
