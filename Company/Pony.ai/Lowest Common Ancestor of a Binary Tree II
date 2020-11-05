@@ -1,0 +1,61 @@
+Given the root of a binary tree, return the lowest common ancestor (LCA) of two given nodes, p and q.
+If either node p or q does not exist in the tree, return null. All values of the nodes in the tree are unique.
+
+According to the definition of LCA on Wikipedia: "The lowest common ancestor of two nodes p and q in a binary tree T is the lowest node that has both p and q as descendants
+(where we allow a node to be a descendant of itself)". A descendant of a node x is a node y that is on the path from node x to some leaf node.
+
+ 
+
+Example 1:
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+Output: 3
+Explanation: The LCA of nodes 5 and 1 is 3.
+
+Example 2:
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
+Output: 5
+Explanation: The LCA of nodes 5 and 4 is 5. A node can be a descendant of itself according to the definition of LCA.
+
+Example 3:
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 10
+Output: null
+Explanation: Node 10 does not exist in the tree, so return null.
+
+
+
+# 相比1，只是多了p，q不一定出现在 Binary Tree中，所以加入了p_exit & q_exit 两个类变量进行判断
+# time complexity： O(n); space complexity: O(1)
+class Solution:
+    p_exit = False
+    q_exit = False
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        result = self.helper(root, p, q) 
+        if(Solution.p_exit == True and Solution.q_exit == True):
+            return result
+        else:
+            return False
+           
+    def helper(self, root, p, q):
+        # exit of recursion
+        if(root == None):
+            return None
+        if(root ==p or root == q):
+            if(root == p):
+                Solution.p_exit = True
+            if(root == q):
+                Solution.q_exit = True
+            return root
+        
+        # Divide
+        left = self.helper(root.left , p, q)
+        right = self.helper(root.right, p, q)
+        
+        # Conquer
+        if(left == None and right == None):
+            return None
+        elif(left != None and right != None):
+            return root
+        elif(left != None and right == None):
+            return left
+        else:
+            return right
