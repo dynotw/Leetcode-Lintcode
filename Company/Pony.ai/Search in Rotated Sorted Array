@@ -1,0 +1,54 @@
+You are given an integer array nums sorted in ascending order, and an integer target.
+
+Suppose that nums is rotated at some pivot unknown to you beforehand (i.e., [0,1,2,4,5,6,7] might become [4,5,6,7,0,1,2]).
+
+If target is found in the array return its index, otherwise, return -1.
+
+
+Example 1:
+Input: nums = [4,5,6,7,0,1,2], target = 0
+Output: 4
+
+Example 2:
+Input: nums = [4,5,6,7,0,1,2], target = 3
+Output: -1
+
+Example 3:
+Input: nums = [1], target = 0
+Output: -1
+
+
+
+# binary search, time complexiy: O(logn); space complexity: O(1)
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        if(nums == None or len(nums) == 0):
+            return -1
+        
+        # binary search
+        left = 0
+        right = len(nums) - 1
+        while(left + 1 < right):
+            mid = left + (right - left)//2
+            if(nums[mid] == target):
+                return mid
+            # mid and left are at the same array
+            if(nums[left] < nums[mid]):
+                # target is between left and mid
+                if(nums[left] <= target and target <= nums[mid]):
+                    right = mid
+                else:
+                    left = mid
+                    
+            # mid and left aren't at the same array
+            else:
+                if(nums[mid] <= target and target <= nums[right]):
+                    left = mid
+                else:
+                    right = mid
+        
+        if(nums[left] == target):
+            return left
+        if(nums[right] == target):
+            return right
+        return -1
