@@ -47,7 +47,6 @@ class Solution:
                 for i in range(size):
                     result.append(queue.popleft().val)
                 return result
-            
             else:
                 for i in range(size):
                     start = queue.popleft()
@@ -56,8 +55,7 @@ class Solution:
                             continue
                         queue.append(next_node)
                         visited.add(next_node)            
-                count -= 1
-        
+                count -= 1       
         return result
     
     def buildMap(self, node, parent):
@@ -70,5 +68,4 @@ class Solution:
                 Solution.mapping[parent].append(node)
             self.buildMap(node.left, node)
             self.buildMap(node.right, node)
-        
         return
