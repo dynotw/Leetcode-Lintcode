@@ -1,0 +1,53 @@
+Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, 
+determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note:
+
+The same word in the dictionary may be reused multiple times in the segmentation.
+You may assume the dictionary does not contain duplicate words.
+Example 1:
+Input: s = "leetcode", wordDict = ["leet", "code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
+
+Example 2:
+Input: s = "applepenapple", wordDict = ["apple", "pen"]
+Output: true
+Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+             Note that you are allowed to reuse a dictionary word.
+             
+Example 3:
+Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+Output: false
+
+
+# wordbreak2 need to use DP
+# bfs, time complexity: O(n^2); space complexity: O(n)
+from collections import deque
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        if(s == None or len(s) == 0):
+            return True
+        
+        queue = deque()
+        # 记录从此index出发，是否已经被遍历过
+        visited_index = set()
+        
+        queue.append(0)
+        while(len(queue) != 0):
+            start = queue.popleft()
+            if(start not in visited_index):
+                for i in range(start+1, len(s)+1):
+                    word = s[start:i]
+                    if(word not in wordDict):
+                        continue
+                        
+                    if(i == len(s)):
+                        return True
+                    
+                    queue.append(i)
+                
+                visited_index.add(start)
+        
+        return False
+        
