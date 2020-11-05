@@ -1,0 +1,65 @@
+Given a robot cleaner in a room modeled as a grid.
+
+Each cell in the grid can be empty or blocked.
+
+The robot cleaner with 4 given APIs can move forward, turn left or turn right. Each turn it made is 90 degrees.
+
+When it tries to move into a blocked cell, its bumper sensor detects the obstacle and it stays on the current cell.
+
+Design an algorithm to clean the entire room using only the 4 given APIs shown below.
+
+Example:
+Input:
+room = [
+  [1,1,1,1,1,0,1,1],
+  [1,1,1,1,1,0,1,1],
+  [1,0,1,1,1,1,1,1],
+  [0,0,0,1,0,0,0,0],
+  [1,1,1,1,1,1,1,1]
+],
+row = 1,
+col = 3
+
+Explanation:
+All grids in the room are marked by either 0 or 1.
+0 means the cell is blocked, while 1 means the cell is accessible.
+The robot initially starts at the position of row=1, col=3.
+From the top left corner, its position is one row below and three columns right.
+
+
+
+class Solution:
+    # 只要按照turnRight的顺序即可
+    direction = [[0,-1],[-1,0],[0,1],[1,0]] # facing up, turning right as index increases
+    def cleanRoom(self, robot):
+        """
+        :type robot: Robot
+        :rtype: None
+        """
+        start = (0,0)
+        visited = set()
+        self.dfs(robot, start, 0, visited)
+        return
+
+    def dfs(self, robot, position, d_index, visited):
+        visited.add(position)
+        robot.clean()
+        last_move = True
+        
+        for i in [3,0,1,2]:
+            if (last_move == True):  #固定先左后右
+                robot.turnLeft()
+            else: 
+                robot.turnRight()
+            
+            # (d_index + i)%4 的组合是为了next_position是turnLeft后移动
+            # 为了配合上面if statement的先左后右
+            d = Solution.direction[(d_index + i)%4]  #調整方向，turnLeft
+            next_position = (position[0]+d[0], position[1]+d[1])  #下一步的位置
+
+            if (next_position not in visited and robot.move()):  #看一看可不可以前進
+                self.dfs(robot, next_position, (d_index + i)%4, visited)   #前進
+                robot.move()    # come back  #精華，有前進就必須有相應的後退!!!原路返回
+                last_move = True    #上一步的backtracking, 已经使得robt回到起点了，下一步繼續嘗試向左轉（换一个方向）
+            else:   #某個點訪問過了或者不可訪問
+                last_move = False    #下一步向右轉
