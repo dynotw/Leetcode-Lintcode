@@ -33,11 +33,9 @@ class Solution:
                     num += 1
         return num
         
-    def bfs(self, grid, position):
-        
+    def bfs(self, grid, position):        
         xIndirection = [-1, 0, 0 ,1]
-        yIndirection = [0, 1, -1 ,0]
-        
+        yIndirection = [0, 1, -1 ,0]      
         queue = list()
         queue.append(position)
         
@@ -55,7 +53,6 @@ class Solution:
         
         if(position[0] >= 0 and position[0] < height and position[1] >= 0 and position[1] < width):
             if(grid[position[0]][position[1]] == "1"):
-                return True
-        
+                return True        
         else:
             return False
