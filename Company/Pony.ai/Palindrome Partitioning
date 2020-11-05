@@ -1,0 +1,45 @@
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return all possible palindrome partitioning of s.
+
+Example:
+Input: "aab"
+Output:
+[
+  ["aa","b"],
+  ["a","a","b"]
+]
+
+
+# DFS, time complexity: O(n*2^n); space compelxity: O(n)
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        result = list()
+        if(s == None or len(s) == 0):
+            return result
+        
+        subnet = list()
+        self.dfs(s, result, subnet, 0)
+        return result
+        
+    def dfs(self, s, result, subnet, startIndex):
+        # exit of recursion
+        if(startIndex == len(s)):
+            result.append(subnet[:])
+            return
+        
+        # dfs
+        for i in range(startIndex, len(s)):
+            temp = s[startIndex:i+1]
+            if(not self.isPalindrome(temp)):
+                continue
+            subnet.append(temp)
+            self.dfs(s, result, subnet, i+1)
+            subnet.pop()
+        
+        return
+    
+    def isPalindrome(self, word):
+        if(len(word) == 0):
+            return False
+        return word == word[::-1]
