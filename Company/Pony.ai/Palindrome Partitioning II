@@ -1,0 +1,54 @@
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return the minimum cuts needed for a palindrome partitioning of s.
+
+
+Example 1:
+
+Input: s = "aab"
+Output: 1
+Explanation: The palindrome partitioning ["aa","b"] could be produced using 1 cut.
+Example 2:
+
+Input: s = "a"
+Output: 0
+Example 3:
+
+Input: s = "ab"
+Output: 1
+
+
+
+from collections import deque
+class Solution(object):
+    def minCut(self, s):
+        # in the form (idx to cut, # of cuts)
+        queue = deque([(len(s), 0)])  
+        # keep track of which cut we are already exploring
+        visited = set()
+
+        while (len(queue) != 0):
+            pre_idx, num_cuts = queue.popleft()
+            pre = s[:pre_idx]
+            if self.is_palindrome(pre):
+                return num_cuts
+
+            for i in range(len(pre)):
+                if i in visited:  # another search already cut here
+                    continue
+                post = pre[i:]  # invariant is that everything in post is already palindrome
+                if not self.is_palindrome(post):
+                # if we cut at current index i, the postfix doesn't satisfy our invariant
+                    continue
+                # found a place to cut where substring s[i:] can be partition into palindromes
+                queue.append((i, num_cuts + 1))
+                # memoize where we are already cutting,
+                # 因为i是从小到大，所以越长的有效palindrome，越早被记录
+                # 即此index开始能切割的最长panliddrome已经被分析过了，那么短的就无需分析，因为我们需要minimum cuts
+                visited.add(i)
+        
+        # 得一个个切割了
+        return len(s) - 1
+    
+    def is_palindrome(self, t):
+        return t == t[::-1]
