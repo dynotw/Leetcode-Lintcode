@@ -25,7 +25,7 @@ class Solution:
             heapq.heappush(heap, (1/A[i], 0, i))
         while K > 0:
             # numerator & denominator are index
-            fraction, numerator, denominator = heapq.heappop(heap)
+            value, numerator, denominator = heapq.heappop(heap)
             K -= 1
             if K == 0: 
                 return[A[numerator], A[denominator]]
