@@ -9,7 +9,6 @@ Explanation: There are three words in words that are a subsequence of S: "a", "a
 
 
 
-
 # Because substring j is a char, find method is O(1)
 # time complexity: O(所有word的长度之和)；space complexity: O(1)
 class Solution:
