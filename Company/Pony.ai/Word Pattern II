@@ -1,0 +1,94 @@
+Given a pattern and a string s, return true if s matches the pattern.
+
+A string s matches a pattern if there is some bijective mapping of single characters to strings such that if each character in pattern is replaced by the string it maps to, then the resulting string is s. A bijective mapping means that no two characters map to the same string, and no character maps to two different strings.
+
+ 
+
+Example 1:
+
+Input: pattern = "abab", s = "redblueredblue"
+Output: true
+Explanation: One possible mapping is as follows:
+'a' -> "red"
+'b' -> "blue"
+Example 2:
+
+Input: pattern = "aaaa", s = "asdasdasdasd"
+Output: true
+Explanation: One possible mapping is as follows:
+'a' -> "asd"
+Example 3:
+
+Input: pattern = "abab", s = "asdasdasdasd"
+Output: true
+Explanation: One possible mapping is as follows:
+'a' -> "a"
+'b' -> "sdasd"
+Note that 'a' and 'b' cannot both map to "asd" since the mapping is a bijection.
+Example 4:
+
+Input: pattern = "aabb", s = "xyzabcxzyabc"
+Output: false
+
+
+
+
+# 复杂度分析
+# 时间复杂度：O(lengthStr^lengthPattern)，  每次递归有lengthStr种匹配串，一共有lengthPattern次，为指数级；
+# 空间复杂度：O(lengthPattern), 需要使用map和set进行存储记录；
+
+from collections import defaultdict
+class Solution:
+    def wordPatternMatch(self, pattern: str, str: str) -> bool:
+        if (pattern == None or len(pattern) == 0):
+            return len(str) == 0;
+        
+        mapping = dict()
+        result = self.dfs(pattern, str, mapping)       
+        return result
+    
+    # mapping is {pattern: string}; # mapping1 is {string: pattern} 
+    def dfs(self, pattern, string, mapping):
+        # exit of recursion， 核实答案是否符合 
+        if(len(pattern) == 0):
+            if(len(string) == 0):
+                return True           
+            else:
+                return False
+            
+        # exit of recursion,提前退出
+        if(len(string) < len(pattern)):
+            return False
+        
+        if(pattern[0] in mapping.keys()):
+            if(not string.startswith(mapping[pattern[0]])):
+                return False
+            
+            else:
+                # 注意这个地方是return
+                 return self.dfs(pattern[1:], string[len(mapping[pattern[0]]):], mapping)
+        
+        # dfs
+        for i in range(len(string)):
+            temp = string[:i+1]
+
+            # check whether this temp is valid
+            if(temp in mapping.values()):
+                if(pattern[0] not in mapping.keys()):
+                    continue
+                if(mapping[pattern[0]] != temp):
+                    continue
+
+            if(len(string) - len(temp) < len(pattern[1:])):
+                break
+            
+            mapping[pattern[0]] = temp
+            
+            # 注意这个地方得有个return
+            if(self.dfs(pattern[1:], string[len(mapping[pattern[0]]):], mapping)):
+                return True
+            
+            #backtracking
+            mapping.pop(pattern[0])
+        
+        return False
