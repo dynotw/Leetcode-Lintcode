@@ -9,7 +9,6 @@ You are given a target value to search. If found in the array return its index, 
 You may assume no duplicate exists in the array.
 
 Example
-
 Example 1:
 Input: [4, 5, 1, 2, 3] and target=1, 
 Output: 2.
@@ -22,8 +21,41 @@ Challenge
 O(logN) time
 
 
-
-
+# binary search, time complexiy: O(logn); space complexity: O(1)
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        if(nums == None or len(nums) == 0):
+            return -1
+        
+        # binary search
+        left = 0
+        right = len(nums) - 1
+        while(left + 1 < right):
+            mid = left + (right - left)//2
+            if(nums[mid] == target):
+                return mid
+            # mid and left are at the same array
+            if(nums[left] < nums[mid]):
+                # target is between left and mid
+                if(nums[left] <= target and target <= nums[mid]):
+                    right = mid
+                else:
+                    left = mid
+                    
+            # mid and left aren't at the same array
+            else:
+                if(nums[mid] <= target and target <= nums[right]):
+                    left = mid
+                else:
+                    right = mid
+        
+        if(nums[left] == target):
+            return left
+        if(nums[right] == target):
+            return right
+        return -1
+        
+        
 public class Solution {
     /**
      * @param A: an integer rotated sorted array
@@ -33,8 +65,6 @@ public class Solution {
     
     // chanllenge use Binary Search once 
     public int search(int[] A, int target) {
-        // write your code here
-        
         // eliminate special conditions
         if (A == null ||A.length == 0){
             return -1;
@@ -50,17 +80,15 @@ public class Solution {
         int left = 0;
         int right = A.length -1;
         
-        while (left + 1 <right){
-            
+        while (left + 1 <right){          
             int mid = left + (right - left)/2;
             
             if (A[mid] == target){
                 return mid;
             }
-            
+           
             // mid is at left array
-            if (A[mid] > A[left]){
-                
+            if (A[mid] > A[left]){               
                 //target is at left array, and between left and mid
                 if (A[left] <= target && target <= A[mid]){
                     right = mid;
@@ -72,8 +100,7 @@ public class Solution {
             }
             
             // mid is at right array
-            else{
-            
+            else{           
             // target is at right array, and it is between mid and right
                 if (A[mid] <= target && target <= A[right]){
                     left =mid;
