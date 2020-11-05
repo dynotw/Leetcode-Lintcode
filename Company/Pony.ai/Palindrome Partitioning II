@@ -16,7 +16,7 @@ Input: s = "ab"
 Output: 1
 
 
-
+# bfs
 from collections import deque
 class Solution(object):
     def minCut(self, s):
