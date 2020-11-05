@@ -1,0 +1,74 @@
+We are given a binary tree (with root node root), a target node, and an integer value K.
+
+Return a list of the values of all nodes that have a distance K from the target node.  The answer can be returned in any order.
+ 
+Example 1:
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], target = 5, K = 2
+Output: [7,4,1]
+
+Explanation: 
+The nodes that are a distance 2 from the target node (with value 5)
+have values 7, 4, and 1.
+
+Note that the inputs "root" and "target" are actually TreeNodes.
+The descriptions of the inputs above are just serializations of these objects
+
+
+
+# 1. build a undirected graph using treenodes as vertices, and the parent-child relation as edges
+# 2. do BFS with source vertice (target) to find all vertices with distance K to it.
+# 关键在于将binary tree通过建立一个mapping，形成undirected graph
+# time complexity: O(n); space complexity: O(n)
+from collections import deque
+class Solution:
+    mapping = dict()
+    
+    def distanceK(self, root: TreeNode, target: TreeNode, K: int) -> List[int]:
+        result = list()
+        # eliminate corner condition
+        if(root == None or K < 0):
+            return result
+        
+        # build map
+        self.buildMap(root, None)
+        if(target not in Solution.mapping.keys()):
+            return result
+
+        # bfs
+        visited = set()
+        queue = deque()
+        queue.append(target)
+        visited.add(target)
+        count = K
+        
+        while(len(queue) != 0):
+            size = len(queue)
+            if(count == 0):
+                for i in range(size):
+                    result.append(queue.popleft().val)
+                return result
+            
+            else:
+                for i in range(size):
+                    start = queue.popleft()
+                    for next_node in Solution.mapping[start]:
+                        if(next_node in visited):
+                            continue
+                        queue.append(next_node)
+                        visited.add(next_node)            
+                count -= 1
+        
+        return result
+    
+    def buildMap(self, node, parent):
+        if(node == None):
+            return
+        if(node.val not in Solution.mapping.keys()):
+            Solution.mapping[node] = list()
+            if(parent != None):
+                Solution.mapping[node].append(parent)
+                Solution.mapping[parent].append(node)
+            self.buildMap(node.left, node)
+            self.buildMap(node.right, node)
+        
+        return
