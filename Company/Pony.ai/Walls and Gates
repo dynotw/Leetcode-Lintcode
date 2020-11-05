@@ -21,7 +21,7 @@ After running your function, the 2D grid should be:
   
   
   
-  ## 我们从gate出发，并且一次性将所有gate放入queue
+## 我们从gate出发，并且一次性将所有gate放入queue
 # 关键所有的gate是同时进行下一步，并不是1st gate 结束才进行 2nd gate, 每个点绝对被离它最近的gate给标记，为防止重复标记， 将entry ！= 2147483647 都认为无效点
 # Time Complexity: O(mn); Space Complexity: O(mn)
 class Solution:
