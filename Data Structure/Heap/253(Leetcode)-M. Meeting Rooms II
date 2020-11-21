@@ -1,0 +1,64 @@
+Given an array of meeting time intervals consisting of start and end times [[s1,e1],[s2,e2],...] (si < ei), find the minimum number of conference rooms required.
+
+Example 1:
+
+Input: [[0, 30],[5, 10],[15, 20]]
+Output: 2
+Example 2:
+
+Input: [[7,10],[2,4]]
+Output: 1
+NOTE: input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.
+
+
+
+## Time complexity: O(n^2); space complexity: O(n)
+from collections import defaultdict
+class Solution:
+    def minMeetingRooms_1(self, intervals: List[List[int]]) -> int:
+        if(len(intervals) == 0):
+            return 0
+        
+        # intervals = set(intervals)
+        starts = set()
+        for interval in intervals:
+            starts.add(interval[0])
+        
+        count = defaultdict(int)
+        max = 0
+        for interval in intervals:
+            for start in starts:
+                # Because it's >= , it will count itself. Therefore we return max
+                if(start >= interval[0] and start < interval[1]):
+                    count[start] += 1
+                    
+                    if(count[start] > max):
+                        max = count[start]
+        
+        return max
+        
+## time complexity: O(nlogn); space complexity: O(n). 
+## This method uses priority queue
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        if not intervals:
+            return 0
+
+        heap = []
+
+        # Sort the meetings in increasing order of their start time.
+        intervals.sort(key= lambda x: x[0])
+        
+        # Add end time
+        heapq.heappush(heap, intervals[0][1])
+
+        for i in intervals[1:]:
+            # If the room due to free up the earliest is free, assign that room to this meeting.
+            if heap[0] <= i[0]:
+                heapq.heappop(heap)
+
+            # If a new room is to be assigned, then also we add to the heap,
+            # If an old room is allocated, then also we have to add to the heap with updated end time.
+            heapq.heappush(heap, i[1])
+
+        # The size of the heap tells us the minimum rooms required for all the meetings.
+        return len(heap)
