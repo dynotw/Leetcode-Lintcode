@@ -1,0 +1,85 @@
+A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
+
+Return a deep copy of the list.
+
+The Linked List is represented in the input/output as a list of n nodes. Each node is represented as a pair of [val, random_index] where:
+
+val: an integer representing Node.val
+random_index: the index of the node (range from 0 to n-1) where random pointer points to, or null if it does not point to any node.
+ 
+
+Example 1:
+Input: head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+Output: [[7,null],[13,0],[11,4],[10,2],[1,0]]
+
+Example 2:
+Input: head = [[1,1],[2,1]]
+Output: [[1,1],[2,1]]
+
+Example 3:
+Input: head = [[3,null],[3,0],[3,null]]
+Output: [[3,null],[3,0],[3,null]]
+
+Example 4:
+Input: head = []
+Output: []
+Explanation: Given linked list is empty (null pointer), so return null.
+ 
+
+Constraints:
+
+-10000 <= Node.val <= 10000
+Node.random is null or pointing to a node in the linked list.
+The number of nodes will not exceed 1000.
+
+
+
+
+# This problem is helpful to understand linkedlist and copy -> address/value in python
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+"""
+# use dict to store relationship
+# Time complexity: O(n); Space complexity: O(2n)
+from collections import defaultdict
+class Solution:
+    def copyRandomList(self, head: 'Node') -> 'Node':
+        dummy = Node(-1)
+        # record: store Node(original address) -> Node(new address)
+        # record_2: store Node(new address) -> random Node(original address)
+        # 通过record_2找到对应的random Node(original address), 再通过record找到Node(original address)对应 Node(new address)
+        record = defaultdict(Node)
+        record_2 = defaultdict(Node)
+        
+        # this while loop to finish val & next
+        head_temp = dummy
+        temp_1 = head
+        while temp_1 != None:
+            head_temp.next = Node(temp_1.val)
+            head_temp = head_temp.next
+            
+            record[temp_1] = head_temp
+            record_2[head_temp] = temp_1.random
+            
+            temp_1 = temp_1.next
+        # because the above loop, temp_1 can't be None, we have to add None -> None pair by myself
+        # We don't need to care about None's address
+        record[None] = None
+        
+        # this while loop to finish random
+        temp_2 = head
+        head_temp2 = dummy.next
+        while temp_2 != None:
+            random_org = record_2[head_temp2]
+            head_temp2.random = record[random_org]
+                
+            head_temp2 = head_temp2.next
+            temp_2 = temp_2.next
+        
+        
+        return dummy.next
