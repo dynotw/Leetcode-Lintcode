@@ -1,0 +1,85 @@
+There are N students in a class. Some of them are friends, while some are not. Their friendship is transitive in nature. 
+For example, if A is a direct friend of B, and B is a direct friend of C, then A is an indirect friend of C. 
+And we defined a friend circle is a group of students who are direct or indirect friends.
+
+Given a N*N matrix M representing the friend relationship between students in the class. If M[i][j] = 1, 
+then the ith and jth students are direct friends with each other, otherwise not. And you have to output the total number of friend circles among all the students.
+
+Example 1:
+Input: 
+[[1,1,0],
+ [1,1,0],
+ [0,0,1]]
+Output: 2
+Explanation:The 0th and 1st students are direct friends, so they are in a friend circle. 
+The 2nd student himself is in a friend circle. So return 2.
+ 
+
+Example 2:
+Input: 
+[[1,1,0],
+ [1,1,1],
+ [0,1,1]]
+Output: 1
+Explanation:The 0th and 1st students are direct friends, the 1st and 2nd students are direct friends, 
+so the 0th and 2nd students are indirect friends. All of them are in the same friend circle, so return 1.
+
+ 
+Constraints:
+1 <= N <= 200
+M[i][i] == 1
+M[i][j] == M[j][i]
+
+
+
+
+# 直接用Union-Find就搞定了，但是Time Complexity是O(n^3)
+# 用DFS & BFS, Time complexity is O(n^2); space complexity is same O(n)
+# Time complexity: O(n^3); Space Complexity: O(n)
+class Solution:
+    def findCircleNum(self, M: List[List[int]]) -> int:
+        temp = Union_Find(len(M))
+        
+        for i in range(len(M)):
+            for j in range(len(M[0])):
+
+                if M[i][j] == 1:
+                    temp.union(i,j)
+        
+        return temp.num
+        
+class Union_Find(object):
+    def __init__(self, n):
+        self.parent = [i for i in range(n)]
+        self.rank = [1] * (n)
+        self.num = n
+    
+    # 第一次使用find method,(compress-find), so the following find method is O(1)
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+    
+    # 第一次使用union method is O(n), and the following union method is O(1)
+    # 如果两者已经union了，返回false； 反之返回true
+    def union(self, x, y):
+        xRoot, yRoot = self.find(x), self.find(y)
+        
+        # x and y are already in the same union
+        if xRoot == yRoot:
+            return False
+        
+        if self.rank[xRoot] < self.rank[yRoot]:
+            self.parent[xRoot] = yRoot
+            self.rank[yRoot] += self.rank[xRoot]
+            
+        elif self.rank[xRoot] > self.rank[yRoot]:
+            self.parent[yRoot] = xRoot
+            self.rank[xRoot] += self.rank[yRoot]
+            
+        else:
+            self.parent[yRoot] = xRoot
+            self.rank[xRoot] += self.rank[yRoot]
+        
+        self.num -= 1
+        return True        
