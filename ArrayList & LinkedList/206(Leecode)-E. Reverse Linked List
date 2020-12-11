@@ -8,14 +8,11 @@ Follow up:
 
 A linked list can be reversed either iteratively or recursively. Could you implement both?
 
-# Python
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
+# Reverse is different from the deepcopy
+# Reverse: we need three nodes(current_pre, current, current_next) to realize reverse in each iteration
+# Deepcopy: we need two nodes(current, current_next)
 class Solution:
-    def reverseList(self, head: ListNode) -> ListNode:
+    def reverseList_1(self, head: ListNode) -> ListNode:
         pre = None
         current = head
         nextone= ListNode(-1)
@@ -28,6 +25,20 @@ class Solution:
         
         head = pre
         return head
+    
+    def reverseList(self, head: ListNode) -> ListNode:
+        current_pre = None
+        current = head
+        current_next = None
+        
+        while(current != None):
+            current_next = current.next
+            current.next = current_pre
+            current_pre = current
+            current = current_next
+        
+        return current_pre
+            
 
 
 // Java
