@@ -8,13 +8,13 @@ You may assume that the given expression is always valid.
 
 Example
 Example 1
-
 Input："1 + 1"
 Output：2
-Example 2
 
+Example 2
 Input："(1+(4+5+2)-3)+(6+8)" 
 Output：23
+
 Notice
 Do not use the eval built-in library function
 
@@ -72,3 +72,61 @@ public class Solution {
         return result;
     }
 }
+
+
+
+
+
+// Python
+# Calculator is all about stack, notice that number can be 100, 10000
+# time complexity: O(n); space complexity: O(n)
+class Solution:
+    def calculate(self, s: str) -> int:
+        if len(s) == 1:
+            return s
+        
+        result = 0        
+        index = 0
+        operator = 1
+        record = list()
+        
+        
+        while(index < len(s)):
+            if s[index].isdigit():
+                temp = 0
+                while (index < len(s) and s[index].isdigit()):
+                    temp *= 10 
+                    temp += int(s[index])
+                    index += 1
+                result += operator * temp
+            
+            elif s[index] == '-':
+                operator = -1
+                index += 1
+            
+            elif s[index] == '+':
+                operator = 1
+                index += 1
+            
+            elif s[index] == ' ':
+                index += 1
+                
+            elif (s[index] == '('):
+                ## we push the result first, then sign;
+                record.append(result)
+                record.append(operator)
+                ## reset the sign and result for the value in the parenthesis，相当于重新开始一套计算
+                operator = 1
+                result = 0
+                index += 1
+            
+            elif (s[index] == ')'):
+
+                operator_temp = record.pop()
+                result_temp = record.pop()
+                result_temp += operator_temp * result
+                result = result_temp
+                index += 1
+            
+        
+        return result
