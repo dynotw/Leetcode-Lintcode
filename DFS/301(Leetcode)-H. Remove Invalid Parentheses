@@ -1,0 +1,107 @@
+Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+
+Note: The input string may contain letters other than the parentheses ( and ).
+
+Example 1:
+Input: "()())()"
+Output: ["()()()", "(())()"]
+
+Example 2:
+Input: "(a)())()"
+Output: ["(a)()()", "(a())()"]
+
+Example 3:
+Input: ")("
+Output: [""]
+
+
+# DFS, 1. get all possible combination; 2. check valid combination
+# time complexity: O(2^n); space complexity: O(2^n)
+from collections import defaultdict
+class Solution:
+    def removeInvalidParentheses(self, s: str) -> List[str]:
+        # firstly check parenthese to know how many parenthese, we need to remove
+        left = 0
+        right = 0
+        for i in s:
+            if i == "(":
+                left += 1
+            elif i == ")":
+                right += 1
+        
+        remove = max(left,right) - min(left, right)
+        num = len(s) -remove
+        
+        combs = list()
+        visit = set()
+        self.getComb(s, "", combs, visit, num, 0)
+        
+        
+        result = defaultdict(list)
+        maxsize = 0
+        for i in combs:
+            if len(i) < maxsize:
+                continue
+                
+            if self.check(i):
+                result[len(i)].append(i)
+                if len(i) > maxsize:
+                    maxsize = len(i)
+                    
+        return result[maxsize]
+        
+    # DFS, get all possible combination
+    # O(2^n)
+    def getComb(self, s, comb, combs, visit, num, index):
+        # exit of recursion
+        if len(comb) > num:
+            return
+        if comb not in visit and len(comb) <= num:
+            combs.append(comb)
+            visit.add(comb)
+        
+        for i in range(index, len(s)):
+            # 提前退出循环, 注意一个是break， 一个是continue
+            if len(comb) >= num:
+                break
+                
+            if i == ")":
+                if len(comb) > 0 and comb[-1] != "(":
+                    continue
+                
+            comb += s[i]
+                
+            self.getComb(s, comb, combs, visit, num, i+1)
+            comb = comb[:-1]
+        
+        return
+    
+    # O(n)
+    # check whether it is valid parentheses, it's more complicated than Leetcode(20)
+    # Because s may include some char like a b c d
+    def check(self, s):
+        stack = list()
+        
+        for i in s:
+            # Ensure i is parenthese
+            if i in ["(", ")"]:
+                if stack:
+                    if i == ")":
+                        if stack[-1] != "(" :
+                            return False
+                        else:
+                            stack.pop()
+                    else:
+                        stack.append(i)
+                        
+                else:
+                    if i == ")":
+                        return False
+                    else:
+                        stack.append(i)
+            
+            else:
+                continue
+            
+        
+        return len(stack) == 0
