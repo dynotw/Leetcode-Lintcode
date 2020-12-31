@@ -1,0 +1,50 @@
+152. Maximum Product Subarray
+Given an integer array nums, find the contiguous subarray within an array (containing at least one number) which has the largest product.
+
+Example 1:
+Input: [2,3,-2,4]
+Output: 6
+Explanation: [2,3] has the largest product 6.
+
+Example 2:
+Input: [-2,0,-1]
+Output: 0
+Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
+
+
+
+// 比较容易想出来的线性dp。由于数据中有正有负，所以我们利用两个dp数组来完成。用fi来保存计算到第i个时的最大值，用gi来保持计算到第i个时的最小值。
+// 在得出了第i-1的dp值之后，即包含i-1的可能值区间为[gi-1,fi-1]（左闭右闭区间）。我们考虑第i个数的情况。
+// 若numsi为正数，可能值区间为[gi-1×numsi,fi-1×numsi]，和numsi。
+// 若numsi为负数，可能值区间为[fi-1×numsi,gi-1×numsi]，和numsi。
+// 所以我们直接根据上述的情况，就能得出包含numsi的最大值fi=max(max(fi-1×numsi, gi-1×numsi), numsi)。同理，gi=min(min(fi-1*×i, gi-1×numsi), numsi)。
+
+// 最后由于我们要求的是最大值，直接对f数组取最大值即可。
+// Time complexity: O(n); Spce complexity: O(n)
+
+class Solution {
+    public int maxProduct(int[] nums) {
+        int[] max = new int[nums.length];
+        int[] min = new int[nums.length];        
+        min[0] = max[0] = nums[0];
+        int result = nums[0];
+        
+        
+        for (int i = 1; i < nums.length; i++) {
+            min[i] = max[i] = nums[i];
+            // 根据nums[i]的正负，分情况
+            if (nums[i] > 0) {
+                max[i] = Math.max(max[i], max[i - 1] * nums[i]);
+                min[i] = Math.min(min[i], min[i - 1] * nums[i]);
+            }
+            else if (nums[i] < 0) {
+                max[i] = Math.max(max[i], min[i - 1] * nums[i]);
+                min[i] = Math.min(min[i], max[i - 1] * nums[i]);
+            }
+            
+            result = Math.max(result, max[i]);
+        }
+        
+        return result;
+    }
+}
