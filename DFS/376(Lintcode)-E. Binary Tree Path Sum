@@ -19,8 +19,8 @@ The tree is look like this:
 	  / \
 	 2   3
 For sum = 5 , it is obviously 1 + 2 + 2 = 1 + 4 = 5
-Example 2:
 
+Example 2:
 Input:
 {1,2,4,2,3}
 3
