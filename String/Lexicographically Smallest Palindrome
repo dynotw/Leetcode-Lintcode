@@ -1,0 +1,122 @@
+Given a string s0 find the lexicographically smallest palindrome of the same length that is lexicographically greater than or equal to s0.
+
+Strings may contain only lowercase English letters.
+
+Example
+For s0 = "cbaba", the output should be
+smallestPalindrome(s0) = "cbabc";
+
+For s0 = "abcbc", the output should be
+smallestPalindrome(s0) = "abdba".
+
+
+
+def smallestPalindrome(s0):
+    size = len(s0)
+    mid = len(s0) // 2
+    result = list()
+    result[:0] = s0
+    
+    # check whether len(s0) is odd or even
+    # len(s0) is odd
+    if len(s0) % 2:
+        right = mid + 1
+        left = mid - 1
+    else:
+        right = mid
+        left = mid - 1
+    
+    # find the 1st position, which makes s0 isn't palindrome
+    while(left >= 0 and s0[left] == s0[right]):
+        left -= 1
+        right += 1
+    
+    # s0 is palindrome itself
+    if left < 0:
+        return s0
+    
+    # s0 isn't palidrome
+    else:
+        # s0[i] > s0[j], just mirror s0[:i+1] to s[j:]
+        # s0 = 'cbaba
+        if s0[left] > s0[right]:
+            while(left >= 0):
+                result[right] = result[left]
+                left -= 1
+                right += 1           
+            return "".join([str(i) for i in result])
+        
+        # s0[i] < s0[j], this condition is a little complicated
+        # s0 = 'ababc'
+        else:            
+            # Also chech len(s0) is odd or even
+            # len(s0) is odd, left can move to mid
+            if len(s0) % 2:
+                # s0[mid] != 'z', we just need to change s0[mid]
+                if result[mid] != 'z':
+                    result[mid] = chr(ord(result[mid]) + 1)
+                    
+                    left = mid-1
+                    right = mid + 1
+                    
+                    while(left >= 0):
+                        result[right] = result[left]
+                        left -= 1
+                        right += 1                   
+                    return "".join([str(i) for i in result])
+                
+                # s0[mid] == 'z', we need to find the closest element, which isn't equal to 'z'
+                # s0 = 'aazba'
+                else:
+                    left = mid - 1
+                    right = mid + 1
+                    while(left >= 0 and result[left] == 'z'):
+                        left -= 1
+                        right += 1
+                    
+                    # make s[1]=a to s[1]=b
+                    if left >= 0:
+                        result[left] = chr(ord(result[left]) + 1)
+                    
+                    # make s[2]=z to s[2]=a
+                    left += 1                
+                    while(left <= mid):
+                        result[left] = 'a'
+                        left += 1
+                    
+                    left = mid - 1
+                    right = mid + 1
+                    
+                    while(left >= 0):
+                        result[right] = result[left]
+                        left -= 1
+                        right += 1                    
+                    return "".join([str(i) for i in result])   
+            
+            # len(s0) is even. left can move to mid - 1
+            # s0 = 'aazzba'
+            else:
+                left = mid - 1
+                right = mid
+                while(left >= 0 and result[left] == 'z'):
+                    left -= 1
+                    right += 1
+                
+                # make s[1]=a to s[1]=b
+                if left >= 0:
+                    result[left] = chr(ord(result[left]) + 1)
+                
+                # make s[2]=z to s[2]=a; and s[3]=z to s[3]=a
+                left += 1                
+                while(left <= mid):
+                    result[left] = 'a'
+                    left += 1
+                
+                left = mid - 1
+                right = mid
+                
+                while(left >= 0):
+                    result[right] = result[left]
+                    left -= 1
+                    right += 1                    
+                return "".join([str(i) for i in result]) 
