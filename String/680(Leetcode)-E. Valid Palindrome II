@@ -1,0 +1,55 @@
+680. Valid Palindrome II
+
+Given a non-empty string s, you may delete at most one character. Judge whether you can make it a palindrome.
+
+Example 1:
+Input: "aba"
+Output: True
+
+Example 2:
+Input: "abca"
+Output: True
+Explanation: You could delete the character 'c'.
+
+Note:
+The string will only contain lowercase characters a-z. The maximum length of the string is 50000.
+
+
+# Time Complexity: O(n), because the max times of recursion is 2 (fixed); Space Complexity: O(1)
+# use two pointers and recursion
+class Solution:
+    def validPalindrome(self, s: str) -> bool:
+        result = self.helper(s, 0, len(s)-1, True)
+        
+        return result
+    
+    # a recusion, the recursion is a little weired, because the max times of recursion is 2
+    def helper(self, s, left, right, chance):
+        if len(s) == 0 or len(s) == 1:
+            return True
+        
+        if right < left or right == left:
+            return True
+        
+        while(left < right):
+            # 不要delete
+            if s[left] == s[right]:
+                left += 1
+                right -= 1
+            
+            # 需要delete
+            else:
+                # check 是否还有机会
+                if chance:
+                    one = self.helper(s, left, right-1, False)
+                    two = self.helper(s, left+1, right, False)
+                
+                else:
+                    return False
+                
+                # 注意如果需要delete,那么外面的 while loop 的left和right不会再变动了， 需要在这个else内部直接返回结果
+                # 有一点像在这个else 内部完成了 divide & conquer
+                return one or two
+        
+        # 如果没有碰到需要delete的情况，那么就是True了      
+        return True
