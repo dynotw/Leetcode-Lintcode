@@ -1,0 +1,110 @@
+987. Vertical Order Traversal of a Binary Tree
+
+Given the root of a binary tree, calculate the vertical order traversal of the binary tree.
+
+For each node at position (x, y), its left and right children will be at positions (x - 1, y - 1) and (x + 1, y - 1) respectively.
+
+The vertical order traversal of a binary tree is a list of non-empty reports for each unique x-coordinate from left to right. Each report is a list of all nodes at a given x-coordinate. 
+The report should be primarily sorted by y-coordinate from highest y-coordinate to lowest. If any two nodes have the same y-coordinate in the report, the node with the smaller value should appear earlier.
+
+Return the vertical order traversal of the binary tree.
+
+ 
+
+Example 1:
+Input: root = [3,9,20,null,null,15,7]
+Output: [[9],[3,15],[20],[7]]
+Explanation: Without loss of generality, we can assume the root node is at position (0, 0):
+The node with value 9 occurs at position (-1, -1).
+The nodes with values 3 and 15 occur at positions (0, 0) and (0, -2).
+The node with value 20 occurs at position (1, -1).
+The node with value 7 occurs at position (2, -2).
+
+Example 2:
+Input: root = [1,2,3,4,5,6,7]
+Output: [[4],[2],[1,5,6],[3],[7]]
+Explanation: The node with value 5 and the node with value 6 have the same position according to the given scheme.
+However, in the report [1,5,6], the node with value 5 comes first since 5 is smaller than 6.
+
+
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+# 典型脑残题，单个vertical line list内部的order有点搞脑
+# Use an integer to record the status of eachnode, if it's left node, -1; if it's right node, +1
+# According to status, node with same status number will be at the same vertical line
+# However, the order in the same vertical line is quite complicated: 1st. by level; 2nd. by value
+from collections import defaultdict
+from collections import deque
+class Solution:
+    # method 1 BFS
+    def verticalTraversal(self, root: TreeNode) -> List[List[int]]:
+        queue = deque()
+        record = defaultdict(list)
+        
+        # normal BFS can realize by level order, but can't realize value order for same level
+        queue.append((root, 0))
+        while(queue):
+            
+            # there're comparation among same level node, so we need this for loop, temp stores all same level nodes
+            size = len(queue)
+            temp = defaultdict(list)
+            for i in range(size):
+                current, status = queue.popleft()
+                temp[status].append(current.val)
+                # record[status].append(current.val)
+
+                if current.left != None:
+                    queue.append((current.left, status - 1))
+
+                if current.right != None:
+                    queue.append((current.right, status + 1))
+            
+            for i in temp:
+                temp[i].sort()
+                record[i].extend(temp[i])
+        
+        result = list()
+        keys = list(record.keys())
+        keys.sort()
+        for i in keys:
+            result.append(record[i])
+        
+        return result
+            
+        
+    # method 2, this DFS can achieve vertical traverse, but can't realize the order as the question ask 
+    # Anyway, this recursion DFS 写得相当顺滑，写recursion就是不要去抠细节，相信recursion的函数能完成自己的任务
+    def verticalTraversal2(self, root: TreeNode) -> List[List[int]]:
+        record = defaultdict(list)
+        self.helper2(record, root, 0)
+        
+        result = list()
+        
+        keys = list(record.keys())
+        keys.sort()
+        for i in keys:
+            result.append(record[i])
+        
+        return result
+
+    
+    def helper2(self, record, root, status):
+        if root == None:
+            return 
+        
+        record[status].append(root.val)
+        
+        if root.left != None:
+            self.helper2(record, root.left, status - 1)
+        
+        if root.right != None:            
+            self.helper2(record, root.right, status + 1)
+            
+        return 
