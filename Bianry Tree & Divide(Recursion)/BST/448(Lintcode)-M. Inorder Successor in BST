@@ -6,21 +6,21 @@ If the given node has no in-order successor in the tree, return null.
 
 Example
 Example 1:
-
 Input: {1,#,2}, node with value 1
 Output: 2
 Explanation:
   1
    \
     2
+    
 Example 2:
-
 Input: {2,1,3}, node with value 1
 Output: 2
 Explanation: 
     2
    / \
   1   3
+  
 Binary Tree Representation
 
 Challenge
@@ -68,3 +68,34 @@ public class Solution {
         return result;
     }
 }
+
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+# 相当于findNext()
+class Solution:
+    def inorderSuccessor(self, root: 'TreeNode', p: 'TreeNode') -> 'TreeNode':
+        result = None
+        
+        # It's inorder in BST, non-decreasing
+        while(root != None):
+            # successor is root or at left subtree
+            if p.val < root.val:
+                result = root
+                root = root.left
+            
+            # 1. no successor, 2. successor is the most left treenode               
+            elif(p.val == root.val):
+                root = root.right
+            
+            # 1. no successor; 2.successor is in the right subtree
+            else:
+                root = root.right
+        
+        return result
