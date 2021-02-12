@@ -15,7 +15,7 @@ Notice
 If the given node has no in-order predecessor in the tree, return null
 
 
-//
+// 差不多就是inorder successor 的相反
 public class Solution {
     /**
      * @param root: the given BST
