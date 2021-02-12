@@ -1,0 +1,75 @@
+Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that is missing from the array.
+
+Follow up: Could you implement a solution using only O(1) extra space complexity and O(n) runtime complexity?
+
+ 
+
+Example 1:
+Input: nums = [3,0,1]
+Output: 2
+Explanation: n = 3 since there are 3 numbers, so all numbers are in the range [0,3]. 2 is the missing number in the range since it does not appear in nums.
+
+Example 2:
+Input: nums = [0,1]
+Output: 2
+Explanation: n = 2 since there are 2 numbers, so all numbers are in the range [0,2]. 2 is the missing number in the range since it does not appear in nums.
+
+Example 3:
+Input: nums = [9,6,4,2,3,5,7,0,1]
+Output: 8
+Explanation: n = 9 since there are 9 numbers, so all numbers are in the range [0,9]. 8 is the missing number in the range since it does not appear in nums.
+
+Example 4:
+Input: nums = [0]
+Output: 1
+Explanation: n = 1 since there is 1 number, so all numbers are in the range [0,1]. 1 is the missing number in the range since it does not appear in nums.
+
+
+
+
+# Space complexity: O(1)
+# Time complexity: O(n)
+class Solution:
+    # use Mathematics Gauss
+    # number * （first + last） / 2
+    def missingNumber(self, nums: List[int]) -> int:
+        noMiss = (len(nums) + 1) * (0 + len(nums))//2
+        fact = sum(nums)
+        
+        return noMiss - fact
+    
+    # if A is [1,2,4,5]
+    def getMissingNo(self,A):
+        n = len(A)
+        total = (n + 1) * (1 + (n+1)) / 2
+        sum_of_A = sum(A)
+        return total - sum_of_A
+
+    
+    
+    # if A is sorted, and each difference should be 1
+    # A = [1,2,3,5] -> 4;  A = [2,4,5] -> 3
+    
+    # binary search
+    # time complexity: O(logn); space complexity: O(1)
+    def findmissing(self, A):
+        # eliminate corner condition:
+        if A[-1] - A[0] == len(A)-1:
+            return -1
+        
+        # binary search:
+        # set two pointers
+        left = 0
+        right = len(A) - 1
+        
+        while(left +1 < right):
+            pivot = left + (right-left)//2
+            
+            # missed number is bigger than A[pivot]
+            if A[pivot] - A[0] <= pivot:
+                left = pivot
+            
+            else:
+                right = pivot
+        
+        return A[left] + 1
