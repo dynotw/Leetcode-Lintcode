@@ -1,0 +1,76 @@
+"""
+In chess, a knight moves in an L shape (1 square in any direction, then 2 squares in an
+orthogonal direction).
+
+* * * *
+* * * *
+* * * *
+* * * *
+
+Given W and H of the size of a chessboard, write a function that returns true if (and only if) 
+a knight placed at the top-left corner can be moved in a single path(不走回头路) such that it touches each square exactly once.
+"""
+
+# check whether next step is valid
+def isValid(nextstep, W, H):
+    x = nextstep[0]
+    y = nextstep[1]
+    
+    if x <0 or x >= H or y < 0 or y >= W:
+        return False
+    
+    return True
+
+def dfs(W, H, x, y, path, visited):
+    if len(path) == W*H:
+        """
+        1 3 4
+        2 5
+        
+        """
+        # print trajectory
+        grids = []
+        
+        for i in range(H):
+            line = ['*'] * W
+            grids.append(line)
+            
+        for i in grids:
+            print(i)
+        
+        count = 0
+        for i in path:
+            grids[i[0]][i[1]] = count
+            count += 1
+        
+        for i in grids:
+            print(i)
+            
+        return True
+    
+    # get all possible next step
+    directionX = [-1,-1,1,1,-2,-2,2,2]
+    directionY = [-2,2,-2,2,-1,1,-1,1]
+    nextStep = list()
+    for i in range(8):
+        nextStep.append((x+directionX[i], y + directionY[i]))
+    
+    
+    for i in nextStep:
+        # is an invalid step
+        if not isValid(i, W, H):
+            continue
+        
+        # already walked
+        if i in path:
+            continue
+        
+        path.append(i)
+        
+        # how to deal with return value???
+        if dfs(W, H, i[0], i[1], path):
+            return True
+        
+        path.pop()
+    
+    return False
