@@ -1,0 +1,129 @@
+Given an m x n matrix, return all elements of the matrix in spiral order.
+
+Example 1:
+Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+Output: [1,2,3,6,9,8,7,4,5]
+
+Example 2:
+Input: matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+ 
+
+Constraints:
+m == matrix.length
+n == matrix[i].length
+1 <= m, n <= 10
+-100 <= matrix[i][j] <= 100
+
+# time: O(n*m); space: O(1)
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        # eliminate edge condition
+        if(len(matrix) == 0):
+            return []
+        
+        height = len(matrix)
+        width = len(matrix[0])
+        result = list()
+        result.append(matrix[0][0])
+        matrix[0][0] = "!"
+        x = 0
+        y = 0
+        
+        while(len(result) < height * width):
+            ## go right until get invalid point
+            while(self.valid(matrix, x, y+1)):
+                result.append(matrix[x][y+1])
+                matrix[x][y+1] = "!"              
+                y += 1
+            ## go down unteil get invalid point
+            while(self.valid(matrix, x+1 ,y)):
+                result.append(matrix[x+1][y])
+                matrix[x+1][y] = "!"
+                x +=1
+            ## go left ....
+            while(self.valid(matrix, x, y-1)):
+                result.append(matrix[x][y-1])
+                matrix[x][y-1] = "!"
+                y -=1
+            # go up ... 
+            while(self.valid(matrix, x-1, y)):
+                result.append(matrix[x-1][y])
+                matrix[x-1][y] = "!"
+                x -=1                
+        
+        return result
+
+    
+    def valid(self, matrix, x, y):
+        height = len(matrix)
+        width = len(matrix[0])        
+        if(x < 0 or x >= height or y <0 or y >= width):
+            return False        
+        if(matrix[x][y] == '!'):
+            return False
+        
+        return True
+        
+
+
+// Java
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        
+        List result = new ArrayList(){};
+        if (matrix.length == 0){
+            return result;
+        }
+                
+        int height = matrix.length;
+        int width = matrix[0].length;
+        result.add(matrix[0][0]);
+        matrix[0][0] = -100;
+        int x = 0;
+        int y = 0;
+        
+        while(result.size() < height * width){
+            while(valid(matrix, x, y+1)){
+                result.add(matrix[x][y+1]);
+                matrix[x][y+1] = -100;             
+                y ++;
+            }
+            
+            while(valid(matrix, x+1, y)){
+                result.add(matrix[x+1][y]);
+                matrix[x+1][y] = -100;                
+                x ++;
+            }
+            
+            while(valid(matrix, x, y-1)){
+                result.add(matrix[x][y-1]);
+                matrix[x][y-1] = -100;                
+                y --;
+            }
+            
+            while(valid(matrix, x-1, y)){
+                result.add(matrix[x-1][y]);
+                matrix[x-1][y] = -100;                
+                x --;
+            }
+        }
+        
+        return result;
+    }
+    
+    
+    public boolean valid(int[][] matrix, int x, int y){
+        int height = matrix.length;
+        int width = matrix[0].length;
+        
+        if(x < 0 || x >= height || y < 0 || y >= width){
+            return false;
+        }        
+        if(matrix[x][y] == -100){
+            return false;
+        }        
+        return true;
+    }
+}
+        
