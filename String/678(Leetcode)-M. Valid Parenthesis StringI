@@ -1,0 +1,73 @@
+678. Valid Parenthesis String
+Medium
+Given a string s containing only three types of characters: '(', ')' and '*', return true if s is valid.
+
+The following rules define a valid string:
+
+Any left parenthesis '(' must have a corresponding right parenthesis ')'.
+Any right parenthesis ')' must have a corresponding left parenthesis '('.
+Left parenthesis '(' must go before the corresponding right parenthesis ')'.
+'*' could be treated as a single right parenthesis ')' or a single left parenthesis '(' or an empty string "".
+ 
+Example 1:
+Input: s = "()"
+Output: true
+
+Example 2:
+Input: s = "(*)"
+Output: true
+
+Example 3:
+Input: s = "(*))"
+Output: true
+ 
+Constraints:
+1 <= s.length <= 100
+s[i] is '(', ')' or '*'.
+
+
+
+
+# Time complexity: O(n); space Complexity: O(n)
+class Solution:        
+    def checkValidString(self, s: str) -> bool:
+        ## Because the index of * is really important,
+        ## only store number of '(' and "*" is not enough, we store index of "(" and "*"
+        stack = list()
+        stack_star = list()
+        num_star = 0
+        for i in range(len(s)):
+            if s[i] == "(":
+                stack.append(i)
+            
+            elif s[i] == ")":
+                if stack:
+                    stack.pop()
+                
+                else:
+                    if len(stack_star) >= 1:
+                        stack_star.pop()
+                    else:
+                        return False
+            
+            else:
+                stack_star.append(i)
+        
+        # check whether there's '(' left
+        if len(stack) == 0:
+            return True
+        # check whether number of star is more than '('
+        if len(stack) > len(stack_star):
+            return False
+        
+        #check whether star is behind '(':
+        p_star = 0
+        for i in stack:
+            while(p_star < len(stack_star) and stack_star[p_star] <= i):
+                p_star += 1            
+            p_star += 1
+            
+        if p_star > len(stack_star):
+            return False
+        
+        return True
