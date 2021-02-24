@@ -1,0 +1,36 @@
+class Solution:
+    ## each element can be used only once, which is different from Combination Sum I(39)
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        result = list()
+        # eliminate corner condition
+        if(candidates == None or len(candidates) == 0):
+            return result
+        
+        candidates.sort()
+        subnet = list()
+        visited = list()
+        self.dfs(candidates, target, result, subnet, 0, visited, 0)
+        return result
+    
+    def dfs(self, candidates, target, result, subnet, allSum, visited, startIndex):
+        if (allSum == target):
+            if(subnet not in visited):
+                result.append(subnet[:])
+                visited.append(subnet[:])
+                return
+            
+        if(allSum > target):
+            return
+        
+        for i in range(startIndex, len(candidates)):
+            if(allSum + candidates[i] > target):
+                break           
+            if allSum + sum(candidates[i:]) < target:
+                break
+            subnet.append(candidates[i])
+            allSum += candidates[i]
+            self.dfs(candidates, target, result, subnet, allSum, visited, i+1)
+            last = subnet.pop()
+            allSum -= last
+        
+        return 
