@@ -1,0 +1,39 @@
+# time complexity: O(n); Space Complexity: O(n)
+class Solution:
+    def firstUniqChar(self, s: str) -> int:
+        record = defaultdict(int)
+        for i in s:
+            record[i] += 1
+        
+        for i in range(len(s)):
+            if record[s[i]] == 1:
+                return i
+        
+        return -1
+        
+        
+class Solution {
+    public int firstUniqChar(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        
+        for(int i=0; i<s.length(); i++){
+            char element = s.charAt(i);
+            if(map.containsKey(element)){
+                // if the element appears more than once, we don't care about the element
+                map.put(element,2);
+            }
+            else{
+                map.put(element,1);
+            }
+        }
+        
+        for(int i=0; i<s.length(); i++){
+            char element = s.charAt(i);
+            if(map.get(element) == 1){
+                return i;
+            }
+        }  
+        
+        return -1;
+    }
+}
