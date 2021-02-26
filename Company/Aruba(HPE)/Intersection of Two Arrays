@@ -1,0 +1,38 @@
+# O(m+n)
+class Solution:
+    def set_intersection(self, set1, set2):
+        return [x for x in set1 if x in set2]
+    
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        set1 = set(nums1)
+        set2 = set(nums2)
+        
+        if len(set1) < len(set2):
+            return self.set_intersection(set1, set2)
+        else:
+            return self.set_intersection(set2, set1)
+            
+            
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+        List<Integer> result = new LinkedList<>();
+        Set<Integer> temp = new HashSet<>();
+        for (int i : nums1){
+            temp.add(i);
+        }
+        
+        for (int i : nums2){
+            if (temp.contains(i)){
+                result.add(i);
+                temp.remove(i);
+            }
+        }
+
+        int[] arr = new int[result.size()];
+        for(int i=0; i<result.size(); i++){
+            arr[i] = result.get(i);
+        }
+        
+        return arr;      
+    }
+}
