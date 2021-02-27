@@ -29,8 +29,10 @@ Output: "a(b(c)d)"
  
 
 
-# Method 2
+# just return one possible solution, rather than all possible solutions 
+
 # visited stores indexes of "(" rather than "(" or ")" itself
+# index store index of ')'
 # Time complexity: O(n), use set(); space complexity: O(n)
     def minRemoveToMakeValid(self, s: str) -> str:        
         visited = list()
