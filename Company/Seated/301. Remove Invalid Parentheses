@@ -1,0 +1,59 @@
+Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+
+Note: The input string may contain letters other than the parentheses ( and ).
+
+Example 1:
+Input: "()())()"
+Output: ["()()()", "(())()"]
+
+Example 2:
+Input: "(a)())()"
+Output: ["(a)()()", "(a())()"]
+
+Example 3:
+Input: ")("
+Output: [""]
+
+
+# Time complexity: O(2^n); Space complexity: O(2^n)
+class Solution:
+    def removeInvalidParentheses(self, s: str) -> List[str]:
+        # firstly check parenthese to know how many parenthese, we need to remove
+        num_invalid = self.calc(s)
+        num = len(s) - num_invalid
+        
+        combs = list()
+        visit = set()
+        self.dfs(s, s, combs, visit, num, num_invalid,0)
+                    
+        return combs
+    
+    # all_valid is the length of comb, we need to choose
+    # last_invalid is the number of invalid Parentheses
+    # This dfs is different from others, we use dfs to remove Parentheses, so comb is shorter and shorter.
+    def dfs(self, s, comb, combs, visit, all_valid, last_invalid, startIndex):
+        # exit of recursion
+        if len(comb) < all_valid:
+            return 
+        if len(comb) == all_valid and self.calc(comb) == 0 and comb not in visit:
+            combs.append(comb)
+            visit.add(comb)
+            return
+        
+        for i in range(startIndex, len(s)):
+            if s[i] in ("(", ")"):
+                new_comb = s[:i] + s[i+1:]
+                
+                current_invalid = self.calc(new_comb)
+                # only current_invalid < last_invalid 才说明移除s[i]是有效的
+                if new_comb not in visit and current_invalid < last_invalid:
+                    self.dfs(new_comb, new_comb, combs, visit, all_valid, current_invalid, i)
+    
+    # calculate how many invalid Parentheses
+    def calc(self, s):
+        a = b = 0
+        for c in s:
+            a += {'(' : 1, ')' : -1}.get(c, 0)
+            b += a < 0
+            a = max(a, 0)
+        return a + b
