@@ -30,6 +30,7 @@ Output: "a(b(c)d)"
 
 
 # just return one possible solution, rather than all possible solutions 
+# Compared with Remove Invalid Parentheses(301), 301 need to return all possible solutions, so it uses DFS. which are much difficult.
 
 # visited stores indexes of "(" rather than "(" or ")" itself
 # index store index of ')'
