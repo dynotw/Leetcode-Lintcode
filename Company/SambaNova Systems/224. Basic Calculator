@@ -1,0 +1,79 @@
+224. Basic Calculator (s consists of digits, '+', '-', '(', ')', and ' '.)
+Hard
+
+Given a string s representing an expression, implement a basic calculator to evaluate it.
+
+
+Example 1:
+Input: s = "1 + 1"
+Output: 2
+
+Example 2:
+Input: s = " 2-1 + 2 "
+Output: 3
+
+Example 3:
+Input: s = "(1+(4+5+2)-3)+(6+8)"
+Output: 23
+ 
+
+Constraints:
+1 <= s.length <= 3 * 105
+s consists of digits, '+', '-', '(', ')', and ' '.
+s represents a valid expression.
+
+
+
+# Calculator is all about stack, notice that number can be 100, 10000
+# time complexity: O(n); space complexity: O(n)
+class Solution:
+    def calculate(self, s: str) -> int:
+        # eliminate corner case
+        if len(s) <= 1:
+            return s
+        
+        result = 0        
+        index = 0
+        operator = 1
+        # list in python is stack
+        record = list()
+        
+        
+        while(index < len(s)):
+            if s[index].isdigit():
+                temp = 0
+                while (index < len(s) and s[index].isdigit()):
+                    temp *= 10 
+                    temp += int(s[index])
+                    index += 1
+                result += operator * temp
+            
+            elif s[index] == '-':
+                operator = -1
+                index += 1
+            
+            elif s[index] == '+':
+                operator = 1
+                index += 1
+            
+            elif s[index] == ' ':
+                index += 1
+                
+            elif (s[index] == '('):
+                ## we push the result first, then sign;
+                record.append(result)
+                record.append(operator)
+                ## reset the sign and result for the value in the parenthesis，相当于重新开始一套计算
+                operator = 1
+                result = 0
+                index += 1
+            
+            elif (s[index] == ')'):
+
+                operator_temp = record.pop()
+                result_temp = record.pop()
+                result_temp += operator_temp * result
+                result = result_temp
+                index += 1
+            
+        return result
