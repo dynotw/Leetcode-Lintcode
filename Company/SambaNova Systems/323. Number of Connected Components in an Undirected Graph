@@ -1,0 +1,73 @@
+323. Number of Connected Components in an Undirected Graph
+Medium
+
+You have a graph of n nodes. You are given an integer n and an array edges where edges[i] = [ai, bi] indicates that there is an edge between ai and bi in the graph.
+
+Return the number of connected components in the graph.
+
+ 
+Example 1:
+Input: n = 5, edges = [[0,1],[1,2],[3,4]]
+Output: 2
+
+Example 2:
+Input: n = 5, edges = [[0,1],[1,2],[2,3],[3,4]]
+Output: 1
+ 
+Constraints:
+1 <= n <= 2000
+1 <= edges.length <= 5000
+edges[i].length == 2
+0 <= ai <= bi < n
+ai != bi
+There are no repeated edges.
+
+
+
+# time complexity: O(n); Space complexity: O(n)
+class Union_Find(object):
+    def __init__(self, n):
+        # 这样的做法(n+1)就是parent和rank的index就表示对象本身。例：数字1在parent和rank中的index就是1
+        # 因为parent[0] and rank[0]实际上是无意义点，因为没有数字0加入到graph中
+        # 视情况而定，此题是没有0，但有些题是有0
+        self.parent = [i for i in range(n+1)]
+        self.rank = [1] * (n+1)
+        self.num = n
+    
+    # 第一次使用find method,(compress-find), so the following find method is O(1)
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+    
+    # 第一次使用union method is O(n), and the following union method is O(1)
+    # 如果两者已经union了，返回false； 反之返回true
+    def union(self, x, y):
+        xRoot, yRoot = self.find(x), self.find(y)
+        
+        # x and y are already in the same union
+        if xRoot == yRoot:
+            return False
+        
+        if self.rank[xRoot] < self.rank[yRoot]:
+            self.parent[xRoot] = yRoot
+            self.rank[yRoot] += self.rank[xRoot]
+            
+        elif self.rank[xRoot] > self.rank[yRoot]:
+            self.parent[yRoot] = xRoot
+            self.rank[xRoot] += self.rank[yRoot]
+            
+        else:
+            self.parent[yRoot] = xRoot
+            self.rank[xRoot] += self.rank[yRoot]
+        
+        self.num -= 1
+        return True
+
+class Solution(object):
+    def findRedundantConnection(self, edges):
+        dsu = Union_Find(len(edges))
+        for edge in edges:
+            if not dsu.union(edge[0], edge[1]):
+                print(dsu.num)
+                return edge
