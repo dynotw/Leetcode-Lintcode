@@ -1,0 +1,86 @@
+498. Diagonal Traverse
+Medium
+
+Given a matrix of M x N elements (M rows, N columns), return all elements of the matrix in diagonal order as shown in the below image.
+
+ 
+Example:
+Input:
+[
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+]
+
+Output:  [1,2,4,7,5,3,6,8,9]
+
+
+Note:
+The total number of elements of the given matrix will not exceed 10,000.
+
+
+
+# time complexity : O(m*n); Space Complexity: O(1)
+class Solution:
+    def findDiagonalOrder(self, matrix: List[List[int]]) -> List[int]:
+        if len(matrix) == 0 or len(matrix[0]) == 0:
+            return list()
+        
+        direction = 'leftdown'
+        height = len(matrix)
+        width = len(matrix[0])
+        result = [matrix[0][0]]
+        x = 0
+        y = 0
+        
+        while(len(result) < height * width):
+            # only when point at first/last row, it may move right
+            if x == 0 or x == height-1:
+                if self.checkValid(matrix, x, y+1):
+                    x = x
+                    y += 1
+                    result.append(matrix[x][y])
+
+                    if direction == 'leftdown':
+                        while(self.checkValid(matrix, x+1, y-1)):
+                            x += 1
+                            y -= 1
+                            result.append(matrix[x][y])
+                        direction = 'upright'
+                    else:
+                        while(self.checkValid(matrix, x-1, y+1)):
+                            x -= 1
+                            y += 1
+                            result.append(matrix[x][y])
+                        direction = 'leftdown'
+                        
+            # only when point at first/last column, it may move down             
+            if y == 0 or y == width - 1:  
+                if self.checkValid(matrix, x+1, y):
+                    x += 1
+                    y = y
+                    result.append(matrix[x][y])
+
+                    if direction == 'leftdown':
+                        while(self.checkValid(matrix, x+1, y-1)):
+                            x += 1
+                            y -= 1
+                            result.append(matrix[x][y])
+                        direction = 'upright'
+                    else:
+                        while(self.checkValid(matrix, x-1, y+1)):
+                            x -= 1
+                            y += 1
+                            result.append(matrix[x][y])
+                        direction = 'leftdown'
+            
+        return result
+        
+    def checkValid(self, matrix, x, y):
+        height = len(matrix)
+        width = len(matrix[0])
+        
+        if x < 0 or x >= height or y < 0 or y >= width:
+            return False
+        else:
+            return True
