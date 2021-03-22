@@ -1,0 +1,103 @@
+227. Basic Calculator II   **s consists of integers and operators ('+', '-', '*', '/', ' ').**
+Medium
+
+Given a string s which represents an expression, evaluate this expression and return its value. 
+The integer division should truncate toward zero.
+
+ 
+Example 1:
+Input: s = "3+2*2"
+Output: 7
+
+Example 2:
+Input: s = " 3/2 "
+Output: 1
+
+Example 3:
+Input: s = " 3+5 / 2 "
+Output: 5
+ 
+
+Constraints:
+1 <= s.length <= 3 * 105
+s consists of integers and operators ('+', '-', '*', '/') separated by some number of spaces.
+s represents a valid expression.
+All the integers in the expression are non-negative integers in the range [0, 231 - 1].
+The answer is guaranteed to fit in a 32-bit integer.
+
+
+
+# use stack
+# time complexity: O(n); space complexity: O(n)
+class Solution:    
+    def calculate(self, s: str) -> int:
+        result = 0
+        operator = 1
+        index = 0
+        
+        # stack_operator only store '+' and '-'
+        # stack_number store number between +/- and *//
+        stack_operator = [1]
+        stack_number = list()
+        
+        while(index < len(s)):
+            if s[index].isdigit():
+                temp = 0
+                while (index < len(s) and s[index].isdigit()):
+                    temp *= 10
+                    temp += int(s[index])
+                    index += 1
+                
+                stack_number.append(temp)
+            
+            elif s[index] == "+":
+                operator_1 = stack_operator.pop()
+                number_1 = stack_number.pop()
+                result += operator_1 * number_1
+                stack_operator.append(1)
+                index +=1
+            
+            elif s[index] == "-":
+                operator_1 = stack_operator.pop()
+                number_1 = stack_number.pop()
+                result += operator_1 * number_1
+                stack_operator.append(-1)
+                index += 1
+            
+            elif s[index] == '*':
+                # next number, use while loop, because next element may be ' '
+                index += 1
+                while(s[index] == ' '):
+                    index += 1
+                temp_1 = 0
+                while (index < len(s) and s[index].isdigit()):
+                    temp_1 *= 10
+                    temp_1 += int(s[index])
+                    index += 1
+                    
+                number_1 = stack_number.pop()
+                stack_number.append(temp_1 * number_1)
+            
+            elif s[index] == '/':
+                # next number, use while loop, because next element may be ' '
+                index += 1
+                while(s[index] == ' '):
+                    index += 1
+                temp_1 = 0
+                while (index < len(s) and s[index].isdigit()):
+                    temp_1 *= 10
+                    temp_1 += int(s[index])
+                    index += 1
+                    
+                number_1 = stack_number.pop()
+                stack_number.append(int(number_1 / temp_1))           
+            
+            else:
+                index += 1
+                     
+        if len(stack_operator) != 0:
+            operator_1 = stack_operator.pop()
+            number_1 = stack_number.pop()
+            result += operator_1 * number_1
+            
+        return result
