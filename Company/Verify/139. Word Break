@@ -1,0 +1,70 @@
+139. Word Break
+Medium
+
+Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note that the same word in the dictionary may be reused multiple times in the segmentation.
+
+ 
+Example 1:
+Input: s = "leetcode", wordDict = ["leet","code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
+
+Example 2:
+Input: s = "applepenapple", wordDict = ["apple","pen"]
+Output: true
+Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+Note that you are allowed to reuse a dictionary word.
+
+Example 3:
+Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
+Output: false
+ 
+
+Constraints:
+1 <= s.length <= 300
+1 <= wordDict.length <= 1000
+1 <= wordDict[i].length <= 20
+s and wordDict[i] consist of only lowercase English letters.
+All the strings of wordDict are unique.
+
+
+
+
+# bfs, time complexity: O(n^2); space complexity: O(n)
+from collections import deque
+class Solution: 
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        # eliminate corner condition
+        if s == None or len(s) == 0:
+            return True
+        
+        # queue stores index of last char of valid word in s
+        queue = deque()
+        queue.append(0)
+        
+        # 记录从此index出发，是否已经被遍历过
+        visit_index = set()
+        visit_index.add(0)
+        
+        all_words = set(wordDict)
+        
+        while(queue):
+            current_index = queue.popleft()
+            
+            for index in range(current_index+1, len(s)+1):
+                if s[current_index: index] in all_words:
+                    if index == len(s):
+                        return True
+                    
+                    # check whether this index has been go through
+                    if index not in visit_index:
+                        queue.append(index)
+                        visit_index.add(index)
+                    else:
+                        continue
+                else:
+                    continue
+        
+        return False
