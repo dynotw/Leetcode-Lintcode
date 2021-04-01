@@ -1,0 +1,49 @@
+848. Shifting Letters
+Medium
+
+We have a string S of lowercase letters, and an integer array shifts.
+
+Call the shift of a letter, the next letter in the alphabet, (wrapping around so that 'z' becomes 'a'). 
+
+For example, shift('a') = 'b', shift('t') = 'u', and shift('z') = 'a'.
+
+Now for each shifts[i] = x, we want to shift the first i+1 letters of S, x times.
+
+Return the final string after all such shifts to S are applied.
+
+
+Example 1:
+Input: S = "abc", shifts = [3,5,9]
+Output: "rpl"
+Explanation: 
+We start with "abc".
+After shifting the first 1 letters of S by 3, we have "dbc".
+After shifting the first 2 letters of S by 5, we have "igc".
+After shifting the first 3 letters of S by 9, we have "rpl", the answer.
+
+
+
+
+# Time complexity: O(n); Space complexity: O(n)
+class Solution:
+    def shiftingLetters(self, S: str, shifts: List[int]) -> str:
+        # ascii: a -- 97; z -- 122
+        move = [0]
+        for i in range(len(shifts)-1, -1, -1):
+            move.append(move[-1] + shifts[i])        
+        move.reverse()
+        
+        print(move)
+        result = ""
+        for i in range(len(S)):
+            asc = ord(S[i]) + move[i]
+            if asc > 122:
+                asc = (asc - 122) % 26 + 96
+            
+            # In case of ord(S[i]) == 122 and move[i] = 26n
+            if asc == 96:
+                asc = 122
+            
+            result += chr(asc)
+        
+        return result
