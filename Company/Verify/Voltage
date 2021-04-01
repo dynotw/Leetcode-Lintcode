@@ -1,0 +1,34 @@
+上来双方相互介绍了下，然后开始写代码：
+题目的要求比较开放，最后通过讨论确定下来的要求是输入是: a list of nodes in a graph: blocks. 
+Class block 有 is_torch, set_power, get_power and get_adjacent.
+graph：blocks 表示一个供电网络。每个block有自己的电压。如果 block.is_torch() 电压为16. 如果NOT is_torch(), 电压随着离torch的距离减小（如下图）
+T(16) -- W(15) -- W(15) -- T(16)
+                 |
+              W(14)
+
+需要计算所有blocks的电压 power （i.e. voltage.）
+
+from collections import deque
+def calculate_power(blocks):
+    q = deque()
+    visited = set()
+    for block in blocks:
+    # check whether this block is torch
+        if block.is_torch():
+            block.set_power(16)
+            visited.add(block)
+            q.append(block)
+  
+  # if there's no torch, then all blocks should be 0
+  if q == []:
+      for block in blocks:block.set_power(0)
+
+  while q:
+      cur_block = q.popleft()
+      cur_level = cur_block.get_power
+      for block in cur_block.get_adjacent():
+          if not block in visited:
+            # ensure there's no negative voltage
+              block.set_power(max(0,cur_level-1))
+              visited.add(block)
+              q.append(block)
