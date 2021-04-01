@@ -1,0 +1,44 @@
+Imagine a person travels from city A to city B by train. 
+There are N stations between city A and B (including A and B). He may get off the train at any of the station, but he would not get off in neighboring stations.  
+He can not travel backward neither. How many different ways he can travel?
+
+# 一亩三分地的答案
+# N = 4, return 1
+def paths(n):
+    # eliminate corner condition
+    if n <= 2:
+        return 0
+    
+    dp = [1] * (n+1)
+    for i in range(5, n+1):
+        for j in range(2, i-1):
+            dp[i] += dp[j]
+            
+            print(dp)
+    
+    return dp[n]
+    
+
+
+
+
+# N = 4, return 2
+# There're n stations from A to B
+# People can't get off at neighbor station
+
+def travel(n):
+    # eliminate corner condition
+    if n <= 2:
+        return 0
+    
+    dp = [0]*n
+    dp[0] = 1
+    dp[1] = 1
+    
+    for i in range(2, n):
+        for j in range(max(0, i-1)):
+            dp[i] += dp[j]
+            
+            print(dp)
+    
+    return dp[n-1]
