@@ -1,0 +1,41 @@
+242. Valid Anagram
+Easy
+
+
+Given two strings s and t, return true if t is an anagram of s, and false otherwise.
+
+
+Example 1:
+Input: s = "anagram", t = "nagaram"
+Output: true
+
+Example 2:
+Input: s = "rat", t = "car"
+Output: false
+
+
+
+# use different way in Java, this time use QuickSort
+class Solution:
+    # Use Sort, time complexity: O(nlogn)  
+    def isAnagram_1(self, s: str, t: str) -> bool:
+        # eliminate edge condition
+        if(len(s) != len(t)):
+            return False
+        
+        s1 = list(s)
+        t1 = list(t)
+        # 自己写的quicksort time out 估计是碰到最差情况了 
+        '''
+        self.quicksort(s1, 0, len(s1)-1)
+        self.quicksort(t1, 0, len(t1)-1)
+        '''
+        
+        s1.sort()
+        t1.sort()
+            
+        return (s1 == t1)
+    
+    # Use Counter, time complexity: O(n)
+    def isAnagram(self, s: str, t: str) -> bool:
+        return collections.Counter(s) == collections.Counter(t)
