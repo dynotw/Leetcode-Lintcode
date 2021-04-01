@@ -1,0 +1,84 @@
+1168. Optimize Water Distribution in a Village
+Hard
+
+
+There are n houses in a village. We want to supply water for all the houses by building wells and laying pipes.
+
+For each house i, we can either build a well inside it directly with cost wells[i - 1] (note the -1 due to 0-indexing), or pipe in water from another well to it. The costs to lay pipes between houses are given by the array pipes, where each pipes[j] = [house1j, house2j, costj] represents the cost to connect house1j and house2j together using a pipe. Connections are bidirectional.
+
+Return the minimum total cost to supply water to all houses.
+
+ 
+
+Example 1:
+Input: n = 3, wells = [1,2,2], pipes = [[1,2,1],[2,3,1]]
+Output: 3
+Explanation: 
+The image shows the costs of connecting houses using pipes.
+The best strategy is to build a well in the first house with cost 1 and connect the other houses to it with cost 2 so the total cost is 3.
+ 
+
+Constraints:
+1 <= n <= 104
+wells.length == n
+0 <= wells[i] <= 105
+1 <= pipes.length <= 104
+pipes[j].length == 3
+1 <= house1j, house2j <= n
+0 <= costj <= 105
+house1j != house2j
+
+
+
+
+
+class Solution:
+    def minCostToSupplyWater(self, n: int, wells: List[int], pipes: List[List[int]]) -> int:
+        
+        # 根据cost of pipe进行排序
+        pipes.sort(key=lambda p: p[2])
+        
+        # This parents means rank in Union-Find
+        # 实际意义：初始化，house_i都是自身造well，从自身接水
+        parents = list(range(n))
+        
+        # cd[i]是指整个以i为头的dishoint set的总成本
+        # 因为初始化，各个house是各自造well，所以cd[i] = wells[i]
+        cd = {i: wells[i] for i in range(n)}
+        
+        def find(i):
+            while i != parents[i]: 
+                i = parents[i]
+            return i
+        
+        # i & j is house_i & house_j (from 1 instead of 0); 
+        # c is cost of pipe between house_i and house_j
+        def union(i, j, c):
+            # get parents of i and j， 即house_i & house_j分别从哪两个house（well）接水 
+            pi, pj = find(i), find(j)
+            
+            # i and j is in one disjoint set
+            if pi == pj: 
+                return
+            
+            if c >= wells[pi] and c>= wells[pj]:
+                return
+            
+            # This part, wells[pi] is similar to rank[pi]
+            # 实际意义：如果pj造well的价格比pi高，自然就是pi造well，然后pj去接pi的水
+            # 因为初始化时，所有house都是自身造well，
+            # 所以当pj接pi后，cd[pi] = (pi为头的disjoint set的费用) + (pi连接pj的费用) + (pj为头的disjoint set的费用 - pj造well的成本 [因为pj连接pi后，pj不需要自身造well])
+            if wells[pi] < wells[pj]:
+                parents[pj] = pi
+                cd[pi] += c + (cd[pj] - wells[pj])
+                
+            else:
+                parents[pi] = pj
+                cd[pj] += c + cd[pi] - wells[pi]
+                
+        for p in pipes: 
+            union(p[0] - 1, p[1] - 1, p[2])
+        
+        print(parents)
+        return sum(cd[i] for i in range(n) if i == parents[i])
+        
