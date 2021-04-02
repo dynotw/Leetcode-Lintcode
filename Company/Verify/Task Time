@@ -1,0 +1,36 @@
+Question was a variation of https://leetcode.com/problems/task-scheduler/
+
+You're given a list of tasks, and a cool down time between the same types of tasks. The only difference is that you cannot change the order of the tasks, so you need to calculate the time to complete the tasks based on the string given.
+
+i.e. "ABACCA", cooldown = 2 would return a total time of 9
+
+1 2 3 4 5 6 7 8 9
+A B _ A C _ _ C A
+
+Follow-up was to implement an O(1) Space solution
+
+
+# Time Complexity: O(n); Space Complexity: O(1), because there're 26 alphets at most, then max(len(record)) = 26
+def tasktime(tasks, cooldown):
+    record = dict()
+    
+    time = 0
+    for task in tasks:
+        if task not in record.keys():
+            record[task] = time
+            
+            time += 1
+        
+        # same task has been implemented before, compare time gap with cooldown
+        else:
+            last = record[task]
+            if time - last > cooldown:
+                record[task] = time
+                time += 1
+            
+            else:
+                time = last + cooldown + 1
+                record[task] = time
+                time += 1
+    
+    return time
