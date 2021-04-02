@@ -1,0 +1,54 @@
+https://www.careercup.com/question?id=5648527329853440
+
+Have many TreeNode
+class TreeNode:
+    def __init__(self, id, weight, parent):
+        self.id = id
+        self.weight = weight
+        self.parent = parent
+
+
+输出以每个TreeeNode为头的subtree 的 weight 之和
+
+from collections import defaultdict
+class TreeNode:
+    def __init__(self, id, weight, parent):
+        self.id = id
+        self.weight = weight
+        self.parent = parent
+
+def printSubTreeWeight(nodes):
+    childs = defaultdict(list)
+    weights = defaultdict(int)
+    
+    result = dict()
+    
+    for node in nodes:
+        childs[node.parent].append(node.id)
+        weights[node.id] = node.weight
+    
+    for id in childs.keys():
+        calculateWeight(id, childs, weights, result)
+
+    return result
+          
+def calculateWeight(id, childs, weights, result):
+    weight = weights[id]
+    # exit of recursion
+    if id not in childs.keys():
+        result[id] = weight
+        return weight
+    
+    if id in result.keys():
+        return result[id]
+    
+    temp = weight
+    for id_childs in childs[id]:
+        if id_childs in result.keys():
+            temp += result[id_childs]
+        else:
+            temp += calculateWeight(id_childs, childs, weights, result)
+    
+    result[id] = temp
+
+    return temp
