@@ -1,0 +1,44 @@
+Given a matrix, each row is sorted. Select an element from each row to form the final output. It's required that the final output has the least variance between elements.
+For example:
+input = [[2,4,7,8],
+[1,5,9,10],
+[3,4,6,8]]
+
+The output is [4,5,4]
+
+
+# This answers is modified based on 632. Smallest Range Covering Elements from K Lists
+# Why the smallest range can be used to get smallest variancce ?
+# This method is about to shorten range, which means that only change min/max, the numbers in mid won't be changed
+# Therefore, the variance must be minized, if min get bigger or max get smaller
+
+# time o(nlogm), space o(m)
+# PQ based, it will help check the smallest element and it's index at log(n) time.
+from statistics import variance
+import heapq
+class Solution:
+    def smallestVariance(self, nums):
+        # initialize pq by 1st column, number, row_index, column_index
+        pq = [(num[0], i, 0) for i, num in enumerate(nums)]
+        heapq.heapify(pq)
+        
+        # initialize range, with biggest one
+        variance_min = float("inf")
+        result = [0] * len(nums)
+        curmax = max([num[0] for num in nums])
+
+        # In this while loop, ensure there're 3 numbers from 3 rows at the end of each iteration
+        # 每次都是弹出最小的，相当于是去压缩range，并放入同一行的后一个
+        # 1. max没改变，还是去增加min来压缩range
+        # 2. max改变，相当于重新确定range的min和max，重新开始新一轮的range 压缩
+        while pq:
+            temp = [i[0] for i in pq]
+            curmin, rowIndex, columnIndex = heapq.heappop(pq)
+            if variance_min > variance(temp):
+                variance_min = variance(temp)
+                result = temp
+            if columnIndex == len(nums[rowIndex]) -1:
+                return result
+            
+            curmax = max(curmax, nums[rowIndex][columnIndex+1])
+            heapq.heappush(pq, (nums[rowIndex][columnIndex+1], rowIndex, columnIndex+1))
