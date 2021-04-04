@@ -1,0 +1,31 @@
+An array of numbers is given. Tell the length of longest subarray which contains consecutive elements.
+For example:
+1 4 5 3 2 7 8 12 14 13
+Ans: 5 ( index 0 to 4 )
+example 2
+1 4 7 6 5 9 2
+ans: 4 (index 1 to 4)
+
+
+
+
+def longestLength(arr):
+    longest = 1
+    for i in range(len(arr)):
+        if len(arr) - i < longest:
+            break
+        max_temp = arr[i]
+        min_temp = arr[i]
+        for j in range(i, len(arr)):
+            if arr[j] > max_temp:
+                max_temp = arr[j]
+            
+            elif arr[j] < min_temp:
+                min_temp = arr[j]
+            
+            if max_temp - min_temp == j - i:
+                if j - i > longest:
+                    longest = j-i + 1
+                    result = arr[i:j+1]
+    
+    return longest, result
