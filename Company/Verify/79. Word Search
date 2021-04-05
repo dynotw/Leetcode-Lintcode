@@ -1,0 +1,79 @@
+79. Word Search
+Medium
+
+Given an m x n grid of characters board and a string word, return true if word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+ 
+
+Example 1:
+Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+Output: true
+
+Example 2:
+Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
+Output: true
+
+Example 3:
+Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+Output: false
+
+
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        
+        # find all valid start point
+        starts = list()
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == word[0]:
+                    starts.append((i,j))
+        
+        # word的1st char begin
+        for start in starts:
+            find = False
+            visited = set()
+            visited.add(start)
+            string = ''
+            temp = self.dfs(start, visited, word, board, word[0], 1)
+            if temp == True:
+                return True
+        
+        return False
+        
+       
+    def dfs(self, start, visited, word, board, string, index):
+        # exit 
+        if len(string) == len(word):
+            return string == word
+        
+        # 
+        direction = [[0,1],[0,-1],[1,0],[-1,0]]
+        for move in direction:
+            next_point = (start[0] + move[0], start[1] + move[1])
+            # out of board's boundary
+            if next_point[0] < 0 or next_point[0] >= len(board) or next_point[1] < 0 or next_point[1] >= len(board[0]):
+                continue
+            # this point has been visited
+            if next_point in visited:
+                continue
+            # char doesn't meet
+            if board[next_point[0]][next_point[1]] != word[index]:
+                continue
+            
+            string += board[next_point[0]][next_point[1]]
+            visited.add(next_point)
+            index += 1
+            
+            temp = self.dfs(next_point, visited, word, board, string, index)
+            if(temp == True):
+                return True
+            
+            # backtracking
+            visited.remove(next_point)
+            index -= 1
+            string = string[:-1]
+        
+        # if there's no True return of dfs, it must be False
+        return False
