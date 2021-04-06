@@ -1,0 +1,53 @@
+159. Longest Substring with At Most Two Distinct Characters
+Medium
+
+
+Given a string s, return the length of the longest substring that contains at most two distinct characters.
+
+
+Example 1:
+Input: s = "eceba"
+Output: 3
+Explanation: The substring is "ece" which its length is 3.
+
+Example 2:
+Input: s = "ccaabbb"
+Output: 5
+Explanation: The substring is "aabbb" which its length is 5.
+
+
+
+
+
+# Time complexity: O(n); Space complexity: O(1)
+# sliding window, delete method in dictionary is O(1)
+from collections import defaultdict
+class Solution:
+    def lengthOfLongestSubstringTwoDistinct(self, s: str) -> int:
+        # hashmap delete operation is O(1)
+        record = defaultdict(int)
+        record[s[0]] += 1
+        max_size = 1
+        # set two pointers
+        left = 0
+        right = 1
+        result = s[0]
+        
+        while(left <= right and right < len(s)):
+            record[s[right]] += 1
+            
+            if len(record) == 3:
+                while(left < right and len(record) >= 3):
+                    record[s[left]] -= 1
+                    if record[s[left]] <= 0:
+                        del record[s[left]]
+                    
+                    left += 1
+            
+            right += 1
+            
+            if right - left > max_size:
+                result = s[left:right]
+                max_size = right - left
+                
+        return len(result)
