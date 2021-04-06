@@ -1,0 +1,48 @@
+647. Palindromic Substrings
+Medium
+
+
+Given a string, your task is to count how many palindromic substrings in this string.
+
+The substrings with different start indexes or end indexes are counted as different substrings even they consist of same characters.
+
+Example 1:
+Input: "abc"
+Output: 3
+Explanation: Three palindromic strings: "a", "b", "c".
+ 
+
+Example 2:
+Input: "aaa"
+Output: 6
+Explanation: Six palindromic strings: "a", "a", "a", "aa", "aa", "aaa".
+
+
+
+
+# Use two pointer to find a consecutive substring with the same char, 
+# sum them up and add it to result, then start looking to the left and to the right.
+class Solution:
+    def countSubstrings(self, s):
+        num = 0
+        left, right = 0, 0
+        while left < len(s):
+            while right < len(s) and s[right] == s[left]:
+                right += 1
+            num += self.sum(right - left)
+            
+            l, r = left-1, right
+            while l >= 0 and r < len(s) and s[r] == s[l]:
+                num += 1
+                l -= 1
+                r += 1
+            left = right
+            
+        return num
+    
+    # 大palindrome下面有多少个小的palindrome
+    def sum(self, n):
+        s = 0
+        for i in range(1, n + 1):
+            s += i
+        return s
