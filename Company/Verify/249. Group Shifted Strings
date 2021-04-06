@@ -1,0 +1,47 @@
+249. Group Shifted Strings
+Medium
+
+
+We can shift a string by shifting each of its letters to its successive letter.
+
+For example, "abc" can be shifted to be "bcd".
+We can keep shifting the string to form a sequence.
+
+For example, we can keep shifting "abc" to form the sequence: "abc" -> "bcd" -> ... -> "xyz".
+Given an array of strings strings, group all strings[i] that belong to the same shifting sequence. You may return the answer in any order.
+
+ 
+
+Example 1:
+Input: strings = ["abc","bcd","acef","xyz","az","ba","a","z"]
+Output: [["acef"],["a","z"],["abc","bcd","xyz"],["az","ba"]]
+
+Example 2:
+Input: strings = ["a"]
+Output: [["a"]]
+
+
+
+
+# Time complexity: O(m * n); Space Complexity: O(m * n)
+from collections import defaultdict
+class Solution:
+    def groupStrings(self, strings: List[str]) -> List[List[str]]:
+        record = defaultdict(list)
+        for string in strings:
+            key  = self.calculateDiff(string)
+            record[key].append(string)
+            
+        return record.values()
+    def calculateDiff(self, string):
+        diff = list()
+        
+        prev = ord(string[0])
+        for character in string:
+            current = ord(character)
+            # the diff is circle, like za & ab should be in one group
+            diff.append((current - prev + 26) % 26)
+            prev = current
+        
+        return tuple(diff)
+        
