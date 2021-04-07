@@ -60,7 +60,9 @@ class Solution:
             # i and j is in one disjoint set
             if pi == pj: 
                 return
-            
+                
+            # 如果i去连接j的话，pi就 -> pj，不需要在pi地方造well了
+            # 所以需要比较连接i和j，与pi造well的费用
             if c >= wells[pi] and c>= wells[pj]:
                 return
             
