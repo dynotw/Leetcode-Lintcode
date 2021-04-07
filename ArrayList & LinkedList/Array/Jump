@@ -1,0 +1,91 @@
+This is problem is from phone interview (Verily Life Science)
+
+Question 1
+"""
+Given an ordered list where you start at the first index, 
+continuously jump the number of indexes equal to the value at the current index. 
+If this results in reaching the final index of the list without going over, the list is “good”. 
+
+For example
+[3,7,8,2,1,0] - good
+[4,2,3,1,2] - good // 4 jumps gets you to final index
+[0] - good
+[1,2,3,4,0] - bad // 1 jump then 2 jumps then 4 jumps goes out of bounds
+[5,2] - bad
+[0,1,3,4,1,1,1,1,1] - bad // 0 jumps infinite loops
+[3] - bad
+
+Write a function which determines if an ordered list is “good”.
+"""
+
+def check(arr):
+  # corner condition
+  if len(arr) == 0:
+    return "bad"
+  if len(arr) == 1 and arr[-1] == 0:
+    return "good"
+  
+  # go through the whole list
+  position = 0
+  while(position < len(arr)):
+    jump = arr[position]
+    # chech whether is valid jump
+    if jump == 0:
+      if position < len(arr)-1:
+        return "bad"
+
+    next_position = position + jump
+    if next_position == len(arr) - 1:
+      return "good"
+
+    elif next_position < len(arr) - 1:
+      position = next_position
+
+    else:
+      return "bad"
+    
+  return "bad"
+
+testcase1 = [1,0,1]
+print(check(testcase1))
+
+
+Follow Up
+"""
+If I have any “bad” lists I want to see if I can convert 
+them to “good” lists by removing one and only one value from the list.
+
+[1,2,3,4,0] -> [1,2,3,0] or [1,2,4,0] or [1,2,3,4] would 
+cause this list to be “good” 
+
+So given this input, the index of the value to remove 
+should be 2, 3 or 4 (starting index = 0)
+
+[1,1,0,0,1] -> always bad
+[7,7,7,7,7,1,1,0,1,1] - > remove 0 or first 7 -> return 0 OR return 7
+[7,8,7,7,7,1,1,0,0,1] - > remove first 7 -> return 0
+[1,3,1,0,9,1] -> remove the last 9 or 1 -> return 4 OR return 5
+"""
+
+def change(arr):
+  if check(arr[1:]) == "good":
+    return 0
+  
+  start = 0
+  while(start < len(arr)):
+    jump = arr[start]
+    # check whether remove arr[start + jump - 1] works
+    # if check([:start+jump].extend(check[start+jump+1:])) == "good": 
+    if check(arr[:start+jump]+arr[start+jump+1:]) == "good": 
+      return start + jump
+    
+    else:
+      if jump != 0:
+        start = start + jump
+      else:
+        start += jump + 1
+   
+  return "always bad"
+
+test = [1,2,3,4,0]
+print(change(test))
