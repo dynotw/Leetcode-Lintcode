@@ -27,6 +27,7 @@ class Solution:
         return result
         
     # dfs
+    # left/right is the left number left/right parentheses
     def helper(self, temp, result, left, right):
         # over recursion(no need to dfs anymore, because impossible to show valid combination)
         # 提前终止dfs
