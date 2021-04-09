@@ -1,0 +1,88 @@
+1254. Number of Closed Islands
+Medium
+
+Given a 2D grid consists of 0s (land) and 1s (water).  
+An island is a maximal 4-directionally connected group of 0s and a closed island is an island totally (all left, top, right, bottom) surrounded by 1s.
+Return the number of closed islands.
+
+ 
+
+Example 1:
+Input: grid = [[1,1,1,1,1,1,1,0],
+               [1,0,0,0,0,1,1,0],
+               [1,0,1,0,1,1,1,0],
+               [1,0,0,0,0,1,0,1],
+               [1,1,1,1,1,1,1,0]]
+Output: 2
+Explanation: 
+Islands in gray are closed because they are completely surrounded by water (group of 1s).
+
+Example 2:
+Input: grid = [[0,0,1,0,0],
+               [0,1,0,1,0],
+               [0,1,1,1,0]]
+Output: 1
+
+Example 3:
+Input: grid = [[1,1,1,1,1,1,1],
+               [1,0,0,0,0,0,1],
+               [1,0,1,1,1,0,1],
+               [1,0,1,0,1,0,1],
+               [1,0,1,1,1,0,1],
+               [1,0,0,0,0,0,1],
+               [1,1,1,1,1,1,1]]
+Output: 2
+
+
+
+
+
+# Timecomplexity：O(m*n); Space Complexity: O(1)
+# A closed island, it won't near boundary, which means its all adjacent positions are 0 or 1 
+from collections import deque
+class Solution:
+    def closedIsland(self, grid: List[List[int]]) -> int:
+        result = 0
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == 0:
+                    if self.bfs(grid, (i,j)):
+                        result += 1
+        return result
+    
+    
+    # Use bfs to check whether it's a closed island, as long as its boundary isn't beyond grid
+    def bfs(self, grid, start):
+        closed = True
+        queue = deque()
+        queue.append(start)
+        grid[start[0]][start[1]] = 1
+        
+        directionX = [-1,1,0,0]
+        directionY = [0,0,-1,1]
+        while(queue):
+            current = queue.popleft()
+            for i in range(4):
+                row = current[0] + directionX[i]
+                column = current[1] + directionY[i]
+                
+                # check wether it's out of boundary
+                if not self.inBoundary(grid, row, column):
+                    closed = False
+                    continue
+                
+                if grid[row][column] == 0:
+                    queue.append((row, column))
+                    grid[row][column] = 1
+        
+        return closed
+                    
+        
+    def inBoundary(self, grid, row, column):
+        height = len(grid)
+        width = len(grid[0])
+        
+        if row < 0 or row >= height or column < 0 or column >= width:
+            return False
+        
+        return True
