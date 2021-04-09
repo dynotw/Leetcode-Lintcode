@@ -1,0 +1,70 @@
+# it can't be solved by DP
+# Because the hiker can go in all four directions. This means that a dp algorithm would need to look into subproblems that haven't been solved yet.
+# Use BFS + Binary Search: binary search is to go through all possible results, BFS is to check whether specific result is valid
+
+
+# Time complexity: O(m*n); Space Complexity: O(m*n)
+from collections import deque
+class Solution:
+    # Because minimumEfforPath is from 0 to (max_height - min_height), use binary search to check each possible value
+    def minimumEffortPath(self, heights: List[List[int]]) -> int:
+        min_height = float('inf')
+        max_height = 0
+        
+        for row in heights:
+            if min(row) < min_height:
+                min_height = min(row)
+            if max(row) > max_height:
+                max_height = max(row)
+        
+        left = 0
+        right = max_height - min_height
+        while(left < right):
+            mid = (left+right)//2
+            if self.bfs(heights, mid):
+                right =mid
+            else:
+                left = mid + 1
+        
+        return left
+        
+    def bfs(self, heights, max_diff):
+        start = (0,0)
+        visited = [[False]*len(heights[0]) for i in range(len(heights))]
+        
+        queue = deque()
+        queue.append(start)
+        visited[0][0] = True
+        directionX = [-1,1,0,0]
+        directionY = [0,0,-1,1]
+        
+        while(queue):
+            current_position = queue.popleft()
+            current_row = current_position[0]
+            current_column = current_position[1]
+            if current_row == len(heights)-1 and current_column == len(heights[0])-1:
+                return True
+            
+            for index in range(4):
+                next_position = (current_row + directionX[index], current_column + directionY[index])
+                next_row = next_position[0]
+                next_column = next_position[1]
+                if self.isValid(next_position, heights) and visited[next_row][next_column] == False:
+                    diff = abs(heights[next_row][next_column] - heights[current_row][current_column])
+                    if diff <= max_diff:
+                        queue.append(next_position)
+                        visited[next_row][next_column] = True
+                          
+        return False
+        
+    def isValid(self, position, heights):
+        height = len(heights)
+        width = len(heights[0])
+        
+        x = position[0]
+        y = position[1]
+        
+        if x < 0 or x >= height or y < 0 or y >= width:
+            return False
+        
+        return True
