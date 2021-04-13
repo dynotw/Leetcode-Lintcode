@@ -32,10 +32,7 @@ Note that no other cars meet these fleets before the destination, so the answer 
 
 # If another car needs more time, it will be the new slowest car, and becomes the new lead of a car fleet.
 
-
 # Time Complexity: O(NlogN), Space Complexity: O(n).
-
-
 class Solution:
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         times = [float(target - p) / s for p, s in sorted(zip(position, speed))]
