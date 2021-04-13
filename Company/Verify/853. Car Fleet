@@ -33,12 +33,8 @@ Note that no other cars meet these fleets before the destination, so the answer 
 # If another car needs more time, it will be the new slowest car, and becomes the new lead of a car fleet.
 
 
-# Complexity:
-# O(NlogN) Quick sort the cars by position. (Other sort can be applied)
-# O(N) One pass for all cars from the end to start (another direction also works).
+# Time Complexity: O(NlogN), Space Complexity: O(n).
 
-# O(N) Space for sorted cars.
-# O(1) space is possible if we sort pos inplace.
 
 class Solution:
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
