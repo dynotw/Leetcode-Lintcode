@@ -1,0 +1,72 @@
+465. Optimal Account Balancing
+Hard
+
+You are given an array of transactions transactions where transactions[i] = [fromi, toi, amounti] 
+indicates that the person with ID = fromi gave amounti $ to the person with ID = toi.
+
+Return the minimum number of transactions required to settle the debt.
+
+ 
+
+Example 1:
+Input: transactions = [[0,1,10],[2,0,5]]
+Output: 2
+Explanation:
+Person #0 gave person #1 $10.
+Person #2 gave person #0 $5.
+Two transactions are needed. One way to settle the debt is person #1 pays person #0 and #2 $5 each.
+
+Example 2:
+Input: transactions = [[0,1,10],[1,0,1],[1,2,5],[2,0,5]]
+Output: 1
+Explanation:
+Person #0 gave person #1 $10.
+Person #1 gave person #0 $1.
+Person #1 gave person #2 $5.
+Person #2 gave person #0 $5.
+Therefore, person #1 only need to give person #0 $4, and all debt is settled.
+
+
+
+
+
+# Use DFS
+class Solution:
+    def minTransfers(self, transactions: List[List[int]]) -> int:
+        """
+        :type transactions: List[List[int]]
+        :rtype: int
+        """
+        debt = collections.defaultdict(int)
+        
+        for t in transactions:
+            debt[t[0]]-=t[2]
+            debt[t[1]]+=t[2]
+        
+        result = self.dfs(debt, float('inf'), 0)
+        
+        return result
+    
+    def dfs(self, debt, num_transcation, id):
+        # This while loop is to skip debt[id] = 0
+        while(id < len(debt) and debt[id]==0):
+            id+=1
+            
+        # exit of recursion
+        if id == len(debt):
+            return 0
+
+        current_transcation_optimal = num_transcation
+        for next_id in range(id+1, len(debt)):
+            if debt[next_id] * debt[id] < 0:
+                debt[next_id] += debt[id]
+                
+                num_transcation = min(num_transcation, self.dfs(debt, num_transcation, id+1) + 1)
+                
+                # print("id is ", id+1, "num_transcation is ", self.dfs(debt, id+1) + 1)
+                
+                # backtracking
+                debt[next_id] -= debt[id]
+        
+        return num_transcation
+                
