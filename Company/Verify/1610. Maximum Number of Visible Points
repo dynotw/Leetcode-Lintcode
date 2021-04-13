@@ -1,0 +1,67 @@
+1610. Maximum Number of Visible Points (看LeetCode原题，联系图去理解题目)
+Hard
+
+
+You are given an array points, an integer angle, and your location, where location = [posx, posy] and points[i] = [xi, yi] both denote integral coordinates on the X-Y plane.
+Initially, you are facing directly east from your position. You cannot move from your position, but you can rotate. In other words, posx and posy cannot be changed. Your field of view in degrees is represented by angle, determining how wide you can see from any given view direction. Let d be the amount in degrees that you rotate counterclockwise. 
+Then, your field of view is the inclusive range of angles [d - angle/2, d + angle/2].
+You can see some set of points if, for each point, the angle formed by the point, your position, and the immediate east direction from your position is in your field of view.
+There can be multiple points at one coordinate. There may be points at your location, and you can always see these points regardless of your rotation. 
+Points do not obstruct your vision to other points.
+Return the maximum number of points you can see.
+
+ 
+
+Example 1:
+Input: points = [[2,1],[2,2],[3,3]], angle = 90, location = [1,1]
+Output: 3
+Explanation: The shaded region represents your field of view. All points can be made visible in your field of view, 
+including [3,3] even though [2,2] is in front and in the same line of sight.
+
+Example 2:
+Input: points = [[2,1],[2,2],[3,4],[1,1]], angle = 90, location = [1,1]
+Output: 4
+Explanation: All points can be made visible in your field of view, including the one at your location.
+
+Example 3:
+Input: points = [[1,0],[2,1]], angle = 13, location = [1,1]
+Output: 1
+Explanation: You can only see one of the two points, as shown above.
+
+
+
+
+# Time complexity: O(nlogn); Space Complexity: O(n)
+class Solution:
+    def visiblePoints(self, points: List[List[int]], angle: int, location: List[int]) -> int:
+        # 以location为原点，x=location[0]为x轴
+        angles, extra = [], 0
+        for point in points:
+            if point == location:
+                extra += 1
+                continue
+            angles.append(math.degrees(math.atan2(point[1] - location[1], point[0] - location[0])))
+        
+        # 如果所有point都和location重合
+        if extra == len(points):
+            return extra
+        angles.sort()
+        # This part is the key, math.degrees得到的会是-180 - 180
+        # This extend相当于构成了一个圈，原本只有1-2-3-4， 现在是将第四象限和第一象限也连起来了
+        angles.extend([x + 2.0 * 180 for x in angles])
+
+        #print(angles)
+        
+        # sliding window, 
+        left = 0
+        right = 1
+        result = 1
+        while(left < right and right < len(angles)):
+            if angles[right] - angles[left] <= angle:
+                result = max(result, right - left + 1)
+                right += 1
+            else:
+                left += 1
+                if left == right:
+                    right += 1
+        return result + extra
