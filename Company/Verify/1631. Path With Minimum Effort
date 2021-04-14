@@ -6,7 +6,8 @@
 # Time complexity: O(m*n); Space Complexity: O(m*n)
 from collections import deque
 class Solution:
-    # Because minimumEfforPath is from 0 to (max_height - min_height), use binary search to check each possible value
+    # Because minimumEfforPath is from 0 to (max_height - min_height), use binary search to go through possible answer
+    # Then use bfs to check whether this answer is valid
     def minimumEffortPath(self, heights: List[List[int]]) -> int:
         min_height = float('inf')
         max_height = 0
@@ -54,7 +55,9 @@ class Solution:
                     if diff <= max_diff:
                         queue.append(next_position)
                         visited[next_row][next_column] = True
-                          
+                    
+                    # Don't write --    else: return False
+                    
         return False
         
     def isValid(self, position, heights):
