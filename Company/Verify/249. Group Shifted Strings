@@ -41,6 +41,7 @@ class Solution:
             current = ord(character)
             # the diff is circle, like za & ab should be in one group
             diff.append((current - prev + 26) % 26)
+            # 其实这里直接用 (current - prev)%26 就可以了，因为余数不能是负数 -1%26 = 25
             prev = current
         
         return tuple(diff)
