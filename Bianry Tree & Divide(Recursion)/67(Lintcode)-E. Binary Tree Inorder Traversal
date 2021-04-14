@@ -46,6 +46,57 @@ Can you do it without recursion?
  * }
  */
  
+ 
+ // Python 
+ class Solution:
+    # Recursion
+    def inorderTraversal_1(self, root: TreeNode) -> List[int]:
+        result = list()
+        
+        # exit of recursion
+        if root == None:
+            return result
+        
+        # Divide 
+        left = self.inorderTraversal(root.left)
+        right = self.inorderTraversal(root.right)
+        
+        # conquer
+        result.extend(left)
+        result.append(root.val)
+        result.extend(right)
+        
+        return result
+    
+    # Iteration
+    def inorderTraversal(self, root):
+        stack = list()
+        result = list()
+        
+        while(root != None):
+            stack.append(root)
+            root = root.left
+        
+        while(stack):
+            node = stack[-1]
+            result.append(node.val)
+            
+            if node.right == None:
+                node = stack.pop()
+                while(stack and stack[-1].right == node):
+                    node = stack.pop()
+            
+            else:
+                node = node.right
+                while(node):
+                    stack.append(node)
+                    node = node.left
+                    
+        return result
+ 
+ 
+ 
+ // Java
  // Binary Tree, Traverse(Recursion), Divide
  // recursion method
  // inorder, preorder, postorder都可以用recursion
