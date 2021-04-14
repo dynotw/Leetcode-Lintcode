@@ -32,8 +32,10 @@ Output: [2.00000,1.00000,1.50000,-1.00000]
 from collections import deque
 class Solution:
     def getCollisionTimes(self, cars: List[List[int]]) -> List[float]:
+    
+        # result and stack store things anti-order： car[i+2] -> car[i+1] -> car[i]
+        # 所以后面的pop()的操作是是先核实car[i]，再是 car[i+1]
         result = []
-        # cars that might collide with current car
         stack = []
         for position, speed in cars[::-1]:
             # if current car speed is less than the head of the stack then there won't be a collision
