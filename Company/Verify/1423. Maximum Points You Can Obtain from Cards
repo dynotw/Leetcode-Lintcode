@@ -40,7 +40,8 @@ Output: 202
 
 
 
-
+# Sliding windows
+# Time complexity: O(n); Space Complexity: O(1)
 class Solution:
     def maxScore(self, cardPoints: List[int], k: int) -> int:
         
