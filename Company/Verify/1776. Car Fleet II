@@ -27,7 +27,8 @@ Output: [2.00000,1.00000,1.50000,-1.00000]
 
 
 
-# This is different from 853 Car Fleet I, which 
+# This is different from 853 Car Fleet I
+# 853 has a fixed destination, 1176 this problem doesn't has a fixed destination
 from collections import deque
 class Solution:
     def getCollisionTimes(self, cars: List[List[int]]) -> List[float]:
