@@ -57,6 +57,7 @@ class Solution:
         res = -float('inf')
         for x, y in A:
             # delete all pair which |xi - xj| > k
+            # if |xi - xj| >k, then |xi+1 - xj| must > k
             while queue and x - queue[0][1] > k:
                 queue.popleft()
             if queue: 
