@@ -38,10 +38,11 @@ class Solution:
         result = []
         stack = []
         for position, speed in cars[::-1]:
-            # if current car speed is less than the head of the stack then there won't be a collision
-            # or if c1 collides with c2 after c2 collides with c3, we can ignore c2 and find collision time of c1 and c3 instead
+            # 1. if current car speed is less than the head of the stack then there won't be a collision ---- speed <= stack[-1][1]
+            # 2. if c1 collides with c2 after c2 collides with c3, we can ignore c2 and find collision time of c1 and c3 instead --- 
+            # (stack[-1][0] - position) / (speed - stack[-1][1] >= stack[-1][2])
             # (where c1 is current car, c2 is the head of the stack and c3 is the car that c2 will collide with)
-            # (if we have [[x1, s1], [x2, s2]], then collision time is (x2 - x1) / (s1 - s2))
+            # if we have [[x1, s1], [x2, s2]], then collision time is (x2 - x1) / (s1 - s2)
             while stack and (speed <= stack[-1][1] or (stack[-1][0] - position) / (speed - stack[-1][1]) >= stack[-1][2]):
                 stack.pop()
                 
