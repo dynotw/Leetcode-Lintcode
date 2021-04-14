@@ -32,6 +32,7 @@ Explanation: You can only see one of the two points, as shown above.
 
 
 # Time complexity: O(nlogn); Space Complexity: O(n)
+# Use 数学先算出所有角度，then use sliding window to get the range
 class Solution:
     def visiblePoints(self, points: List[List[int]], angle: int, location: List[int]) -> int:
         # 以location为原点，x=location[0]为x轴
