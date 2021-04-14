@@ -2,10 +2,13 @@
 Medium
 
 
-Android devices have a special lock screen with a 3 x 3 grid of dots. Users can set an "unlock pattern" by connecting the dots in a specific sequence, forming a series of joined line segments where each segment's endpoints are two consecutive dots in the sequence. A sequence of k dots is a valid unlock pattern if both of the following are true:
+Android devices have a special lock screen with a 3 x 3 grid of dots. Users can set an "unlock pattern" by connecting the dots in a specific sequence, 
+forming a series of joined line segments where each segment's endpoints are two consecutive dots in the sequence. 
+A sequence of k dots is a valid unlock pattern if both of the following are true:
 
 All the dots in the sequence are distinct.
-If the line segment connecting two consecutive dots in the sequence passes through any other dot, the other dot must have previously appeared in the sequence. No jumps through non-selected dots are allowed.
+If the line segment connecting two consecutive dots in the sequence passes through any other dot, the other dot must have previously appeared in the sequence. 
+No jumps through non-selected dots are allowed.
 Here are some example valid and invalid unlock patterns:
 
 1 2 3
