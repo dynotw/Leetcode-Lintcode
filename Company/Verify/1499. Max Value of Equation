@@ -51,6 +51,7 @@ class Solution:
 
 # Time Complexity: O(n); Space Complexity: O(n)
     # Use queue, 在queue中是按原有顺序保存pair，所以过程更加直观
+    # This queue store (y-x, x), and keep this queue is kinds of 根据（y-x）单调递减list
     def findMaxValueOfEquation(self, A, k):
         queue = collections.deque()
         res = -float('inf')
