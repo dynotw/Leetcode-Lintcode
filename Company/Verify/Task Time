@@ -24,6 +24,7 @@ def tasktime(tasks, cooldown):
         # same task has been implemented before, compare time gap with cooldown
         else:
             last = record[task]
+            # 和上一次间隔时间已经超过了cooldown time
             if time - last > cooldown:
                 record[task] = time
                 time += 1
