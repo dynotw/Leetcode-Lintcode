@@ -26,6 +26,7 @@ Input: board = [["A","B","C","E"],
 Output: false
 
 
+// Use DFS, btw BFS doesn't work
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
         
