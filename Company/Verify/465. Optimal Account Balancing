@@ -31,6 +31,11 @@ Therefore, person #1 only need to give person #0 $4, and all debt is settled.
 
 
 # Use DFS
+# Starting from first debt debt[0], we look for all other debts debt[i] (i>0) which have opposite sign to debt[0]. 
+# Then each such debt[i] can make one transaction debt[i] += debt[0] to clear the person with debt debt[0]. 
+# From now on, the person with debt debt[0] is dropped out of the problem and 
+# we recursively drop persons one by one until everyone's debt is cleared meanwhile updating the minimum number of transactions during DFS.
+
 class Solution:
     def minTransfers(self, transactions: List[List[int]]) -> int:
         """
@@ -53,11 +58,12 @@ class Solution:
             id+=1
             
         # exit of recursion
+        # each recursion的id是id+1，不是next_id，相当于一层recursion，只前进一个id和debt为0的id
         if id == len(debt):
             return 0
 
-        current_transcation_optimal = num_transcation
         for next_id in range(id+1, len(debt)):
+            # 只有当 id 和 next_id 两人的debt为一正一负，将其抵消才有意义
             if debt[next_id] * debt[id] < 0:
                 debt[next_id] += debt[id]
                 
