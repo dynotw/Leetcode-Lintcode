@@ -18,8 +18,7 @@ def tasktime(tasks, cooldown):
     for task in tasks:
         # 之前没有出现过相同任务，所以不用管cooldown time
         if task not in record.keys():
-            record[task] = time
-            
+            record[task] = time            
             time += 1
         
         # same task has been implemented before, compare time gap with cooldown
