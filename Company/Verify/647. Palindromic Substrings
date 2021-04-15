@@ -27,10 +27,13 @@ class Solution:
         num = 0
         left, right = 0, 0
         while left < len(s):
+            
+            # find a “consecutive” substring with the same char
             while right < len(s) and s[right] == s[left]:
                 right += 1
             num += self.sum(right - left)
             
+            # find 以 上面consecutive substring为中心的palindrome
             l, r = left-1, right
             while l >= 0 and r < len(s) and s[r] == s[l]:
                 num += 1
