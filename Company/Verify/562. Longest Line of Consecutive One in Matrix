@@ -23,16 +23,21 @@ class Solution:
             for column in range(len(M[0])):
                 if M[row][column] == 0:
                     M[row][column] = [0,0,0,0]
-                if M[row][column] == 1:
+
+                # if M[row][column] == 1:
+                else:
                     M[row][column] = [1,1,1,1]
+                    
                     # top-left
                     if row == 0 and column == 0:
                         M[row][column] = [1,1,1,1]
                         max_line = max(M[row][column])
+                        
                     # 1st row
                     elif row == 0:
                         M[row][column][0] += M[row][column-1][0]
                         max_line = max(max_line, M[row][column][0])
+                        
                     # 1st column
                     elif column == 0:
                         M[row][column][1] += M[row-1][column][1]
