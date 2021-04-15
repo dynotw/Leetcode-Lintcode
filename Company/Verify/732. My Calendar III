@@ -44,13 +44,13 @@ class MyCalendarThree(object):
         self.delta[start] += 1
         self.delta[end] -= 1
 
-        active = ans = 0
+        active = result = 0
         for x in sorted(self.delta):
             active += self.delta[x]
-            if active > ans: 
-                ans = active
+            if active > result: 
+                result = active
 
-        return ans
+        return result
 
 
 # Your MyCalendarThree object will be instantiated and called as such:
