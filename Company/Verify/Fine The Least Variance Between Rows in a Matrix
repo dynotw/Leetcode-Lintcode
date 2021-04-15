@@ -33,13 +33,18 @@ class Solution:
         # 1. max没改变，还是去增加min来压缩range
         # 2. max改变，相当于重新确定range的min和max，重新开始新一轮的range 压缩
         while pq:
+        # get a list 关于现在pq 的数字
             temp = [i[0] for i in pq]
+            
+            # 弹出pq 中最小的数字
             curmin, rowIndex, columnIndex = heapq.heappop(pq)
             if variance_min > variance(temp):
                 variance_min = variance(temp)
                 result = temp
+            # 如果这个数字已经是这个row的最后一列了，那么这一行就没其他数字可以替换了，所以iteration结束
             if columnIndex == len(nums[rowIndex]) -1:
                 return result
             
+            # 放入同一行里的下一个数字
             curmax = max(curmax, nums[rowIndex][columnIndex+1])
             heapq.heappush(pq, (nums[rowIndex][columnIndex+1], rowIndex, columnIndex+1))
