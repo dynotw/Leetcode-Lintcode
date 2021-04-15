@@ -7,7 +7,8 @@ Example:
 
 Note: A node can have ‘N’ number of children
 
-Explanation: Consider the above tree, for node 1 , the average width would be the total no. of nodes under that node ie. 7 (including the target node) divided by the total number of levels under the parent node (7/3) .
+Explanation: Consider the above tree, for node 1 , the average width would be the total no. of nodes under that node ie. 
+7 (including the target node) divided by the total number of levels under the parent node (7/3).
 
 The format of the answer should be: [node number : average width of that node ] that is ,for the given tree the answer is :
 
