@@ -19,7 +19,7 @@ from statistics import variance
 import heapq
 class Solution:
     def smallestVariance(self, nums):
-        # initialize pq by 1st column, number, row_index, column_index
+        # initialize pq by 1st column: number, row_index, column_index
         pq = [(num[0], i, 0) for i, num in enumerate(nums)]
         heapq.heapify(pq)
         
