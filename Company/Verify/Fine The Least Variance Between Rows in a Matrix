@@ -1,8 +1,9 @@
-Given a matrix, each row is sorted. Select an element from each row to form the final output. It's required that the final output has the least variance between elements.
+Given a matrix, each row is sorted. Select an element from each row to form the final output. 
+It's required that the final output has the least variance between elements.
 For example:
 input = [[2,4,7,8],
-[1,5,9,10],
-[3,4,6,8]]
+         [1,5,9,10],
+         [3,4,6,8]]
 
 The output is [4,5,4]
 
