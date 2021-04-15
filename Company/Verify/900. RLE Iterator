@@ -38,7 +38,7 @@ class RLEIterator:
         self.sequence = A
 
     def next(self, n: int) -> int:
-        
+        # while loop 的两个条件：1. pointer有效，2.self.pointer所指的char的出现次数比n小
         while(self.pointer < len(self.sequence) and self.sequence[self.pointer] < n):
             n -= self.sequence[self.pointer]
             self.pointer += 2
@@ -46,6 +46,7 @@ class RLEIterator:
         if self.pointer >= len(self.sequence):
             return -1
         
+        # 更新sequence中的char的出现次数，同时返回答案
         self.sequence[self.pointer] -= n
         return self.sequence[self.pointer + 1]
     
