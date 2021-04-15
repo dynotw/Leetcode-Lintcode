@@ -61,7 +61,7 @@ class Solution:
                 continue
             
             # there's no num in pattern
-            elif used[i] == False and len(pattern) == 0:
+            elif len(pattern) == 0:
                 pattern.append(nums[i])
                 used[i] = True
                 result = self.dfs(nums, used, pattern, result,m,n)
