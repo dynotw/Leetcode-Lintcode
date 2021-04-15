@@ -66,7 +66,9 @@ class Solution:
     
 # case 1: sentence_ptr at the end of the screen falls on space in the sentence. Go to the next letter sentence_ptr+1 in the next row of the screen.
 # case 2: sentence_ptr at the end of the screen falls on the last letter of a word. We skip the space in the sentence as the last letter coincides with the screen end: sentence_ptr+2
-# case 3: sentence_ptr points in the middle of a word at the end of the screen: roll back sentence_ptr till there's a space in the sentence. his corresponds to starting to fill the word in the next row, as it does not fit into the current. sentence_ptr > 0 is needed for the case when a word is longer than cols; sentence_ptr will be < len(s)
+# case 3: sentence_ptr points in the middle of a word at the end of the screen: roll back sentence_ptr till there's a space in the sentence. 
+# his corresponds to starting to fill the word in the next row, as it does not fit into the current. 
+# sentence_ptr > 0 is needed for the case when a word is longer than cols; sentence_ptr will be < len(s)
     def wordsTyping(self, sentence: List[str], rows: int, cols: int) -> int:
         # 注意末尾需要加一个空格
         s = ' '.join(sentence) + ' '
