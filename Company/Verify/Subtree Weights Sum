@@ -35,6 +35,7 @@ def printSubTreeWeight(nodes):
 def calculateWeight(id, childs, weights, result):
     weight = weights[id]
     # exit of recursion
+    # 没有childs，相当于就是末节点
     if id not in childs.keys():
         result[id] = weight
         return weight
@@ -43,9 +44,12 @@ def calculateWeight(id, childs, weights, result):
         return result[id]
     
     temp = weight
+    # 遍历所有的子节点
     for id_childs in childs[id]:
+        # 之前已经遍历过了
         if id_childs in result.keys():
             temp += result[id_childs]
+        # 之前没有遍历过
         else:
             temp += calculateWeight(id_childs, childs, weights, result)
     
