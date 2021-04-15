@@ -22,6 +22,7 @@ Output: [["a"]]
 
 # Time complexity: O(n*klogk); sapce complexity: O(n)
 # We can optimize sort, by kinds of collections.Counter method, see method 2
+# We can't use collections.Counter directly, because Counter is hashtable type, it can't be used as key in dictionary.
 from collections import defaultdict
 class Solution:
     def groupAnagrams_1(self, strs: List[str]) -> List[List[str]]:
