@@ -45,3 +45,13 @@ class Solution:
         for i in range(length):
             if(visited1[i] == True):
                 continue
+                
+            subnet.append(nums[i])
+            visited1[i] = True
+            
+            self.dfs(nums, result, subnet, visited, visited1)
+            
+            subnet.pop()
+            visited1[i] = False
+        
+        return
