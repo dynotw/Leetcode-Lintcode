@@ -60,6 +60,7 @@ class Solution:
         print("node is ", node)
         print("Tree is ", tree)
         
+        # There's duplicated subtree, and we only need to append the root treenode rather than the whole subtree
         allTree[tuple(tree[:])] += 1
         if allTree[tuple(tree[:])] == 2:
             result.append(node)
