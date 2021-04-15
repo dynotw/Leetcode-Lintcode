@@ -12,8 +12,11 @@ ans: 4 (index 1 to 4)
 def longestLength(arr):
     longest = 1
     for i in range(len(arr)):
+        # 剩余的arr 长度小于现有最长的答案，则没有iteration的必要了
         if len(arr) - i < longest:
             break
+        
+        # check 以arr[i]开头的符合要求的longest subarry
         max_temp = arr[i]
         min_temp = arr[i]
         for j in range(i, len(arr)):
