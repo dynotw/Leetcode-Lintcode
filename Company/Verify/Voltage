@@ -12,6 +12,8 @@ from collections import deque
 def calculate_power(blocks):
     q = deque()
     visited = set()
+    
+    # 先得到所有torch点
     for block in blocks:
     # check whether this block is torch
         if block.is_torch():
