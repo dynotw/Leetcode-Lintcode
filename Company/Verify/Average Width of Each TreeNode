@@ -59,7 +59,8 @@ class Solution:
             n, l = self.findAverageWidthNAryTree(node)
             num_of_nodes += n
             num_of_levels = max(num_of_levels, l)
-
+        
+        # TreeNode itself
         num_of_nodes += 1
         num_of_levels += 1
 
