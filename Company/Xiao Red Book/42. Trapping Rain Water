@@ -15,7 +15,8 @@ Input: height = [4,2,0,3,2,5]
 Output: 9
 
 
-
+# Use two pointers 
+# Time Complexity: O(n); Space Complexity: O(1)
 
 class Solution:
     def trap(self, height: List[int]) -> int:           
