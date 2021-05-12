@@ -1,4 +1,7 @@
-    def selection_sort(self, nums):
+# Time Complexity: O(n^2); Space Complexity: O(1)
+# 稳定性：用数组实现的选择排序是不稳定的，用链表实现的选择排序是稳定的；内排序；
+
+def selection_sort(self, nums):
     n = len(nums)
     for i in range(n):
         for j in range(i, n):
