@@ -1,1 +1,32 @@
-def
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        self.quicksort(nums, 0, len(nums)-1)
+        return nums
+    
+    def quicksort(self, arr, start, end):
+        # exit of recursion
+        if start >= end:
+            return 
+        
+        left = start
+        right = end
+        pivot = arr[start + (end-start)//2]
+        
+        while(left <= right):
+            while(left <= right and arr[left] < pivot):
+                left += 1
+            while(left <= right and arr[right] > pivot):
+                right -= 1
+            
+            # exchange arr[left] and arr[right]
+            if left <= right:
+                temp = arr[left]
+                arr[left] = arr[right]
+                arr[right] = temp
+                left += 1
+                right -= 1
+        
+        self.quicksort(arr, start, right)
+        self.quicksort(arr, left, end)
+        
+        return
