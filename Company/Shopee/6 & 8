@@ -1,0 +1,33 @@
+一个整数只能由6和8构成，以6， 8， 66， 68， 86， 88....这样的自然顺序，给定一个K，问第K个这样的数字是多少。
+
+
+def kNum(k):
+    # eliminate corner case
+    if k == 1:
+        return 6
+    if k == 2:
+        return 8
+    
+    temp = 0
+    i = 1
+    while(temp < k):
+        temp += pow(2, i)
+        i += 1
+    
+    temp -= pow(2,i-1)
+    index = k-temp-1
+    num = bin(index)
+    
+    num = deque(num[2:])
+    while(len(num) < i-1):
+        num.appendleft('0')
+    
+    print(num)
+    
+    for index, number in enumerate(num):
+        if number == '0':
+            num[index] = '6'
+        else:
+            num[index] = '8'
+    
+    return int("".join(num))
