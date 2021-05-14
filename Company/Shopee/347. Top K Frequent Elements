@@ -1,0 +1,36 @@
+347. Top K Frequent Elements
+Medium
+
+Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
+
+
+Example 1:
+Input: nums = [1,1,1,2,2,3], k = 2
+Output: [1,2]
+
+Example 2:
+Input: nums = [1], k = 1
+Output: [1]
+
+
+
+# Same as Leetcode 692
+# Time complexity: O(nlogk); space complexity: O(n)
+from collections import defaultdict
+import heapq
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        heap = list()
+        record = defaultdict(int)
+        
+        for i in nums:
+            record[i] += 1
+        
+        for i in record:
+            heapq.heappush(heap, (record[i],i))
+        
+        result = [i[1] for i in heapq.nlargest(k, heap)]
+        return result
+            
+            
+            
