@@ -1,0 +1,54 @@
+125. Valid Palindrome
+Easy
+Given a string s, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+
+ 
+
+Example 1:
+Input: s = "A man, a plan, a canal: Panama"
+Output: true
+Explanation: "amanaplanacanalpanama" is a palindrome.
+
+Example 2:
+Input: s = "race a car"
+Output: false
+Explanation: "raceacar" is not a palindrome.
+
+
+
+# Set two pointers
+# Time complexity: O(n); Space Complexity: O(1)
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        # eliminate corner condition
+        if len(s) == 1:
+            return True
+        
+        # set two pointers
+        left = 0
+        right = len(s)-1
+        
+        while(left < right):
+            while(not s[left].isalnum() and left < right):
+                left += 1
+            while(not s[right].isalnum() and right > left):
+                right -= 1
+            
+            if s[left].lower() == s[right].lower():
+                left += 1
+                right -= 1
+            
+            else:
+                return False
+        
+        if left == right or left > right:
+            return True
+        
+        else:
+            return False
+            
+            
+            
+            
+            
+            
