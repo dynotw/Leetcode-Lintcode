@@ -1,0 +1,97 @@
+772. Basic Calculator III
+Hard
+
+Implement a basic calculator to evaluate a simple expression string.
+
+The expression string contains only non-negative integers, '+', '-', '*', '/' operators, and open '(' and closing parentheses ')'. 
+The integer division should truncate toward zero.
+
+You may assume that the given expression is always valid. All intermediate results will be in the range of [-231, 231 - 1].
+
+Note: You are not allowed to use any built-in function which evaluates strings as mathematical expressions, such as eval().
+
+ 
+Example 1:
+Input: s = "1+1"
+Output: 2
+
+Example 2:
+Input: s = "6-4/2"
+Output: 4
+
+Example 3:
+Input: s = "2*(5+5*2)/3+(6/2+8)"
+Output: 21
+
+Example 4:
+Input: s = "(2+6*3+5-(3*14/7+2)*5)+3"
+Output: -12
+
+Example 5:
+Input: s = "0"
+Output: 0
+
+
+
+class Solution:
+    def helper(self, stack, number, operator):
+        if operator == '+':
+            stack.append(number)
+        elif operator == '-':
+            stack.append(-number)
+        elif operator == '*':
+            stack.append(number*stack.pop())
+        elif operator == '/':
+            stack.append(int(stack.pop()/number))
+            
+    def calculate(self, s: str) -> int:
+        stack = list()
+        operator = '+'
+        index = 0
+        temp = 0
+        
+        while (index < len(s)):
+            if s[index].isdigit():
+                temp = 0
+                while (index < len(s) and s[index].isdigit()):
+                    temp *= 10
+                    temp += int(s[index])
+                    index += 1
+            
+            # when s[index] is a operator, we calculate the previous operator
+            elif s[index] in '+-*/':
+                self.helper(stack, temp, operator)
+                operator = s[index]
+                index += 1
+            
+            # store operator before '('
+            elif s[index] == '(':
+                stack.append(operator)
+                stack.append('(')
+                operator = '+'
+                index += 1
+            
+            elif s[index] == ')':
+                self.helper(stack, temp, operator)
+                sum_parenthese = 0
+                while(stack[-1] != '('):
+                    sum_parenthese += stack.pop()
+                # delete '('
+                stack.pop()
+                operator = stack.pop()
+                self.helper(stack, sum_parenthese, operator)
+                
+                operator= '+'
+                temp = stack.pop()
+                index += 1
+                
+            else:
+                index += 1
+            
+        # This is for last element(number or ')'), becasue we the latter operator to trigger previous operator
+        # However, there's no latter operator after last element, so we have to do it manually.
+        self.helper(stack, temp, operator)        
+        return sum(stack)
+                
+                     
+            
