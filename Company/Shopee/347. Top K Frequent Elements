@@ -15,7 +15,7 @@ Output: [1]
 
 
 # Same as Leetcode 692
-# Time complexity: O(nlogk); space complexity: O(n)
+# Time complexity: O(nlogn); space complexity: O(n)
 from collections import defaultdict
 import heapq
 class Solution:
