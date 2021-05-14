@@ -1,0 +1,72 @@
+224. Basic Calculator
+Hard
+
+Given a string s representing an expression, implement a basic calculator to evaluate it.
+Note: You are not allowed to use any built-in function which evaluates strings as mathematical expressions, such as eval().
+
+Example 1:
+Input: s = "1 + 1"
+Output: 2
+
+Example 2:
+Input: s = " 2-1 + 2 "
+Output: 3
+
+Example 3:
+Input: s = "(1+(4+5+2)-3)+(6+8)"
+Output: 23
+
+
+
+# Calculator is all about stack, notice that number can be 100, 10000
+# time complexity: O(n); space complexity: O(n)
+class Solution:
+    def calculate(self, s: str) -> int:
+        # eliminate corner case
+        if len(s) <= 1:
+            return s
+        
+        result = 0
+        operator = 1
+        index = 0
+        # stack is to deal with '(' and ')'
+        stack_result = list()
+        stack_operator = list()
+        
+        while(index < len(s)):
+            # if number is multi digit, need while loop to calculate
+            if s[index].isdigit():
+                temp = 0
+                while(index < len(s) and s[index].isdigit()):
+                    temp *= 10
+                    temp += int(s[index])
+                    index += 1
+                result += operator * temp
+            
+            elif s[index] == '-':
+                operator = -1
+                index += 1
+            
+            elif s[index] == '+':
+                operator = 1
+                index += 1
+            
+            elif s[index] == '(':
+                # store sum before '(' , result to sum number in ()
+                stack_result.append(result)
+                stack_operator.append(operator)
+                result = 0
+                operator = 1
+                index += 1
+            
+            # s[index] == ')'
+            elif s[index] == ')':
+                operator_pre = stack_operator.pop()
+                result_pre = stack_result.pop()
+                result = operator_pre * result + result_pre
+                index += 1
+            
+            else:
+                index += 1
+            
+        return result
