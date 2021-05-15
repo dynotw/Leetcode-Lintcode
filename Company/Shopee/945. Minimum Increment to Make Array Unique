@@ -1,0 +1,59 @@
+945. Minimum Increment to Make Array Unique
+Medium
+
+Given an array of integers nums, a move consists of choosing any nums[i], and incrementing it by 1.
+Return the least number of moves to make every value in nums unique.
+
+
+Example 1:
+Input: nums = [1,2,2]
+Output: 1
+Explanation:  After 1 move, the array could be [1, 2, 3].
+
+Example 2:
+Input: nums = [3,2,1,2,1,7]
+Output: 6
+Explanation:  After 6 moves, the array could be [3, 4, 1, 2, 5, 7].
+It can be shown with 5 or less moves that it is impossible for the array to have all unique values.
+
+
+
+
+# Only can increase number, can't decrease number
+# Time complexity: O(n); Space Complexity: O(n)
+class Solution:
+    def minIncrementForUnique(self, nums: List[int]) -> int:
+        # eliminate corner condition
+        if nums == None or len(nums) == 1:
+            return 0
+        
+        # repeated 是需要去 increment 的 num
+        repeated = list()
+        visited = set()
+        nums.sort()
+        for i in nums:
+            if i in visited:
+                repeated.append(i)
+            else:
+                visited.add(i)
+        
+        if len(repeated) == 0:
+            return 0
+        
+        # num is the replacement number of repeated[pointer1]
+        result = 0
+        pointer1 = 0
+        num = repeated[0]+1
+        while(pointer1 < len(repeated)):
+            while(repeated[pointer1] >= num or num in visited):
+                num += 1
+            
+            result += abs(repeated[pointer1] - num)
+            pointer1 += 1
+            num += 1
+        
+        return result
+        
+        
+        
+        
