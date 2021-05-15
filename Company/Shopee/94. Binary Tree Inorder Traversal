@@ -1,0 +1,88 @@
+94. Binary Tree Inorder Traversal
+Easy
+
+Given the root of a binary tree, return the inorder traversal of its nodes' values.
+
+
+Example 1:
+Input: root = [1,null,2,3]
+Output: [1,3,2]
+
+Example 2:
+Input: root = []
+Output: []
+
+Example 3:
+Input: root = [1]
+Output: [1]
+
+Example 4:
+Input: root = [1,2]
+Output: [2,1]
+
+Example 5:
+Input: root = [1,null,2]
+Output: [1,2]
+
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    # Use recursion
+    def inorderTraversal_1(self, root: TreeNode) -> List[int]:
+        result = list()
+        # exit of recursion
+        if root == None:
+            return result
+        
+        # Divide
+        left = self.inorderTraversal(root.left)
+        right = self.inorderTraversal(root.right)
+        
+        # Conquer
+        result.extend(left)
+        result.append(root.val)
+        result.extend(right)
+        
+        return result
+    
+    # Interation, use Stack
+    def inorderTraversal(self, root):
+        result = list()
+        # eliminate corner case
+        if root == None:
+            return result
+        
+        stack = list()
+        stack.append(root)
+        
+        # Add all mostleft treenodes
+        while(root.left != None):
+            stack.append(root.left)
+            root = root.left
+        
+        while(len(stack) > 0):
+            node = stack[-1]
+            result.append(node.val)
+            
+            if node.right == None:
+                node = stack.pop()
+                while(stack and stack[-1].right == node):
+                    node = stack.pop()
+            
+            else:
+                node = node.right
+                while(node):
+                    stack.append(node)
+                    node = node.left
+                    
+        return result
+        
+        
+        
+        
