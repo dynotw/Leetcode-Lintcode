@@ -1,0 +1,65 @@
+963. Minimum Area Rectangle II
+Medium
+
+Given a set of points in the xy-plane, determine the minimum area of any rectangle formed from these points, 
+with sides not necessarily parallel to the x and y axes.
+
+If there isn't any rectangle, return 0.
+
+ 
+
+Example 1:
+Input: [[1,2],[2,1],[1,0],[0,1]]
+Output: 2.00000
+Explanation: The minimum area rectangle occurs at [1,2],[2,1],[1,0],[0,1], with an area of 2.
+
+Example 2:
+Input: [[0,1],[2,1],[1,1],[1,0],[2,0]]
+Output: 1.00000
+Explanation: The minimum area rectangle occurs at [1,0],[1,1],[2,1],[2,0], with an area of 1.
+
+Example 3:
+Input: [[0,3],[1,2],[3,1],[1,3],[2,1]]
+Output: 0
+Explanation: There is no possible rectangle to form from these points.
+
+Example 4:
+Input: [[3,1],[1,1],[0,1],[2,1],[3,3],[3,2],[0,2],[2,3]]
+Output: 2.00000
+Explanation: The minimum area rectangle occurs at [2,1],[2,3],[3,3],[3,1], with an area of 2.
+
+
+
+
+# Use vector 
+# Time complexity： O(n^2); Space Complexity: O(n^2)
+from collections import defaultdict
+class Solution:
+    def minAreaFreeRect(self, points: List[List[int]]) -> float:
+        points.sort()
+        # store each point as a complex number: x is real, y is complex
+        points = [complex(z[0],z[1]) for z in points] 
+        seen = collections.defaultdict(list) # store each edges in a dictionary
+        for P, Q in itertools.combinations(points, 2):
+            seen[Q - P].append((P + Q) / 2)
+            # Q-P, it is a vector that stores both the direction and the length of the edge
+            # (P+Q)/2 is the mid point of the edge 
+            # save the midpoints as a list for all edges with the same direction and length 
+
+        ans = float("inf")
+        for edge, midpoints in seen.items():  # iteritem doesn't work in python3, so I changed to items
+            for P, Q in itertools.combinations(midpoints, 2): # for each pair of edges P and Q
+                # if the line linking two midpoint (P-Q) is perpendicular to the edge
+                if edge.real * (P - Q).real + edge.imag * (P - Q).imag == 0: 
+                    # calculate the area of the rectangle
+                    # why edge and P-Q can be rectangle, because 
+                    # 1. edge and P-Q vertical
+                    # 2. only len(midpoints) >= 2时，才会有P/Q，这就代表至少有两个edge是相同的vector 
+                    ans = min(ans, abs(edge) * abs(P - Q))
+                    
+        return ans if ans < float("inf") else 0 # save the smallest rectangle
+        
+        
+        
+        
+        
