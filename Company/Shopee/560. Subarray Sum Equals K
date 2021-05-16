@@ -1,0 +1,74 @@
+560. Subarray Sum Equals K
+Medium
+
+Given an array of integers nums and an integer k, return the total number of continuous subarrays whose sum equals to k.
+
+ 
+Example 1:
+Input: nums = [1,1,1], k = 2
+Output: 2
+
+Example 2:
+Input: nums = [1,2,3], k = 3
+Output: 2
+
+
+
+# Time complexity:O(n); Space Compelxity: O(n)
+from collections import defaultdict
+class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        record = defaultdict(int)
+        record[0] += 1
+        temp_sum = 0
+        count = 0
+        for i in nums:
+            temp_sum += i
+            # Notice: it's (temp_sum - k) rather than (k - temp_sum
+            if temp_sum-k in record.keys():
+                count += record[temp_sum-k]
+            
+            record[temp_sum] += 1
+        return count
+        
+        
+
+# The vary of Leetcode 560
+# The array is an increasing array (Sorted)
+# Time complexity: O(n); Space Complexity: O(1
+)
+def numSubarray(arr, k):
+    # set two pointers
+    left = 0
+    right = 0
+    temp_sum = arr[0]
+    count = 0
+    while(right < len(arr) and left <= right):
+        if temp_sum < k:
+            if right+1 < len(arr):
+                right += 1
+                temp_sum += arr[right]
+            else:
+                break
+        
+        elif temp_sum == k:
+            count += 1
+            if right + 1< len(arr):
+                right += 1
+                temp_sum += arr[right]
+            else:
+                temp_sum -= arr[left]
+                left += 1
+            
+        
+        else:
+            temp_sum -= arr[left]
+            left += 1
+    
+    return count
+    
+    
+    
+    
+    
+    
