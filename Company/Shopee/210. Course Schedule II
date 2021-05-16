@@ -1,0 +1,84 @@
+210. Course Schedule II
+Medium
+
+There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. 
+You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
+
+For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.
+Return the ordering of courses you should take to finish all courses. If there are many valid answers, return any of them. 
+If it is impossible to finish all courses, return an empty array.
+
+ 
+
+Example 1:
+Input: numCourses = 2, prerequisites = [[1,0]]
+Output: [0,1]
+Explanation: There are a total of 2 courses to take. To take course 1 you should have finished course 0. So the correct course order is [0,1].
+
+Example 2:
+Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+Output: [0,2,1,3]
+Explanation: There are a total of 4 courses to take. To take course 3 you should have finished both courses 1 and 2. Both courses 1 and 2 should be taken after you finished course 0.
+So one correct course order is [0,1,2,3]. Another correct ordering is [0,2,1,3].
+
+Example 3:
+Input: numCourses = 1, prerequisites = []
+Output: [0]
+
+
+
+# BFS + Topo
+# Time compelxity: O(n); Space Compelxity: O(n)
+from collections import defaultdict
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        # eliminate corner condition
+        if numCourses == 0:
+            return []
+        if len(prerequisites) == 0:
+            return [i for i in range(numCourses)]
+        
+        indegree = defaultdict(int)
+        next_courses = defaultdict(list)
+        # record all courses shown in prerequisties, because certain courses may not show in prerequisites
+        shown = set()
+        for pair in prerequisites:
+            indegree[pair[0]] += 1
+            if pair[-1] not in indegree.keys():
+                indegree[pair[-1]] = 0
+            shown.add(pair[0])
+            shown.add(pair[-1])
+            next_courses[pair[-1]].append(pair[0])
+        
+#         print(indegree)
+#         print(next_courses)
+        
+        # First courses
+        start = list()
+        for course in indegree.keys():
+            if indegree[course] == 0:
+                start.append(course)
+        
+        result = []
+        while(len(start) > 0):
+            current_course = start.pop()
+            result.append(current_course)
+            for next_course in next_courses[current_course]:
+                indegree[next_course] -= 1
+                if indegree[next_course] == 0:
+                    start.append(next_course)
+                    
+        # Internal Topo can't be finished, impossible to finish all courses
+        if len(result) != len(indegree.keys()):
+            return []
+        
+        # Internal Topo can't be solved, but certain courses don't show in this Topo
+        # Like 4, [[3,0],[0,1]], one answer is [1,0,3,2]
+        for i in range(numCourses):
+            if i not in shown:
+                result.append(i)
+        return result
+        
+        
+        
+        
