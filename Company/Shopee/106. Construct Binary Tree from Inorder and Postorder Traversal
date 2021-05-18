@@ -33,3 +33,7 @@ class Solution:
         root.right=self.buildTree(inorder[i+1:],postorder) 
         root.left=self.buildTree(inorder[:i],postorder) 
         return root
+        
+        
+        
+        
