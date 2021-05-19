@@ -45,6 +45,7 @@ class Solution:
         pointer1 = 0
         num = repeated[0]+1
         while(pointer1 < len(repeated)):
+            # 寻找第一个符合要求的数
             while(repeated[pointer1] >= num or num in visited):
                 num += 1
             
