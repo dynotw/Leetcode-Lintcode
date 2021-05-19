@@ -1,0 +1,48 @@
+import random
+def getPi(num_all):
+    num_cir = 0         #随机点在圆内的计数器
+    num_all = num_all #每产生这么多个随机点后，计算并打印一次目前的结果
+
+    for i in range(num_all): 
+        x = random.uniform(-1,1)         #获得随机点的横坐标
+        y = random.uniform(-1,1)         #获得随机点的纵坐标
+
+        if x*x + y*y < 1 :          #随机点(x,y)在圆内
+            num_cir = num_cir + 1   #圆内计数器+1
+    pi = 4*num_cir/num_all
+    
+    return pi
+
+
+def getPi2():
+    # π=4*(1/1-1/3+1/5-1/7+1/9-1/11+……)=4*∑((-1)^n/(1+2n)),n∈N
+    pi=0.0
+    fuhao=1;
+    for i in range(1,1000000,2):
+        if fuhao==1:
+            pi += 1/i
+        else:
+            pi -= 1/i
+        fuhao *= -1
+        
+    return 4*pi
+
+
+def closet(arr, k):
+    left = 0
+    right = len(arr)-1
+    while(right-left > 1):
+        mid = left + (right-left)//2
+        
+        if k < arr[mid]:
+            right = mid
+        
+        else:
+            left = mid
+    
+    print(arr[left])
+    print(arr[right])
+    if abs(k-arr[left]) < abs(k-arr[right]):
+        return arr[left]
+    else:
+        return arr[right]
