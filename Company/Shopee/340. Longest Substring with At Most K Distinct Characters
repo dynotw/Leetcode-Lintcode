@@ -38,6 +38,7 @@ class Solution:
             right += 1
 
             if len(hashmap) == k + 1:
+                # hashmap中只记录每种char最晚出现的 index， 删除的是mostleft的最晚index的char
                 # delete the leftmost character
                 del_idx = min(hashmap.values())
                 del hashmap[s[del_idx]]
@@ -47,3 +48,4 @@ class Solution:
             max_len = max(max_len, right - left)
 
         return max_len
+
