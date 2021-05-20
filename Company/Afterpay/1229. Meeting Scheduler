@@ -1,0 +1,69 @@
+1229. Meeting Scheduler
+Medium
+
+Given the availability time slots arrays slots1 and slots2 of two people and a meeting duration duration, 
+return the earliest time slot that works for both of them and is of duration duration.
+
+If there is no common time slot that satisfies the requirements, return an empty array.
+
+The format of a time slot is an array of two elements [start, end] representing an inclusive time range from start to end.
+
+It is guaranteed that no two availability slots of the same person intersect with each other. 
+That is, for any two time slots [start1, end1] and [start2, end2] of the same person, either start1 > end2 or start2 > end1.
+
+ 
+
+Example 1:
+Input: slots1 = [[10,50],[60,120],[140,210]], slots2 = [[0,15],[60,70]], duration = 8
+Output: [60,68]
+
+Example 2:
+Input: slots1 = [[10,50],[60,120],[140,210]], slots2 = [[0,15],[60,70]], duration = 12
+Output: []
+
+
+
+
+
+# Sort + Two pointers
+# Time complexity: O(nlogn); Space Compelxity: O(1)
+class Solution:
+    def minAvailableDuration(self, slots1: List[List[int]], slots2: List[List[int]], duration: int) -> List[int]:
+        slots1.sort()
+        slots2.sort()
+        
+        # set two pointers
+        pointer1 = 0
+        pointer2 = 0
+        while(pointer1 < len(slots1) and pointer2 < len(slots2)):
+            while(pointer1 < len(slots1) and slots1[pointer1][1] - slots1[pointer1][0] < duration):
+                pointer1 += 1
+            
+            while(pointer2 < len(slots2) and slots2[pointer2][1] - slots2[pointer2][0] < duration):
+                pointer2 += 1
+            
+            # slots1 或 slots2中有一个不存在合适的区间，即不可能存在两者都合适的区间
+            if pointer1 >= len(slots1) or pointer2 >= len(slots2):
+                return []
+            
+            temp_interval = min(slots1[pointer1][1], slots2[pointer2][1]) - max(slots1[pointer1][0], slots2[pointer2][0])
+            
+            if temp_interval >= duration:
+                return [max(slots1[pointer1][0], slots2[pointer2][0]), max(slots1[pointer1][0], slots2[pointer2][0]) + duration]
+            
+            # pointer1 -> interval1; pointer2 -> interval2
+            # 分三种情况讨论
+            # interval1[0] < interval2[0] < interval2[1] < interval1[1]
+            if slots1[pointer1][0] < slots2[pointer2][0] and slots2[pointer2][1] < slots1[pointer1][1]:
+                pointer2 += 1
+            elif slots1[pointer1][0] < slots2[pointer2][0] and slots2[pointer2][1] > slots1[pointer1][1]:
+                pointer1 += 1
+            else:
+                pointer2 += 1
+                
+            
+        return []
+        
+        
+        
+        
