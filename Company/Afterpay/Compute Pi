@@ -46,3 +46,4 @@ def closet(arr, k):
         return arr[left]
     else:
         return arr[right]
+
