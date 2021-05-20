@@ -1,0 +1,34 @@
+252. Meeting Rooms
+Easy
+
+Given an array of meeting time intervals where intervals[i] = [starti, endi], determine if a person could attend all meetings.
+
+ 
+Example 1:
+Input: intervals = [[0,30],[5,10],[15,20]]
+Output: false
+
+Example 2:
+Input: intervals = [[7,10],[2,4]]
+Output: true
+
+
+
+# Time complexity: O(nlogn); Space Complexity: O(1)
+class Solution:
+    def canAttendMeetings(self, intervals: List[List[int]]) -> bool:
+        # How to use .sort()
+        # a = sorted(a, lambda x: x.modified, reverse=True)
+        intervals.sort()
+        
+        for index, interval in enumerate(intervals):
+            if index == 0:
+                continue
+            
+            if intervals[index][0] < intervals[index-1][-1]:
+                return False
+            
+        return True
+        
+        
+        
