@@ -18,6 +18,7 @@ Output: true
 class Solution:
     def canAttendMeetings(self, intervals: List[List[int]]) -> bool:
         # How to use .sort()
+        # lst.sort(key=lambda x:x[1])
         # a = sorted(a, lambda x: x.modified, reverse=True)
         intervals.sort()
         
