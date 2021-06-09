@@ -36,6 +36,7 @@ class Solution:
         pointer1 = 0
         pointer2 = 0
         while(pointer1 < len(slots1) and pointer2 < len(slots2)):
+            # 删除不满足duration的区间
             while(pointer1 < len(slots1) and slots1[pointer1][1] - slots1[pointer1][0] < duration):
                 pointer1 += 1
             
@@ -52,14 +53,13 @@ class Solution:
                 return [max(slots1[pointer1][0], slots2[pointer2][0]), max(slots1[pointer1][0], slots2[pointer2][0]) + duration]
             
             # pointer1 -> interval1; pointer2 -> interval2
-            # 分三种情况讨论
-            # interval1[0] < interval2[0] < interval2[1] < interval1[1]
-            if slots1[pointer1][0] < slots2[pointer2][0] and slots2[pointer2][1] < slots1[pointer1][1]:
+            # 分二种情况讨论
+            # Always move the interval which ends earlier
+            if slots2[pointer2][1] < slots1[pointer1][1]:
                 pointer2 += 1
-            elif slots1[pointer1][0] < slots2[pointer2][0] and slots2[pointer2][1] > slots1[pointer1][1]:
-                pointer1 += 1
+
             else:
-                pointer2 += 1
+                pointer1 += 1
                 
             
         return []
