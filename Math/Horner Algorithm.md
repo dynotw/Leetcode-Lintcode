@@ -7,14 +7,10 @@ We have a polynomial: 2x^3 - 6x^2 + 2x - 1, and we want to know the value of thi
 
 # Horner Algorithm
 Implementation of Horner Method for Polynomial Evaluation
-returns value of polynomial: poly[0] * x^(n-1) + poly[1] * x^(n-2) + .. + poly[n-1]
+returns value of polynomial: a0 * x^(n-1) + a1 * x^(n-2) + .. + an-1: 
 
 '''
-def horner(poly, n, x):
-    # poly is a list which represents the coeffiecnt of each term
-    # n-1 is the highest order of x
-    # x: we want to get value of y(x)
-
+def 
     # Initialize result
     result = poly[0] 
   
