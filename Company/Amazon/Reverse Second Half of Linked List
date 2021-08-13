@@ -1,0 +1,29 @@
+Reverse Second Half of Linked List
+
+
+[1,2,3,4,5] -> [1,2,3,5,4]
+[1,2,3,4,5,6] -> [1,2,3,6,5,4]
+
+
+public static ListNode reverseSecondHalfList(ListNode head) {
+	if (head == null || head.next == null)		return head;
+  
+  // This while loop is kinds of preprocess, just to locate sencond half of linkedlist
+	ListNode fast = head;
+	ListNode slow = head;
+	while (fast.next != null && fast.next.next != null) {
+		fast = fast.next.next;
+		slow = slow.next;
+	}
+  
+  // This while loop is just simple reverse linkedlist
+	ListNode pre = slow.next;
+	ListNode cur = pre.next;
+	while (cur != null) {
+		pre.next = cur.next;
+		cur.next = slow.next;
+		slow.next = cur;
+		cur = pre.next;
+	}
+	return head;
+}
