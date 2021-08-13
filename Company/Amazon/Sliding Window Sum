@@ -1,0 +1,16 @@
+Sliding Window Sum
+
+[1,2,3,4] & 3 -> [6, 9]
+[1,2,3,4] & 2 -> [3, 5, 7]
+
+def slide_window_sum(array, k):
+    # eliminate corner case
+    if k <= 0 or array == None or len(array) == 0:
+        return []
+    
+    result = []
+    for i in range(k-1, len(array)):
+        result.append(sum(array[i-k+1:i+1]))
+    
+    return result
+            
