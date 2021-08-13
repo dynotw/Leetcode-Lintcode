@@ -4,7 +4,36 @@ Reverse Second Half of Linked List
 [1,2,3,4,5] -> [1,2,3,5,4]
 [1,2,3,4,5,6] -> [1,2,3,6,5,4]
 
+def reverseList(self, head: ListNode) -> ListNode:
+	# eliminate corner case
+	if head == None or head.next == None:
+	    return head
 
+	# locate the second half o linked list
+	fast = head
+	slow = head
+	while(fast.next != None and fast.next.next != None):
+	    fast = fast.next.next
+	    slow = slow.next
+
+	# This whie loop is just to reverse linkedlist
+	# Notice: current_pre is None, and remember to '' slow.next = current_pre'', to merge two separated linkedlist
+	current_pre = None
+	current = slow.next
+	current_next = current.next
+
+	while(current != None):
+	    current_next = current.next
+	    current.next = current_pre
+	    current_pre = current
+	    current = current_next
+
+	slow.next = current_pre
+
+	return head
+	
+	
+	
 public static ListNode reverseSecondHalfList(ListNode head) {
 	if (head == null || head.next == null)		return head;
   
