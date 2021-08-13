@@ -1,0 +1,24 @@
+Greatest Common Divisor
+
+#Define our customed method to get gcd
+def find_gcd(l):
+    n =1
+    f = l[0]
+    while n != len(l):
+        f = gcd(f,l[n])
+        if  f == 1:
+            return 1
+        else:
+            n = n + 1          
+    return f
+
+def gcd(a, b):
+    while b:
+        a, b = b, a%b
+    return a
+    
+
+# Use existed method in Numpy
+import numpy as np
+def find_gcp(array):
+ return np.gcd.reduce(A)
