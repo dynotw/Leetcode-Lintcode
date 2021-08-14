@@ -6,3 +6,13 @@
 572. Subtree of Another Tree
 973. K Closest Points to Origin
 836. Rectangle Overlap
+146. LRU Cache
+48. Rotate Image
+708. Insert into a Sorted Circular Linked List
+141. Linked List Cycle
+142. Linked List Cycle II - (141的基础上，再返回cycle的ListNode)
+124. Binary Tree Maximum Path Sum （AnyNode to AnyNode）； 124(Lintcode). Binary Tree Maximum Path Sum (Root to anynode)
+957. Prison Cells After N Days
+490. The Maze
+239. Sliding Window Maximum
+413. Arithmetic Slices
