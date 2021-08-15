@@ -1,0 +1,92 @@
+Fresh Promotion
+
+https://leetcode.com/discuss/interview-question/1002811/Amazon-or-OA-20201-or-Fresh-Promotion
+
+# Method 1
+def is_winner(self, promotions: List[List[str]], orders: List[str]) -> bool:
+    # initialize indexes to 0
+    p_idx = o_idx = 0
+
+    # 1st loop until both index reach their size
+    while p_idx < len(promotions) and o_idx < len(orders):
+        # put the each promotion combination into a list
+        promo_combination = promotions[p_idx]
+        # initialize the above combination index
+        promo_idx = 0
+        # loop through the promo_combination and orders to see if
+        # it satisfies
+        while promo_idx < len(promo_combination) and o_idx < len(orders):
+            # now compare each combination with the order and also wild card anything
+            if promo_combination[promo_idx] == orders[o_idx] or promo_combination[promo_idx] == "anything":
+                # increment the promo_idx
+                promo_idx += 1
+            else:
+                # if not start the comparision from beginning
+                promo_idx = 0
+            # move to next order
+            o_idx += 1
+        if promo_idx != len(promo_combination):
+            return False
+        # move to next promotion combinations
+        p_idx += 1
+    # if the promotion index is less than total promotions
+    # return False
+    if p_idx < len(promotions):
+        return False
+    return True
+    
+    
+    
+    
+# Method 2
+def fresh_promotion(codes, orders):
+    match_num = 0
+    order_index = 0
+    
+    # 按次序匹配each code， match_num indicate how many code has been matched
+    for code in codes:
+        size = len(code)
+        # Has no enough order to match promo_code
+        if order_index + size > len(orders):
+            return False
+        
+        while order_index < len(orders):
+            # 在order中找到符合 code 的 起点,依次进行尝试
+            if orders[order_index] == code[0] or code[0] == "anything":
+                if check(orders[order_index: order_index+size], code):
+                    match_num += 1
+                    if match_num == len(codes):
+                        return True
+                    order_index += size
+                    break
+                    
+                else:
+                    order_index += 1  
+                    if order_index + size > len(orders):
+                        return False
+                    
+            else:
+                order_index += 1
+    
+    return match_num == len(codes)
+                       
+
+# check whether match
+def check(order, code):
+    if len(order) != len(code):
+        return False
+    
+    order_index = 0
+    code_index = 0
+    
+    while(order_index < len(order) and code_index < len(code)):
+        if order[order_index] != code[code_index] and code[code_index] != "anything":
+            return False
+        
+        order_index += 1
+        code_index += 1
+    
+    return True
+    
+    
+    
