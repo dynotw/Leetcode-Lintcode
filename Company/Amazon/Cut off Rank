@@ -1,0 +1,53 @@
+Cut off Rank
+https://leetcode.com/discuss/interview-question/824381/na-amazon-sde-intern-oa-2
+
+You are given a list of integers representing scores of players in a video game. 
+Players can 'level-up' if by the end of the game they have a rank that is at least the cutOffRank. 
+A player's rank is solely determined by their score relative to the other players' scores. For example:
+
+Score : 10 | Rank 1
+Score : 5 | Rank 2
+Score : 3 | Rank 3
+etc.
+
+
+
+
+# Method 1
+from collections import defaultdict
+def cut_off_rank(cutOffRank, num, scores):
+    # eliminate corner case
+    if(cutOffRank <= 0):
+        return 0
+    
+    count = defaultdict(int)
+    for score in scores:
+        count[score] += 1
+    
+    people = 0
+    keys = sorted(count.keys(), reverse  = True)
+    for key in keys:
+        people += count[key]
+        if people >= cutOffRank:
+            break
+    
+    return people
+    
+    
+    
+# Method 2
+# counting sort
+class Solution:
+	def cutOffRank(self, scores: List[int], cutOffRank: int, num: int) -> int:
+			buckets = [0]*101
+			for s in scores:
+				buckets[s] += 1
+			print(buckets)
+			count = 0
+			for score in range(100, -1, -1):
+				if score <= cutOffRank:
+					break
+				count += buckets[score]
+				if count >= cutOffRank:
+					break
+			return count
