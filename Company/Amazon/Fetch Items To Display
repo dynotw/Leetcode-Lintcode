@@ -1,0 +1,25 @@
+Fetch Items To Display
+
+
+
+from typing import Dict, List, Tuple
+def fetch_results_to_display(sort_column: int, sort_order: int, results_per_page: int, page_index: int, results: Dict[str, Tuple[int, int]]) -> List[str]:
+    # WRITE YOUR BRILLIANT CODE HERE
+    ordered = [(name, rel, price) for name, (rel, price) in results.items()]
+    return []
+    ordered.sort(key=lambda x: x[sort_column], reverse=sort_order == 1) # sort by sort_column and reverse order if needed
+    start_index = results_per_page * page_index # find the start index of the first result on the target page
+    return [name for name, _, _ in ordered[start_index:start_index + results_per_page]] # return only the name of each result on the page
+if __name__ == '__main__':
+    sort_column = int(input())
+    sort_order = int(input())
+    results_per_page = int(input())
+    page_index = int(input())
+    results_length = int(input())
+    results = {
+        n: (int(r), int(p))
+        for _ in range(results_length)
+        for n, r, p in [input().split()]
+    }
+    res = fetch_results_to_display(sort_column, sort_order, results_per_page, page_index, results)
+    print(' '.join(res))
