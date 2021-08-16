@@ -1,0 +1,23 @@
+Prime Air Route
+
+https://leetcode.com/discuss/interview-question/1025705/Amazon-or-OA-or-Prime-Air-time/824897
+https://www.careercup.com/question?id=5750442676453376
+
+
+
+def find(F, B, T):
+    ans = [0, 0, 0]
+    F = sorted([x, i] for i,x in F)
+    for idy,y in B:
+        f = 0
+        end = len(F)
+        z = T - y
+        while f != end:
+            m = (f + end)/2
+            if F[m][0] <= z:
+                f = m+1
+            else:
+                end = m
+        if f != 0 and y+F[f-1][0] > ans[0]:
+            ans = [y+F[f-1][0], F[f-1][1], idy]
+    return ans[1:]
