@@ -1,0 +1,145 @@
+Largest Item Association
+
+https://leetcode.com/discuss/interview-question/844979/amazon-oa-2020-largest-item-association
+https://yidongzhang.gitbooks.io/-oa-1/content/itemassociation.html
+
+# Java
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Created by Tian on 2017/8/9.
+ */
+public class ItemAssociation {
+    public static void main(String[] args) {
+        String[][] items = {{"itemA", "itemB"}, {"itemB", "itemC"},
+                {"itemD", "itemE"}, {"itemE", "itemF"}, {"itemG", "itemD"}};
+
+        ItemAssociation ia = new ItemAssociation();
+        String[] res = ia.count(items);
+    }
+
+    public String[] count(String[][] items) {
+        int n = items.length;
+
+        int index = 0;
+        Map<String, Integer> hash = new HashMap<String, Integer>();
+        for (int i = 0; i < n; i++) {
+            if (!hash.containsKey(items[i][0])) hash.put(items[i][0], index++);
+            if (!hash.containsKey(items[i][1])) hash.put(items[i][1], index++);
+        }
+
+        UnionFind un = new UnionFind(hash.size());
+
+        for (int i = 0; i < n; i++) {
+            un.union(hash.get(items[i][0]), hash.get(items[i][1]));
+        }
+
+        int maxIndex = un.findMaxSize();
+        System.out.println(maxIndex);
+        for (Map.Entry<String, Integer> entry : hash.entrySet()) {
+            String key = entry.getKey();
+            Integer ind = entry.getValue();
+//            System.out.println(key + un.find(ind));
+            if (un.find(ind) == maxIndex) {
+                System.out.println(key);
+            }
+        }
+        return null;
+    }
+
+    class UnionFind {
+        int[] father = null;
+        int[] size = null;
+        UnionFind(int n) {
+            father = new int[n];
+            size = new int[n];
+            for (int i = 0; i < n; i++) {
+                father[i] = i; //father is itself
+                size[i] = 1;
+            }
+        }
+
+        void union(int a, int b) {
+            int root_a = find(a);
+            int root_b = find(b);
+            if (root_a != root_b) {
+                father[root_b] = root_a; //father merge
+                size[root_a] += size[root_b];
+            }
+        }
+
+        int find(int x) {
+            if (father[x] == x) {
+                return x;
+            }
+
+            return father[x] = find(father[x]);
+        }
+
+        int findMaxSize() {
+            int max = 0;
+            int index = 0;
+            for (int i = 0; i < size.length; i++) {
+//                System.out.println("father["+i+"]"+father[i]+" size[" +i +"]"+ size[i]);
+                if (size[i] > max) {
+                    max = size[i];
+                    index = i;
+                }
+            }
+            return index;
+         }
+    }
+}
+
+
+
+
+# Python
+def itemassociation(arr):
+    d = {}
+    for i in range(len(arr)):
+        for j in range(len(arr[i])):
+            if arr[i][j] not in d:
+                d[arr[i][j]] = [arr[i][j]]
+
+    for k in d:
+        for node1, node2 in arr:
+            if node1 in d[k]:
+                d[k].append(node2)
+            elif node2 in d[k]:
+                d[k].append(node1)
+    maxval = 0
+    output = None
+    for key, val in d.items():
+        if len(val) > maxval:
+            maxval = len(val)
+            output = val
+    return output
+    
+    
+    
+    
+# Method 3
+def dfs(start, group, graph, visited):
+    group.append(start)
+    visited.add(start)
+    for asso in graph[start]:
+        if asso not in visited:
+            dfs(asso, group, graph, visited)
+
+def item_association(pairs):
+    graph = defaultdict(list)
+    for a, b in pairs: # building adjlist
+        graph[a].append(b)
+        graph[b].append(a)
+        
+    visited = set()
+    res = []
+    for k in graph.keys():
+        if k not in visited:
+            group = []
+            dfs(k, group, graph, visited)
+            if len(group) > len(res):
+                res = group
+    return res
