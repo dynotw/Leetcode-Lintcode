@@ -4,7 +4,6 @@
 5. Longest Palindromic Substring
 21. Merge Two Sorted Lists
 572. Subtree of Another Tree
-973. K Closest Points to Origin
 836. Rectangle Overlap
 146. LRU Cache
 48. Rotate Image
@@ -26,4 +25,6 @@
 138. Copy List with Random Pointer
 1395. Count Number of Teams
 1192. Critical Connections in a Network (Crital Connection) ---- 没懂
-
+547. Number of Provinces ---- (Friend Circles) ---- (Gifting Groups)
+973. K Closest Points to Origin ---- (Amazon Fresh Deliveries)
+1268. Search Suggestions System ---- (Keyword Suggestions)
