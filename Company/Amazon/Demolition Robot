@@ -1,0 +1,79 @@
+Demolition Robot
+
+https://leetcode.com/discuss/interview-question/1033264/amazon-oa-1-year-experienced-for-sde1
+
+
+from collections import deque
+
+from typing import List
+false = False
+
+def move_obstacle(lot: List[List[int]]) -> int:
+
+    # WRITE YOUR BRILLIANT CODE HERE
+
+    num_rows = len(lot)
+
+    num_cols = len(lot[0])
+
+    def get_neighbors(coord):
+
+        row, col = coord
+
+        for dx, dy in [(-1, 0), (0, -1), (1, 0), (0, 1)]:
+
+            r = row + dx
+
+            c = col + dy
+
+            if 0 <= r < num_rows and 0 <= c < num_cols:
+
+                yield (r, c)
+
+    def bfs(start):
+
+        queue = deque([start])
+
+        r, c = start
+
+        lot[r][c] = 0
+
+        dist = 0
+
+        while len(queue) > 0:
+
+            dist += 1
+
+            n = len(queue)
+
+            for _ in range(n):
+
+                node = queue.popleft()
+
+                for r, c in get_neighbors(node):
+
+                    if lot[r][c] == 9:
+                       false = True
+
+                        return dist
+
+                    if lot[r][c] == 0:
+
+                        continue
+
+                    queue.append((r, c))
+
+                    lot[r][c] = 0
+    x = bfs((0,0))
+    if false == True:
+           return x
+    else:
+           return -1
+
+if __name__ == '__main__':
+
+    lot = [[int(x) for x in input().split()] for _ in range(int(input()))]
+
+    res = move_obstacle(lot)
+
+    print(res)
