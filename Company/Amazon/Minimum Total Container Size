@@ -1,0 +1,30 @@
+Minimum Total Container Size
+# 听闻和Leetcode - 1335. Minimum Difficulty of a Job Schedule ， 一样
+
+https://leetcode.com/discuss/interview-question/958494/minimum-total-container-size-interview-question
+
+# Method 1
+# max_check define from i to j what's the highest job difficulty
+def minContainerSize(d, P):
+    n = len(jobDifficulty)
+    if n < d:
+        return -1
+    max_check = [[0 for _ in range(n)] for _ in range(n)]
+    for i in range(n):
+        max_check[i][i] = jobDifficulty[i]
+    for i in range(0, n):
+        for j in range(i+1, n):
+            max_check[i][j] = max(max_check[i][j-1], jobDifficulty[j])
+
+    dp = [[0 for _ in range(n)] for _ in range(d)]
+
+    for j in range(n):
+        dp[0][j] = max_check[0][j]
+
+    for i in range(1, d):
+        for j in range(i, n):
+            dp[i][j] = dp[i-1][j-1] + jobDifficulty[j]
+            for k in range(i-1, j):
+                dp[i][j] = min(dp[i][j], dp[i-1][k] + max_check[k+1][j])
+
+    return dp[-1][-1]
