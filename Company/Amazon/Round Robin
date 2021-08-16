@@ -1,0 +1,48 @@
+Round Robin
+
+https://jincheng8841.gitbooks.io/leetcode-note/content/round_robin.html
+
+
+# Method 1
+class Solution {
+  public:
+    double RoundRobin(vector<int>& requestTime, vector<int>& duration, int q) {
+      int n = requestTime.size();
+      double res = 0;
+      if ( n <= 1 ) return res;
+      deque<int> jobs;
+      vector<int> twait(n, 0);
+      int t = 0, i = 0;
+      while ( i != n or ! jobs.empty() ) {
+        if ( jobs.empty() ) {
+          jobs.push_back(i);
+          t = requestTime[i];
+          i++;
+        }
+        int j = jobs.front();
+        jobs.pop_front();
+        twait[j] += t - requestTime[j];
+        t += min(q, duration[j]);
+        while ( i < n and requestTime[i] <= t ) jobs.push_back(i++);
+        if ( duration[j] > q ) {
+          duration[j] -= q;
+          jobs.push_back(j);
+          requestTime[j] = t;
+        }
+        else duration[j] = 0;
+      }
+      for ( int i = 0; i < n; i++ ) res += twait[i];
+      return res/n;
+    }
+};
+
+int main() {
+  Solution sol;
+  int x[3] = {0, 1, 4};
+  int y[3] = {5, 2, 3};
+  int q = 3;
+  vector<int> requestTime(x, x + sizeof(x)/sizeof(x[0]));
+  vector<int> duration(y, y + sizeof(y)/sizeof(y[0]));
+  cout << sol.RoundRobin(requestTime, duration, q) << endl;
+  return 0;
+}
