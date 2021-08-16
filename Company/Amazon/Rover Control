@@ -1,0 +1,58 @@
+Rover Control
+
+https://leetcode.com/discuss/interview-question/985703/amazon-oa-rover-control
+
+## Method 1
+public static int roverMove(String[] cmnds, int n){
+	int row=0;
+	int col=0;
+	for(String cmnd:cmnds) {
+		if(cmnd=="RIGHT") {
+			if(col<n-1)col=col+1;
+		}
+		else if(cmnd=="LEFT") {
+			if(col>0)col=col-1;
+		}
+		else if(cmnd=="UP") {
+			if(row>0)row=row-1;
+        }
+		else {
+			if(row<n-1) row=row+1;
+		}
+	}
+	return (row*n)+col;
+}
+
+
+
+## Method 2
+public static int finalPostion(int n, String[] commands ) {
+	
+	int x = 0, y = 0;
+	for (String cmd: commands) {
+		int dx = 0;
+		int dy = 0;
+		switch (cmd) {
+			case "LEFT": 
+				dy = -1; break;
+			case "RIGHT": 
+				dy = 1; break;
+			case "UP": 
+				dx = -1; break;
+			case "DOWN": 
+				dx = 1; break;
+		}
+		
+		if ((x+dx) >= 0 && (x+dx) < n && (y+dy) >= 0 && (y+dy) < n) {
+			x += dx;
+			y += dy;
+		}
+	}
+	return x*n + y;
+}
+public static void main(String[] args) {
+	// TODO Auto-generated method stub
+	System.out.println(finalPostion(4,new String[] {"RIGHT", "UP", "DOWN", "LEFT", "DOWN", "DOWN"}));
+	System.out.println(finalPostion(4,new String[] {"RIGHT", "DOWN", "LEFT", "LEFT", "DOWN"}));
+
+}
