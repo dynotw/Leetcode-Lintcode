@@ -1,0 +1,85 @@
+Subtree with Maximum Average 
+
+https://leetcode.com/discuss/interview-question/349617
+
+
+## Method 1
+double max = Integer.MIN_VALUE;
+TreeNode maxNode = null;
+
+public TreeNode maximumAverageSubtree(TreeNode root) {
+    if (root == null) return null;
+    helper(root);
+    return maxNode;
+}
+
+private double[] helper(TreeNode root) {
+    if (root == null) return new double[] {0, 0};
+
+    double curTotal = root.val;
+    double count = 1;
+    for (TreeNode child : root.children) {
+        double[] cur = helper(child);
+        curTotal += cur[0];
+        count += cur[1];
+    }        
+    double avg = curTotal / count;
+    if (count > 1 && avg > max) { //taking "at least 1 child" into account
+        max = avg;
+        maxNode = root;
+    }
+    return new double[] {curTotal, count};
+}
+
+
+
+## Method 2
+class TreeNode:
+    def __init__(self, val, children):
+        self.val = val
+        self.children = children
+
+class Solution:
+    def maxAverage(self, root):
+        if not root or not root.children:
+            return None
+
+        # self.res = [max average, tree node of the max average]
+        self.res = [float('-inf'), root)]
+        self.dfs(root)
+
+        return self.res[1]
+
+    def dfs(self, root):
+        if not root.children:
+            return [root.val, 1]
+        
+        cur_val, cur_count = root.val, 1
+
+        for node in root.children:
+            child_val, child_count = self.dfs(node)
+            cur_val += child_val
+            cur_count += child_count
+
+        cur_average = cur_val / float(cur_count)
+
+        if cur_average > self.res[0]:
+            self.res = [cur_average, root]
+
+        return [cur_val, cur_count]
+
+if __name__ == '__main__':
+
+    n8 = TreeNode(8, [])
+    n7 = TreeNode(15, [])
+    n6 = TreeNode(3, [])
+    n5 = TreeNode(2, [])
+    n4 = TreeNode(11, [])
+    n3 = TreeNode(18, [n7, n8])
+    n2 = TreeNode(12, [n4, n5, n6])
+    n1 = TreeNode(20, [n2, n3])
+
+    solution = Solution()
+    for node in solution.maxAverage(n1).children:
+        print(node.val)
+    print("node val with highest average", solution.maxAverage(n1).val)
