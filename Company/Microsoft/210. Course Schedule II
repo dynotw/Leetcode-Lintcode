@@ -1,0 +1,51 @@
+# BFS + Topo
+# Time compelxity: O(n); Space Compelxity: O(n)
+from collections import defaultdict
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        # eliminate corner condition
+        if numCourses == 0:
+            return []
+        if len(prerequisites) == 0:
+            return [i for i in range(numCourses)]
+        
+        indegree = defaultdict(int)
+        next_courses = defaultdict(list)
+        # record all courses shown in prerequisties, because certain courses may not show in prerequisites
+        shown = set()
+        for pair in prerequisites:
+            indegree[pair[0]] += 1
+            if pair[-1] not in indegree.keys():
+                indegree[pair[-1]] = 0
+            shown.add(pair[0])
+            shown.add(pair[-1])
+            next_courses[pair[-1]].append(pair[0])
+        
+#         print(indegree)
+#         print(next_courses)
+        
+        # First courses
+        start = list()
+        for course in indegree.keys():
+            if indegree[course] == 0:
+                start.append(course)
+        
+        result = []
+        while(len(start) > 0):
+            current_course = start.pop()
+            result.append(current_course)
+            for next_course in next_courses[current_course]:
+                indegree[next_course] -= 1
+                if indegree[next_course] == 0:
+                    start.append(next_course)
+                    
+        # Internal Topo can't be finished, impossible to finish all courses
+        if len(result) != len(indegree.keys()):
+            return []
+        
+        # Internal Topo can't be solved, but certain courses don't show in this Topo
+        # Like 4, [[3,0],[0,1]], one answer is [1,0,3,2]
+        for i in range(numCourses):
+            if i not in shown:
+                result.append(i)
+        return result
