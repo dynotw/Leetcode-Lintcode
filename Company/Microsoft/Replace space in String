@@ -1,0 +1,41 @@
+请实现一个函数，把字符串 s 中的每个空格替换成"%20"。
+输入：s = "We are happy."
+输出："We%20are%20happy."
+
+方法一：遍历添加
+在 Python 和 Java 等语言中，字符串都被设计成「不可变」的类型，即无法直接修改字符串的某一位字符，需要新建一个字符串实现。
+
+# In Python, we have built-in function
+return s.replace(' ','%20')
+
+# Time Complexity: O(n); Space Complexity: O(n)
+class Solution:
+    def replaceSpace(self, s: str) -> str:
+        res = []
+        for c in s:
+            if c == ' ': res.append("%20")
+            else: res.append(c)
+        return "".join(res)
+
+
+# Use two pointers
+新字符串长度 = 旧字符串s长度+ 空格数*2
+p1指向旧字符串尾，p2指向新字符串尾
+p2的指针一直落后p1的间距：空格数*2
+当p1,p2相遇时，一定所有的空格都被替换完
+
+# Time Complexity: O(n); Space Complexity: O(1)
+class Solution:
+    def replaceSpace(self, s: str) -> str:
+        p1 = len(s) - 1 # p1指向原字符串的最后一个元素的位置
+        s = list(s) + ['0']*s.count(' ')*2 # 增加空格替换后的元素位置
+        p2 = len(s) - 1 # p2指向新字符串的最后一个元素的位置
+        while p1 != p2: # 当两个指针未相遇时，开始遍历
+            if s[p1] != ' ': # 遇到非括号
+                s[p2] = s[p1] # 新旧字符串尾交换
+                p2 -= 1 # p2左移1格
+            else: # 遇到括号
+                s[p2],s[p2-1],s[p2-2] = '0','2','%' # 空格换
+                p2 -= 3 # p2左移3格
+            p1 -= 1 # p1左移1格
+        return ''.join(s)
