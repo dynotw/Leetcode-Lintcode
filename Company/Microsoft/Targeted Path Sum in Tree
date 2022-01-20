@@ -1,0 +1,15 @@
+
+def path_finder(root, target):
+    def dfs(root, path, path_sum):
+        if len(root.children) == 0:
+            if path_sum == target:
+                res.append(path[:])
+            return
+        for child in root.children:
+            path.append(child.val)
+            dfs(child, path, path_sum+child.val)
+            path.pop()
+ 
+    res = []
+    dfs(root, [], 0)
+    return res
