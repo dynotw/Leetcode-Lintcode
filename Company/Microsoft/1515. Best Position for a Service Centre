@@ -1,0 +1,32 @@
+import scipy.optimize
+class Solution:
+    def getMinDistSum(self, positions: List[List[int]]) -> float:
+        '''
+        1. Create a function that sum all distances between a point to all its neighboring points
+        2. Start with average of all x's and y's (mean_x, mean_y) for optimizing the point
+        3. Use scipy optimize to help minimize the distance function (from step 1)
+        4. Return min_dist
+        '''
+        
+        def dist_func(point):
+            dist = 0
+            for x, y in positions:
+                dist += math.sqrt((point[0] - x) ** 2 + (point[1] - y) ** 2)
+            return dist
+        
+        n = len(positions)
+        mean_x = sum([i[0] for i in positions]) / n
+        mean_y = sum([i[1] for i in positions]) / n
+        
+        
+        # scipy.optimize.minimize(fun, x0, args=(), method=None, jac=None, hess=None, hessp=None, bounds=None, constraints=(), tol=None, callback=None, options=None)
+        # 其中：
+        # fun：目标函数，返回单值，
+        # x0：初始迭代值，
+        # args：要输入到目标函数中的参数
+        # method：求解的算法，目前可选的有
+        
+        output = scipy.optimize.minimize(dist_func, [mean_x, mean_y])
+        
+        print(output)
+        return output.fun
