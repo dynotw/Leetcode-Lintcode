@@ -1,0 +1,48 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+# BST inorder traverse is no-decreasing 
+class Solution:
+    def recoverTree(self, root):
+        stack = list()
+        result = list()
+        swith1 = None
+        switch2 = None
+        times = 0
+        
+        while(root != None):
+            stack.append(root)
+            root = root.left
+        
+        while(stack):
+            node = stack[-1]
+            if len(result) > 0:
+                if node.val < result[-1].val:
+                    if times == 0:
+                        switch1 = result[-1]
+                        switch2 = node
+                    else:
+                        switch2 = node
+                    times += 1
+
+            result.append(node)
+            # print("-------")
+            # for i in result:
+            #     print(i.val)
+            
+            if node.right == None:
+                node = stack.pop()
+                while(stack and stack[-1].right == node):
+                    node = stack.pop()
+            
+            else:
+                node = node.right
+                while(node):
+                    stack.append(node)
+                    node = node.left
+        
+        switch1.val, switch2.val = switch2.val, switch1.val
