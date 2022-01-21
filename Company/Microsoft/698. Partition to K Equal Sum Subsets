@@ -1,0 +1,69 @@
+698. Partition to K Equal Sum Subsets
+Medium
+
+Given an integer array nums and an integer k, return true if it is possible to divide this array into k non-empty subsets whose sums are all equal.
+
+Example 1:
+Input: nums = [4,3,2,3,5,2,1], k = 4
+Output: true
+Explanation: It is possible to divide it into 4 subsets (5), (1, 4), (2,3), (2,3) with equal sums.
+
+Example 2:
+Input: nums = [1,2,3,4], k = 3
+Output: false
+
+
+
+# dfs
+# Time Complexity: O(k * 2^N); Space Complexity: O(n)
+
+class Solution:
+    def canPartitionKSubsets(self, arr: List[int], k: int) -> bool:
+        # eliminate corner case
+        # If the total sum is not divisible by k, we can't make subsets.
+        n = len(arr)
+        total_sum = sum(arr)
+        if k > n or total_sum % k != 0:
+            return False
+        target_sum = total_sum // k
+
+        # Sort in decreasing order.
+        arr.sort(reverse=True)
+
+        taken = [False] * n
+                
+        return self.backtrack(arr, 0, taken, 0, 0, target_sum, k)
+        
+    def backtrack(self, arr, index, taken, count, curr_sum, target_sum, k):
+        n = len(arr)
+
+        # We made k - 1 subsets with target_sum and the last subset must also have target_sum.
+        # Because we ensure arr can be divided into k subsets at the beginning
+        if count == k - 1:
+            return True
+
+        # No need to proceed further.
+        if curr_sum > target_sum:
+            return False
+
+        # When curr sum reaches target then one subset is made.
+        # Increment count and reset current sum.
+        if curr_sum == target_sum:
+            return self.backtrack(arr, 0, taken, count + 1, 0, target_sum, k)
+
+        # Try unpicked elements to make some combinations.
+        for j in range(index, n):
+            if not taken[j]:
+                # Include this element in current subset.
+                taken[j] = True
+
+                # If using current jth element in this subset leads to make all valid subsets.
+                if self.backtrack(arr, j + 1, taken, count, curr_sum + arr[j], target_sum, k):
+                    return True
+
+                # Backtrack step.
+                taken[j] = False
+
+        # We were not able to make a valid combination after picking 
+        # each element from the array, hence we can't make k subsets.
+        return False
