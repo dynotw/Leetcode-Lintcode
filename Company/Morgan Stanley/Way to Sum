@@ -1,0 +1,27 @@
+def ways_to_sum(total, k):
+    # Use DFS
+    # variant of combination sum
+    result =[]
+    curr = []
+    dfs_helper(total, k, 1, 0, curr, result)
+
+    print(result)
+
+def dfs_helper(total, k, start, curr_sum, curr, result):
+    if curr_sum == total:
+        result.append(curr[:])
+        return
+    
+    for i in range(start, k+1):
+        if curr_sum + i > total:
+            break
+
+        curr_sum += i
+        curr.append(i)
+        dfs_helper(total, k, i, curr_sum, curr, result)
+        curr.pop()
+        curr_sum -= i
+
+
+if __name__ == "__main__":
+    ways_to_sum(8, 2)
