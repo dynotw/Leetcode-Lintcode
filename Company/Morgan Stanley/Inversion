@@ -1,0 +1,35 @@
+def inversions(n, arr):
+    """[summary]
+    Use DFS, kinds of variant of combination 
+    """
+
+    # exit of recursion
+    result = []
+    curr = []
+    visit = []
+
+    dfs_helper(arr, curr, result, visit, 0, n)
+
+    print(result)
+
+def dfs_helper(arr, curr, result, visit, index, length):
+    
+    if len(curr) == 3:
+        if curr not in result:
+            result.append(curr[:])
+            return
+    
+    for i in range(index, length):
+        if len(curr) == 0:
+            curr.append(arr[i])
+            dfs_helper(arr, curr, result, visit, i+1, length)
+            curr.pop()
+
+        elif arr[i] < curr[-1]:
+            curr.append(arr[i])
+            dfs_helper(arr, curr, result, visit, i+1, length)
+            curr.pop()
+
+
+if __name__ == "__main__":
+    inversions(4, [4,2,2,1])
