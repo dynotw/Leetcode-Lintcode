@@ -1,0 +1,23 @@
+def efficient_janitor(weights):
+    #eliminate corner case
+    if weights == None or len(weights) == 0 or max(weights) > 3:
+        return "No such answer"
+
+    weights.sort()
+    times = 0
+    # set two pointers
+    left = 0
+    right = len(weights) - 1
+    while(right > left):
+        if weights[right] + weights[left] <= 3:
+            times += 1
+            left += 1
+            right -= 1
+        else:
+            times += 1
+            right -= 1
+
+    print(times)
+
+if __name__ == "__main__":
+    efficient_janitor([1.99, 1.01, 2.5, 1.5, 3.00])
