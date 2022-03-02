@@ -29,12 +29,14 @@ Output: [2,3,4,-1,4]
         result = [-1] * n
         # 1. nums[i] < nums[i+1] -> find greater
         # 2. nums[i] >= nums[i+1], then compare nums[i] & greater of nums[i+1], .......
-        # Firstly, find greater of the most right element, then compare nums[-2] & nums[-1], which is stack.append(i) in while loop
-        # stack.append(i) represents nums[i+1], stack[-2] is greater of nums[i+1]
+        # Firstly, find greater of the most right element, 
+        # stack.append(i) represents nums[i+1], in terms of next for loop
+        # stack[-2] is next greater of nums[i+1], if there's next greater of nums[i+1]
         for i in range(n-1,-1,-1):
             while(stack and nums[stack[-1]] <= nums[i]):
                 stack.pop()
-                
+            
+            # 说明 there's a number greater than nums[i]
             if stack:
                 result[i] = nums[stack[-1]]
             
