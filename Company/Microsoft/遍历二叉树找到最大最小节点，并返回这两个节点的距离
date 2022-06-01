@@ -53,4 +53,10 @@
         else:
             return right
             
-# 3. 计算距离
+# 3. 计算距离 (其实就是计算Height)
+        def getHeight(self, node, target):
+            if not node:
+                return float("inf")
+            if node.val == target:
+                return 0
+            return 1 + min(getHeight(node.left, target), getHeight(node.right, target))
