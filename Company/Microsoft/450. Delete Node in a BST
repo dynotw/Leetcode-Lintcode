@@ -1,0 +1,74 @@
+450. Delete Node in a BST
+Medium
+
+
+Given a root node reference of a BST and a key, delete the node with the given key in the BST. Return the root node reference (possibly updated) of the BST.
+
+Basically, the deletion can be divided into two stages:
+
+Search for a node to remove.
+If the node is found, delete the node.
+
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+# This problem really need to read the Solution, which explain very clearly
+# Time Complexity: O(log N); Space Complexity: O(logN). In BST, H = logN
+class Solution:
+    def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
+        if not root:
+            return None
+        
+        # delete from the right subtree
+        if key > root.val:
+            root.right = self.deleteNode(root.right, key)
+        # delete from the left subtree
+        elif key < root.val:
+            root.left = self.deleteNode(root.left, key)
+            
+        # delete the current node
+        else:
+            # the node is a leaf
+            if root.left == None and root.right == None:
+                root = None
+                
+            # the node is not a leaf and has a right child
+            elif root.right:
+                root.val = self.successor(root)
+                root.right = self.deleteNode(root.right, root.val)
+                
+            # the node is not a leaf, has no right child, and has a left child    
+            else:
+                root.val = self.predecessor(root)
+                root.left = self.deleteNode(root.left, root.val)
+                        
+        return root
+    
+    
+    # All previous and next is based on inorder traversal in BST. which is no descending
+    # Find the next one 
+    def successor(self, root):
+        """
+        One step right and then always left
+        """
+        root = root.right
+        while root.left:
+            root = root.left
+        return root.val
+    
+    # Find the previous one
+    def predecessor(self, root):
+        """
+        One step left and then always right
+        """
+        root = root.left
+        while root.right:
+            root = root.right
+        return root.val
