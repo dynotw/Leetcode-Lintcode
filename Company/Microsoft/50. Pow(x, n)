@@ -17,6 +17,8 @@ Output: 0.25000
 Explanation: 2-2 = 1/22 = 1/4 = 0.25
 
 
+# Time Complexity: O(logN); Space Complexity: O(logN)
+# This is recursion, we can reduce Space Compelxity from O(logN) to O(1), if we use iteration. (See below)
 class Solution:
     # Brute-Force will be time exceeded
     # Use recursion (Divide & Conquer)
@@ -34,3 +36,34 @@ class Solution:
         temp2 = self.myPow(x, n%2)
         
         return temp1* temp1 * temp2
+
+
+  
+# Time Complexity: O(logN); Space Complexity: O(1)
+# This is iterative; Space Complexity is O(logN), if we use recursion
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        if x == 0 and n < 0:
+            return False
+        if x == 0 and n == 0:
+            return "Undefined"
+        
+        if n == 0:
+            return 1
+        elif n == 1:
+            return x
+        elif n == -1:
+            return 1/x
+        
+        temp_n = abs(n)
+        res = 1
+        while(temp_n != 0):
+            if temp_n % 2 == 1:
+                res *= x
+            x *= x
+            temp_n //= 2
+        
+        if n < 0:
+            return 1/res
+        else:
+            return res
