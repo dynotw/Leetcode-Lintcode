@@ -1,0 +1,77 @@
+445. Add Two Numbers II. ---> 2. Add Two Numbers
+Medium
+
+
+You are given two non-empty linked lists representing two non-negative integers. 
+The most significant digit comes first and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+ 
+Example 1:
+Input: l1 = [7,2,4,3], l2 = [5,6,4]
+Output: [7,8,0,7]
+
+Example 2:
+Input: l1 = [2,4,3], l2 = [5,6,4]
+Output: [8,0,7]
+
+Example 3:
+Input: l1 = [0], l2 = [0]
+Output: [0]
+
+
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+
+# 1. Reverse LinkedList; 2. 与Add Number（2）相似，但方向不同
+# Time Complexity: O(n1 + n2); Space Complexity: O(1)
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        l1_reversed = self.reverse_linkedlist(l1)
+        l2_reversed = self.reverse_linkedlist(l2)
+        
+        carry = 0
+        curr = ListNode()
+        while(l1_reversed or l2_reversed):
+            l1_value = l1_reversed.val if l1_reversed else 0
+            l2_value = l2_reversed.val if l2_reversed else 0
+            
+            curr_value = (l1_value + l2_value + carry) % 10
+            carry = (l1_value + l2_value + carry) // 10
+            curr.val = curr_value
+            
+            curr_prev = ListNode()
+            curr_prev.next = curr
+            curr = curr_prev
+            
+            l1_reversed = l1_reversed.next if l1_reversed else None
+            l2_reversed = l2_reversed.next if l2_reversed else None
+        
+        # 多出一个进位，没处理
+        if carry == 1:
+            curr.val = 1
+            return curr
+        
+        return curr.next
+        
+            
+        
+    def reverse_linkedlist(self, node):
+        curr_prev = None
+        curr = node
+        curr_next = None
+        
+        while(curr):
+            curr_next = curr.next
+            curr.next = curr_prev
+            curr_prev = curr
+            curr = curr_next
+        
+        return curr_prev
+        
