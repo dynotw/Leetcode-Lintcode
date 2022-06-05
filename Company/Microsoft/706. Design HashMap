@@ -33,6 +33,7 @@ myHashMap.get(2);    // return -1 (i.e., not found), The map is now [[1,1]]
 
 # Follow the HashMap (learnt) in Java
 # Bucket(array) + LinkedList(New kind LinkedList Node)
+# May require use red-black tree or AVL to replace LinkedList
 class Node:
     def __init__(self, key=-1, val=-1, next = None):
         self.key = key
