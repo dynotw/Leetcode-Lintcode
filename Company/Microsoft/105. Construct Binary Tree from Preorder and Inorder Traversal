@@ -1,0 +1,48 @@
+105. Construct Binary Tree from Preorder and Inorder Traversal
+Medium
+
+Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and 
+inorder is the inorder traversal of the same tree, construct and return the binary tree.
+
+ 
+
+Example 1:
+Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+Output: [3,9,20,null,null,15,7]
+
+Example 2:
+Input: preorder = [-1], inorder = [-1]
+Output: [-1]
+
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+# Use the characteristic of preorder and inorder, to find rootnode
+# time complexity: O(n^2), if the binary tree is on;y one side
+# space complexity: O(1)
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+        if len(preorder)==0:
+            return None
+        
+        # The following characteristic of preorder and inorder shows in solution
+        # preorder： rootnode ～ left-subtree ～ right-subtree
+        # inorder： left-subtree ～ rootnode ～ right-subtree
+        # use preorder to find the rootnode
+        root = TreeNode(preorder[0])
+        # After know rootnode, use inorder to find its left-subtree and right-subtree
+        # time complexity: O(n), get the index of rootnode in inorder list
+        middle = inorder.index(preorder[0])
+        
+        # This divide is so tricky
+        # 使用rootnode在inorder中的index，来拆分preorder和inorder list
+        # 0～middle-1 is left-subtree； middle+1～ is right-subtree
+        root.left = self.buildTree(preorder[1:middle+1],inorder[:middle])
+        root.right = self.buildTree(preorder[middle+1:],inorder[middle+1:])
+        return root
