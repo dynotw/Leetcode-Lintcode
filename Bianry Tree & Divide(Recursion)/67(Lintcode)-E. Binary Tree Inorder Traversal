@@ -83,6 +83,7 @@ Can you do it without recursion?
             
             if node.right == None:
                 node = stack.pop()
+                # 往上推，直到最左边的parent treenode
                 while(stack and stack[-1].right == node):
                     node = stack.pop()
             
