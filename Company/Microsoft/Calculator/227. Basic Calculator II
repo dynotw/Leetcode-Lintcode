@@ -1,0 +1,76 @@
+227. Basic Calculator II
+Medium
+
+Given a string s which represents an expression, evaluate this expression and return its value. 
+
+The integer division should truncate toward zero.
+
+You may assume that the given expression is always valid. All intermediate results will be in the range of [-231, 231 - 1].
+
+Note: You are not allowed to use any built-in function which evaluates strings as mathematical expressions, such as eval().
+
+ 
+Example 1:
+Input: s = "3+2*2"
+Output: 7
+
+Example 2:
+Input: s = " 3/2 "
+Output: 1
+
+Example 3:
+Input: s = " 3+5 / 2 "
+Output: 5
+
+
+
+# use stack
+# time complexity: O(n); space complexity: O(n)
+class Solution:    
+    def calculate(self, s: str) -> int:
+        result = 0
+        index = 0
+        
+        # stack_operator only store '+' and '-'
+        # stack_number store number between +/- and *//
+        stack_operator = ['+']
+        stack_number = list()
+        
+        while(index < len(s)):
+            if s[index].isdigit():
+                temp = 0
+                while (index < len(s) and s[index].isdigit()):
+                    temp *= 10
+                    temp += int(s[index])
+                    index += 1
+                
+                if stack_operator[-1] == '*':
+                    stack_operator.pop()
+                    number_pre = stack_number.pop()
+                    stack_number.append(number_pre * temp)
+                
+                elif stack_operator[-1] == '/':
+                    stack_operator.pop()
+                    number_pre = stack_number.pop()
+                    stack_number.append(int(number_pre / temp))
+                
+                else:
+                    stack_number.append(temp)
+                    
+            elif s[index] in '+-*/':
+                stack_operator.append(s[index])
+                index += 1   
+            
+            else:
+                index += 1
+        
+        for i in range(len(stack_operator)):
+            operator = stack_operator[i]
+            number = stack_number[i]
+            
+            if operator == '+':                
+                result += 1 * number
+            else:
+                result += -1 * number
+        return result
+                
