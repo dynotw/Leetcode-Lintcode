@@ -17,7 +17,6 @@ Explanation: 2 cannot be in the right subtree of 3 because 2 < 3. Swapping 2 and
 
 
 
-
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -27,7 +26,49 @@ Explanation: 2 cannot be in the right subtree of 3 because 2 < 3. Swapping 2 and
 
 # BST inorder traverse is no-decreasing 
 class Solution:
-    def recoverTree(self, root):
+    # Based on the inorder traversal (stack)
+    # Time Complexity: O(n); Space Complexity: O(n)
+    def recoverTree(self, root: TreeNode):
+        """
+        :rtype: void Do not return anything, modify root in-place instead.
+        """
+        stack = []
+        node_1 = node_2 = prev = None
+        count = 0
+        
+        while root:
+            stack.append(root)
+            root = root.left
+        
+        while stack:
+            root = stack.pop()
+            # Find candidate TreeNode, 1st node is prev; 2nd is root
+            if prev and prev.val > root.val:
+                # 1st candidate TreeNode 
+                # Or both of 1st and 2nd TreeNode are found (两个 TreeNode 在 inorder 中相邻)
+                if count == 0:
+                    node_1 = prev
+                    node_2 = root
+                # 2nd candidate TreeNode. We can end loop, becasue both candidate TreeNode
+                else:
+                    node_2 = root
+                    break
+                count += 1
+                    
+            prev = root
+            root = root.right
+            
+            while(root):
+                stack.append(root)
+                root = root.left
+
+        node_1.val, node_2.val = node_2.val, node_1.val
+        
+        
+    def recoverTree(self, root: Optional[TreeNode]) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
         stack = list()
         result = list()
         swith1 = None
@@ -40,6 +81,8 @@ class Solution:
         
         while(stack):
             node = stack[-1]
+            
+            ## This part is external part, compared to inorder (stack)
             if len(result) > 0:
                 if node.val < result[-1].val:
                     if times == 0:
@@ -48,12 +91,9 @@ class Solution:
                     else:
                         switch2 = node
                     times += 1
-
-            result.append(node)
-            # print("-------")
-            # for i in result:
-            #     print(i.val)
+            ##
             
+            result.append(node)
             if node.right == None:
                 node = stack.pop()
                 while(stack and stack[-1].right == node):
