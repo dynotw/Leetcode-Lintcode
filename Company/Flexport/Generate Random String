@@ -1,0 +1,39 @@
+from collections import defaultdict
+import random
+def genereate_string(string, length, start_index):
+    next_char = defaultdict(list)
+    string = string.split(" ")
+    for i in range(len(string)):
+        if i == len(string)-1:
+            next_char[string[i]].append(string[0])
+        else:
+            next_char[string[i]].append(string[i+1])
+
+    ans = []
+    dfs(length, next_char, string[start_index], string[start_index], 1, ans)
+
+    return ans
+
+def dfs(length, next_char, curr_char, temp, temp_num, res):
+    if temp_num == length:
+        res.append(temp)
+        return
+
+    visit = set()
+    for i in next_char[curr_char]:
+        if i in visit:
+            continue
+        else:
+            temp += i
+            visit.add(i)
+            dfs(length, next_char, i, temp, temp_num+1, res)
+            temp = temp[:-1]
+    return
+
+if __name__ == '__main__':
+    length = 4
+    string = "this is a sentence it is not a good one and it is also bad"
+
+    start_index = random.randint(0, 9)
+    res = genereate_string(string, length, start_index)
+    print(res)
