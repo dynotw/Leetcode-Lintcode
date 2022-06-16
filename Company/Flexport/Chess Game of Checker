@@ -1,0 +1,68 @@
+class Board():
+    def __init__(self, num_row, num_col):
+        self.row = num_row
+        self.col = num_col
+        self.board = [[0] * num_col for i in range(num_row)]
+        self.count = 1
+
+    def print_board(self):
+            for i in self.board:
+                print(i)
+            print("-----------")
+
+class Piece():
+    def __init__(self, row, col, board):
+        self.row = row
+        self.col = col
+        board.board[row][col] = 1
+
+    def get_next_step(self):
+        next_moves = list()
+        X = [-1,1,0,0]
+        Y = [0,0,-1,1]
+        for i in range(4):
+            next_position = (self.row + X[i], self.col + Y[i])
+            next_moves.append(next_position)
+        return next_moves
+
+    def check_move(self, target, board):
+        row = target[0]
+        col = target[1]
+        # check the boundary
+        if row < 0 or row >= board.row:
+            return False
+        if col < 0 or col >= board.col:
+            return False
+
+        # check valid position
+        if board.board[row][col] == 1:
+            return False
+
+        return True
+
+    def move(self, target, board):
+        row = target[0]
+        col = target[1]
+        board.board[self.row][self.col] = 0
+
+        self.row = row
+        self.col = col
+        board.board[self.row][self.col] = 1
+
+
+
+if __name__ == '__main__':
+    chess_1 = Board(5,5)
+    chess_1.print_board()
+    piece_1 = Piece(0,0, chess_1)
+    chess_1.print_board()
+
+    next_move = piece_1.get_next_step()
+    print(next_move)
+
+    for position in next_move:
+        ok = piece_1.check_move(position, chess_1)
+        print(ok, position)
+        if ok:
+            piece_1.move(position, chess_1)
+            chess_1.print_board()
