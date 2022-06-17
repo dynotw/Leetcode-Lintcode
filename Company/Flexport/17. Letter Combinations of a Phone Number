@@ -20,6 +20,8 @@ Input: digits = "2"
 Output: ["a","b","c"]
 
 
+
+# Time complexity: O(4^n * n); Space Complexity: O(n)
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
         # Eliminate corner case
