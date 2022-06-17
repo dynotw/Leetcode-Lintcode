@@ -1,0 +1,66 @@
+class Card:
+    def __init__(self, token_color, price, color):
+        self.price = {}
+        for i in range(len(token_color)):
+            self.price[token_color[i]] = price[i]
+        self.color = color
+
+    def modified_cost(self, color, new_price):
+        for i in range(len(color)):
+            self.price[color[i]] = new_price[i]
+
+    def can_purchase(self, wallet):
+        for color in self.price.keys():
+            if self.price[color] > wallet.token[color]:
+                return False
+
+        return True
+
+    def can_purchase_discount(self, wallet):
+        for color in self.price.keys():
+            if self.price[color] > wallet.token[color] + len(wallet.cards[color]):
+                return False
+
+        return True
+
+class Wallet:
+    def __init__(self, color, num_token):
+        self.token = {}
+        for i in range(len(color)):
+            self.token[color[i]] = num_token[i]
+        self.cards = {"blue":[], "red": [], "green":[]}
+
+    def add_token(self, color, num_token):
+        for i in range(len(color)):
+            self.token[color[i]] = num_token[i]
+
+    def purchase(self, card):
+        if card.can_purchase(self):
+            for color in card.price:
+                self.token[color] -= card.price[color]
+            self.cards[card.color].append(card)
+
+        else:
+            print("Not enough")
+
+    def purchase_discount(self, card):
+        if card.can_purchase_discount(self):
+            for color in card.price:
+                self.token[color] -= min(0, (card.price[color] - len(self.cards[color])))
+            self.cards[card.color].append(card)
+
+        else:
+            print("Not enough")
+
+    def show_balance(self):
+        print("Number of token ", self.token)
+        print("Cards ", self.cards)
+
+
+if __name__ == '__main__':
+    card_1 = Card(["blue", "green"], [2,3], "red")
+    wallet_1 = Wallet(["blue", "green"], [3,4])
+
+    print(card_1.can_purchase(wallet_1))
+    wallet_1.purchase(card_1)
+    wallet_1.show_balance()
