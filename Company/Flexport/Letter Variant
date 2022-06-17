@@ -1,0 +1,42 @@
+# Compared with letter of combination,
+# In key-value pair, key can be consist of multi digits
+
+def letter_variant(digits):
+    # Eliminate corner case
+    if digits == None or len(digits) == 0:
+        return []
+
+    letters = {'1': ' ', '2': 'abc', '3': 'def', '4': 'ghi', '5': 'jkl', '6': 'mno', '7': 'pqrs', '8': 'tuv',
+               '9': 'wxyz', "12":"xyz"}
+    keys = set(letters.keys())
+    print(keys)
+    res = list()
+    dfs(digits, letters, keys, 0, list(), res)
+
+    return res
+
+def dfs(digits, letters, keys, start_index, curr, res):
+    if start_index == len(digits):
+        #print("This is one answer")
+        res.append("".join(curr))
+        return
+
+    for i in range(start_index + 1, len(digits) + 1):
+        prefix = digits[start_index: i]
+        print("prefix is ", prefix)
+        if prefix in keys:
+            for letter in letters[prefix]:
+                print("letter is ", letter)
+                curr.append(letter)
+                dfs(digits, letters, keys, i, curr, res)
+                # Backtracking
+                curr.pop()
+
+    return
+
+if __name__ == '__main__':
+    digits = "112"
+
+    res = letter_variant(digits)
+
+    print(res)
