@@ -1,0 +1,74 @@
+92. Reverse Linked List II
+Medium
+
+Given the head of a singly linked list and two integers left and right where left <= right, 
+reverse the nodes of the list from position left to position right, and return the reversed list.
+
+ 
+Example 1:
+Input: head = [1,2,3,4,5], left = 2, right = 4
+Output: [1,4,3,2,5]
+
+Example 2:
+Input: head = [5], left = 1, right = 1
+Output: [5]
+
+
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+# It's a little complicated
+class Solution:
+    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
+        if n == 1:
+            return head
+        
+        now = 0
+        # dummy is head 的前置节点
+        dummy = ListNode(-1)
+        dummy.next = head
+        result = dummy
+        
+        while(now < m-1 and dummy != None):
+            dummy = dummy.next
+            now += 1
+        
+        # stop1 is 1
+        # start is 2
+        stop1 = dummy
+        start = dummy.next
+        # print("stop1 is" + str(stop1.val))
+        # print('start is ' + str(start.val))
+        
+        while(now < n and dummy != None):
+            dummy = dummy.next
+            now += 1
+        
+        # end is 4
+        # stop2 is 5
+        end = dummy
+        stop2 = end.next
+        
+        # reverse m->n
+        # From Leetcode 206. Reverse Linked List
+        current_pre = None
+        current = start
+        current_next = None
+        
+        while(current != None and current != stop2):
+            current_next = current.next
+            current.next = current_pre
+            current_pre = current
+            current = current_next
+        
+        # After reverse. current_pre is the first node of m->n
+        stop1.next = current_pre
+        # reverse后，start is the last node of m->n
+        start.next = stop2
+
+        
+        return result.next
