@@ -16,3 +16,46 @@ Input: root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
 Output: 3
 
 
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+# Time complexity: O(n); Space Complexity: O(n)
+from collections import defaultdict
+class Solution:
+    def pathSum(self, root: TreeNode, target: int) -> int:
+        self.count = 0
+        self.h = defaultdict(int)
+        self.preorder(root, 0, target)
+        return self.count
+    
+    def preorder(self, node: TreeNode, curr_sum, target) -> None:
+        if not node:
+            return 
+
+        # current prefix sum
+        curr_sum += node.val
+
+        # here is the sum we're looking for
+        if curr_sum == target:
+            self.count += 1
+
+        # number of times the curr_sum − k has occurred already, 
+        # determines the number of times a path with sum k to the current node (target + prefix_sum == curr_sum)
+        self.count += self.h[curr_sum - target]
+
+        # add the current sum into hashmap
+        # to use it during the child nodes processing
+        self.h[curr_sum] += 1
+
+        self.preorder(node.left, curr_sum, target)
+        self.preorder(node.right, curr_sum, target)
+        
+        # Just backtracking
+        self.h[curr_sum] -= 1
+        
+        
