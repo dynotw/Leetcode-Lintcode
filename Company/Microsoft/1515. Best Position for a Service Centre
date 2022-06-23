@@ -8,12 +8,6 @@ class Solution:
         4. Return min_dist
         '''
         
-        def dist_func(point):
-            dist = 0
-            for x, y in positions:
-                dist += math.sqrt((point[0] - x) ** 2 + (point[1] - y) ** 2)
-            return dist
-        
         n = len(positions)
         mean_x = sum([i[0] for i in positions]) / n
         mean_y = sum([i[1] for i in positions]) / n
@@ -26,7 +20,14 @@ class Solution:
         # args：要输入到目标函数中的参数
         # method：求解的算法，目前可选的有
         
-        output = scipy.optimize.minimize(dist_func, [mean_x, mean_y])
+        output = scipy.optimize.minimize(self.dist_func, (mean_x, mean_y), positions )
         
-        print(output)
+        #print(output)
         return output.fun
+        
+        
+    def dist_func(self, point, positions):
+        dist = 0
+        for x, y in positions:
+            dist += math.sqrt((point[0] - x) ** 2 + (point[1] - y) ** 2)
+        return dist
