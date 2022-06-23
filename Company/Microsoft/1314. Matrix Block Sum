@@ -22,7 +22,7 @@ class Solution:
     def matrixBlockSum(self, mat: List[List[int]], K: int) -> List[List[int]]:
         m, n = len(mat), len(mat[0])
         
-        # RangeSum[i][j] 是 mat[0][0] 到 mat[i][j] 构成矩形之和
+        # RangeSum[i+1][j+1] 是 mat[0][0] 到 mat[i][j] 构成矩形之和
         rangeSum = [[0] * (n + 1) for _ in range(m + 1)]
         
         for i in range(m):
