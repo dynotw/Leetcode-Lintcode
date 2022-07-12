@@ -1,0 +1,88 @@
+777. Swap Adjacent in LR String
+Medium
+
+In a string composed of 'L', 'R', and 'X' characters, like "RXXLRXRXL", a move consists of either replacing one occurrence of "XL" with "LX", 
+or replacing one occurrence of "RX" with "XR". Given the starting string start and the ending string end, 
+return True if and only if there exists a sequence of moves to transform one string to the other.
+
+ 
+
+Example 1:
+Input: start = "RXXLRXRXL", end = "XRLXXRRLX"
+Output: true
+Explanation: We can transform start to end following these steps:
+RXXLRXRXL ->
+XRXLRXRXL ->
+XRLXRXRXL ->
+XRLXXRRXL ->
+XRLXXRRLX
+
+Example 2:
+Input: start = "X", end = "L"
+Output: false
+
+
+
+
+class Solution:
+    def canTransform(self, start: str, end: str) -> bool:
+        l_dict_s = dict()
+        r_dict_s = dict()
+        l_dict_t = dict()
+        r_dict_t = dict()
+        
+        # Check L
+        num_blank = 0
+        No_s=0
+        for i in range(len(start)):
+            if start[i] == "X":
+                num_blank += 1
+            
+            elif start[i] == "R":
+                num_blank = 0
+            
+            elif start[i] == "L":
+                l_dict_s[No_s] = (i,num_blank)
+                No_s += 1
+
+        No_t=0
+        for i in range(len(end)):
+            if end[i] == 'L':
+                l_dict_t[No_t] = i
+                No_t += 1
+        # print(l_dict_s)
+        # print(l_dict_t)
+        
+        if No_s != No_t:
+            return False
+        for No in l_dict_s.keys():
+            if l_dict_s[No][0] < l_dict_t[No] or l_dict_s[No][0] - l_dict_s[No][1] > l_dict_t[No]:
+                return False
+        
+        # check R
+        num_blank = 0
+        No_s=0
+        for i in range(len(start)-1, -1, -1):
+            if start[i] == 'X':
+                num_blank += 1
+            
+            elif start[i] == 'L':
+                num_blank = 0
+            
+            elif start[i] == 'R':
+                r_dict_s[No_s] = (i,num_blank)
+                No_s += 1
+        No_t=0
+        for i in range(len(end)-1, -1, -1):
+            if end[i] == 'R':
+                r_dict_t[No_t] = i
+                No_t += 1
+                
+        if No_s != No_t:
+            return False
+        for No in r_dict_s.keys():
+            if r_dict_s[No][0] > r_dict_t[No] or r_dict_s[No][0] + r_dict_s[No][1] < r_dict_t[No]:
+                return False
+        
+        
+        return True        
