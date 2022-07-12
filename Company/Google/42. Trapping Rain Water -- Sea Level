@@ -1,0 +1,41 @@
+Google Interview Question:
+Given an array of positive integers representing terrain heights (in 2-d, ala Super Mario)) and an integer representing a flat sea level, 
+return a container of integers representing the volume of each unique body of water.
+
+This is quite similar to Leetcode 42, but Leetcode 42 doesn't have seaLevel, so I need to some modification
+
+
+# Sea Level Solution, based on Leetcode 42, which plus comparation with sealevel in line 33 and line 28
+# Time Comeplxity: O(n); Space Complexity: O(1)
+def trap_1(height, sealevel):           
+    if len(height)<= 2:
+        return 0
+
+    ans = 0
+
+    #using two pointers i and j on indices 1 and n-1
+    i = 0
+    j = len(height) - 1
+
+    #initialising leftmax to the leftmost bar and rightmax to the rightmost bar
+    lmax = height[0]
+    rmax = height[-1]
+
+    while i <=j:
+        # check lmax and rmax for current i, j positions
+        if height[i] > lmax:
+            lmax = height[i]
+        if height[j] > rmax:
+            rmax = height[j]
+
+        #fill water upto lmax level for index i and move i to the right
+        if lmax <= rmax:
+            ans += max(min(lmax, sealevel) - height[i], 0)
+            i += 1
+
+        #fill water upto rmax level for index j and move j to the left
+        else:
+            ans += max(min(rmax, sealevel) - height[j], 0)
+            j -= 1
+
+    return ans
